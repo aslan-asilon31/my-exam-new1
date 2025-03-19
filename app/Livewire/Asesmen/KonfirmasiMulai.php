@@ -5,8 +5,8 @@ namespace App\Livewire\Asesmen;
 use Livewire\Component;
 use App\Models\Asesmen;
 use Livewire\Attributes\On;
-use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
+use Livewire\Attributes\Layout;
 
 class KonfirmasiMulai extends Component
 {

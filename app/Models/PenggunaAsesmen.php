@@ -5,11 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class AsesmenUser extends Model
+class PenggunaAsesmen extends Model
 {
     use HasFactory;
 
-    protected $table = 'asesmen_users';
+    protected $table = 'pengguna_asesmens';
     public $timestamps = false;
     protected $fillable = [
         'user_id',

@@ -21,7 +21,15 @@ class Pertanyaan extends Model
         'jenis',
         'durasi',
         'bobot',
+        'dibuat_oleh',
+        'diupdate_oleh',
+        'tgl_dibuat',
+        'tgl_diupdate',
+        'no_urut',
+        'apa_aktif',
     ];
+
+
 
     public function asesmen(): BelongsTo
     {

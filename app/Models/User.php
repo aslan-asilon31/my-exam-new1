@@ -18,10 +18,20 @@ class User extends Authenticatable
      *
      * @var list<string>
      */
+
+    protected $table = 'penggunas';
+    public $timestamps = false;
+    public $incrementing = false; 
+    protected $keyType = 'string'; 
+
     protected $fillable = [
-        'name',
-        'email',
-        'password',
+        'nama',
+        'surel',
+        'sandi',
+        'dibuat_oleh',
+        'diupdate_oleh',
+        'tgl_dibuat',
+        'tgl_diupdate',
     ];
 
     /**
@@ -30,8 +40,8 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $hidden = [
-        'password',
-        'remember_token',
+        'sandi',
+        'ingat_token',
     ];
 
     /**

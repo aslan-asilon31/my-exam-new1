@@ -12,6 +12,8 @@ class Dasbor extends Component
     use Toast;
 
     public string $search = '';
+    protected $url = '/dasbor';
+
 
     public bool $drawer = false;
 

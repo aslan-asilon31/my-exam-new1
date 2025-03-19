@@ -1,3 +1,6 @@
-<div>
-    {{-- Knowing others is intelligence; knowing yourself is true wisdom. --}}
-</div>
+<x-card  shadow separator class="border shadow">
+
+    <livewire:admin.asesmen.komponen.tabel-asesmen />
+  
+</x-card>
+  

@@ -14,15 +14,17 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', Welcome::class);
+// Route::get('/', Welcome::class);
+Route::get('/', \App\Livewire\Auth\Login::class)->name('login');
+Route::get('/register', \App\Livewire\Auth\Register::class)->name('register');
 
 # admin
 Route::get('/dasbor', \App\Livewire\Admin\Dasbor\Dasbor::class)->name('dashbor');
 Route::get('/admin-daftar-asesmen', \App\Livewire\Admin\Asesmen\DaftarAsesmen::class)->name('admin-daftar-asesmen');
-Route::get('/daftar-pertanyaan', \App\Livewire\Admin\Asesmen\DaftarAsesmen::class)->name('daftar-pertanyaan');
-Route::get('/pengguna', \App\Livewire\Admin\Asesmen\DaftarAsesmen::class)->name('pengguna');
-Route::get('/role', \App\Livewire\Admin\Asesmen\DaftarAsesmen::class)->name('role');
-Route::get('/permission', \App\Livewire\Admin\Asesmen\DaftarAsesmen::class)->name('permission');
+Route::get('/daftar-pertanyaan', \App\Livewire\Admin\Pertanyaan\DaftarPertanyaan::class)->name('daftar-pertanyaan');
+Route::get('/pengguna', \App\Livewire\Admin\Pengguna\DaftarPengguna::class)->name('daftar-pengguna');
+Route::get('/roles', \App\Livewire\Admin\Asesmen\DaftarAsesmen::class)->name('role');
+Route::get('/permissions', \App\Livewire\Admin\Asesmen\DaftarAsesmen::class)->name('permission');
 
 # customer
 Route::get('/daftar-asesmen', \App\Livewire\Asesmen\DaftarAsesmen::class)->name('daftar-asesmen');

@@ -8,6 +8,6 @@ class PermissionList extends Component
 {
     public function render()
     {
-        return view('livewire.admin.permission-list');
+        return view('livewire.admin.daftar-izin');
     }
 }

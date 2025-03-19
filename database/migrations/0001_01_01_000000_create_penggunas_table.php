@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('penggunas', function (Blueprint $table) {
-            $table->uuid();
+            $table->uuid('id');
             $table->string('nama');
             $table->string('surel')->unique();
             $table->timestamp('surel_verifikasi_pada')->nullable();

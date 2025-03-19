@@ -5,11 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class AsesmenUserDetail extends Model
+class DetailPenggunaAsesmen extends Model
 {
     use HasFactory;
 
-    protected $table = 'asesmen_user_detail';
+    protected $table = 'detail_pengguna_asesmen';
     public $timestamps = false;
     protected $fillable = [
         'asesmen_user_id',
@@ -18,7 +18,7 @@ class AsesmenUserDetail extends Model
 
     public function asesmenUser()
     {
-        return $this->belongsTo(AsesmenUser::class, 'asesmen_user_id');
+        return $this->belongsTo(PenggunaAsesmen::class, 'asesmen_user_id');
     }
 
     public function pertanyaan()
