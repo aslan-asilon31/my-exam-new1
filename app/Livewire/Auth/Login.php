@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Hash;
 class Login extends Component
 {
 
+    public  $title = "Halaman Login";
     public LoginForm $loginForm;
 
     public function mount()
@@ -58,7 +59,7 @@ class Login extends Component
     }
 
 
-    #[Title('Konfirmasi Start')] 
+    #[Title('Halaman Login')] 
     public function render()
     {
 

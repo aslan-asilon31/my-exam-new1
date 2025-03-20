@@ -19,6 +19,7 @@ use App\Livewire\Auth\Forms\LoginForm;
 
 class Register extends Component
 {
+    public $title = "Halaman Pendaftaran";
     public $surel;
     public $sandi;
     public $konfirmasiSandi;
@@ -55,6 +56,7 @@ class Register extends Component
 
     public function render()
     {
-        return view('livewire.auth.register');
+        return view('livewire.auth.register')
+        ->layout('components.layouts.app_auth');
     }
 }

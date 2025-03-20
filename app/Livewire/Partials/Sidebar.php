@@ -11,9 +11,6 @@ class Sidebar extends Component
 {
 
     public string $title = ''; 
-
-    
-
    
     public function render()
     {

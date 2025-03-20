@@ -4,10 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 
 class Asesmen extends Model
 {
-    use HasFactory;
+    use HasFactory,HasUuids;
+
+
 
     protected $table = 'asesmens';
 
@@ -22,6 +25,11 @@ class Asesmen extends Model
         'diupdate_oleh',
         'tgl_dibuat',
     ];
+
+    public function newUniqueId(): string
+    {
+      return (string) str()->orderedUuid();
+    }
 
     public $timestamps = false;
     public $incrementing = false; 

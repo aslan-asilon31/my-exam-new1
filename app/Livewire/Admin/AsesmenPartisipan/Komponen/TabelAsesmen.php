@@ -74,8 +74,7 @@ final class TabelAsesmen extends PowerGridComponent
         return PowerGrid::fields()
             ->add('action', fn($record) => Blade::render('
                 <x-dropdown no-x-anchor class="btn-sm">
-                    <x-menu-item title="Show" Link="/daftar-pertanyaan/show/' . e($record->id) . '/readonly" />
-                    <x-menu-item title="Edit" Link="/daftar-pertanyaan/edit/' . e($record->id) . '"/>
+                    <x-menu-item title="Edit" Link="/ubah-asesmen/' . e($record->id) . '"/>
                 </x-dropdown>'))
             ->add('judul', fn($record) => $record->judul)
             ->add('deskripsi')
