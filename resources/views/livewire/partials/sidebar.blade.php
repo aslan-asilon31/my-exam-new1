@@ -7,7 +7,6 @@
         {{-- MENU --}}
         <x-menu activate-by-route>
 
-
             {{-- User --}}
             <x-menu-sub title="Setting" icon="o-cog-6-tooth">
             <x-menu-item title="Profile" icon="o-user-circle" link="#" />

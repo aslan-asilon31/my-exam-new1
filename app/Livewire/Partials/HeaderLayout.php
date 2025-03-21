@@ -7,7 +7,7 @@ use Livewire\Attributes\On;
 use App\Models\Asesmen;
 
 
-class Header extends Component
+class HeaderLayout extends Component
 {
 
     public string $title = ''; 
@@ -55,7 +55,7 @@ class Header extends Component
     
     public function render()
     {
-        return view('livewire.partials.header')
+        return view('livewire.partials.header-layout')
         ->title($this->title);
     }
 

@@ -46,13 +46,15 @@
 
         <x-modal wire:model="modalPertanyaan" class="backdrop-blur">
 
-            <x-form wire:submit="{{ $idSoal ? 'ubah' : 'simpan' }}" wire:confirm="Are you sure?">
+            <x-form wire:submit="{{ $idSoal ? 'update' : 'simpan' }}" wire:confirm="Are you sure?">
                 <div class="text-center mt-3">
                   Soal
                 </div>
                 <x-menu-separator />
         
                   <div id="pertanyaan">
+
+                    <x-input label="Bobot" wire:model.blur="masterSoalForm.id" id="masterSoalForm.id" name="masterSoalForm.id" placeholder="ID" hidden />
 
                     <div class="mb-3">
                       <x-textarea
@@ -73,13 +75,13 @@
                     </div>
                     
                     <div class="mb-3">
-                        <x-input type="number" label="Durasi" wire:model.blur="masterSoalForm.durasi" id="masterSoalForm.durasi" name="masterSoalForm.durasi" placeholder="Durasi" />
+                        <x-input type="datetime-local" label="Durasi" wire:model.blur="masterSoalForm.durasi" id="masterSoalForm.durasi" name="masterSoalForm.durasi" placeholder="Durasi" />
                     </div>
-        
+                    
                     @if (!$isReadonly)
                       <div class="text-center mt-3">
                         <x-errors class="text-white mb-3" />
-                        <x-button type="submit" :label="$id ? 'ubah' : 'Simpan'" class="btn-success btn-sm text-white" />
+                        <x-button type="submit" :label="$idSoal ? 'update' : 'Simpan'" class="btn-success btn-sm text-white" />
                       </div>
                     @endif
         

@@ -165,9 +165,10 @@ class SoalAsesmen extends Component
 
     }
 
+    
     public function nextQuestion()
     {
-        // Validasi jawaban
+        // Check if the current answer is empty
         if (empty($this->jawaban[$this->currentQuestionIndex])) {
             $this->toast(
                 type: 'error',
@@ -182,8 +183,8 @@ class SoalAsesmen extends Component
             $this->dispatch('jawaban-belum-diisi');
             return;
         }
-    
-        // Simpan jawaban ke session
+
+        // Store the current question's answer in the session
         $userId = auth()->id() ?? 'eafe4ec3-2e7d-4147-9dbe-754a79ff7740'; 
         $pertanyaanId = $this->pertanyaans[$this->currentQuestionIndex]->id; 
         
@@ -193,29 +194,29 @@ class SoalAsesmen extends Component
             'pertanyaan_id' => $pertanyaanId,
             'jawaban' => $this->jawaban[$this->currentQuestionIndex]
         ]);
-    
-        // Pindah ke soal berikutnya
+
+        // Move to the next question if possible
         if ($this->currentQuestionIndex < count($this->pertanyaans) - 1) {
             $this->currentQuestionIndex++;
             $this->jawaban[$this->currentQuestionIndex] = session('soal-session.' . $this->currentQuestionIndex, '');
-    
-            // Dispatch event untuk memulai timer dengan durasi soal baru
+
+            // Dispatch event to start the timer with the new question's duration
             $this->dispatch('start-timers');
         } else {
-            // Redirect ke halaman konfirmasi jika sudah soal terakhir
+            // Redirect to confirmation page if it's the last question
             $this->redirect('/konfirmasi-selesai', navigate: true);
         }
     }
-    
+
     public function previousQuestion()
     {
         if ($this->currentQuestionIndex > 0) {
             $this->currentQuestionIndex--;
             $this->jawaban[$this->currentQuestionIndex] = session('soal-session.' . $this->currentQuestionIndex, '');
-            $this->dispatch('start-timers'); // Dispatch event untuk reset timer
+            $this->dispatch('start-timers'); // Dispatch event to reset the timer
         }
     }
-    
+
 
     public function finishTest()
     {

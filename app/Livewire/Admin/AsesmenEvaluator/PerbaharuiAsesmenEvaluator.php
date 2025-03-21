@@ -202,34 +202,34 @@ class PerbaharuiAsesmenEvaluator extends Component
     $this->masterSoalForm->fill($masterData);
   }
 
-  public function update()
-  {
+  // public function update()
+  // {
 
-    $validatedForm = $this->validate(
-      $this->masterSoalForm->rules(),
-      [],
-      $this->masterSoalForm->attributes()
-    )['masterSoalForm'];
+  //   $validatedForm = $this->validate(
+  //     $this->masterSoalForm->rules(),
+  //     [],
+  //     $this->masterSoalForm->attributes()
+  //   )['masterSoalForm'];
 
-    $masterData = $this->masterModelAsesmen::findOrFail($this->id);
+  //   $masterData = $this->masterModelAsesmen::findOrFail($this->id);
 
-    \Illuminate\Support\Facades\DB::beginTransaction();
-    try {
+  //   \Illuminate\Support\Facades\DB::beginTransaction();
+  //   try {
 
-      $validatedForm['id'] = str($validatedForm['name'])->slug('_');
-      $validatedForm['updated_by'] = auth()->user()->username;
+  //     $validatedForm['id'] = str($validatedForm['name'])->slug('_');
+  //     $validatedForm['updated_by'] = auth()->user()->username;
 
 
-      $masterData->update($validatedForm);
+  //     $masterData->update($validatedForm);
 
-      \Illuminate\Support\Facades\DB::commit();
+  //     \Illuminate\Support\Facades\DB::commit();
 
-      $this->success('Data has been updated');
-    } catch (\Throwable $th) {
-      \Illuminate\Support\Facades\DB::rollBack();
-      $this->error('Data failed to update');
-    }
-  }
+  //     $this->success('Data has been updated');
+  //   } catch (\Throwable $th) {
+  //     \Illuminate\Support\Facades\DB::rollBack();
+  //     $this->error('Data failed to update');
+  //   }
+  // }
 
   public function hapus()
   {

@@ -38,6 +38,7 @@ class DaftarPertanyaan extends Component
   public array $options = [];
 
 
+
     public string $url = '/pertanyaan';
 
     public function initialize()
@@ -48,11 +49,9 @@ class DaftarPertanyaan extends Component
 
     public function mount()
     {
-        $this->id = Request::route('id'); 
-
       if ($this->idSoal) {
         $this->title .= ' (Ubah)';
-        $this->ubah();
+        $this->ubah($id);
       } else {
         $this->title .= ' (Buat)';
         $this->buat();
@@ -62,7 +61,6 @@ class DaftarPertanyaan extends Component
 
     public function buat()
     {
-  
       $this->masterSoalForm->reset();
       $this->idSoal = null;
     }
@@ -107,15 +105,16 @@ class DaftarPertanyaan extends Component
 
     public function ubah($id)
     {
-        $this->idSoal = $id;
-        $masterData = Pertanyaan::findOrFail($this->idSoal);
+      $this->idSoal = $id;
+      $masterData = Pertanyaan::findOrFail($this->idSoal);
         $this->masterSoalForm->fill($masterData);
-         $this->modalPertanyaan = true;
+        $this->modalPertanyaan = true;
 
     }
 
     public function update()
     {
+
       // $this->permission($this->basePageName.'-update');
       $validatedForm = $this->validate(
         $this->masterSoalForm->rules(),

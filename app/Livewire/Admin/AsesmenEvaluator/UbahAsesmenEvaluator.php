@@ -107,78 +107,78 @@ class UbahAsesmenEvaluator extends Component
   
   }
   
-  public function simpanSoal()
-  {
-    $validatedSoalForm = $this->validate(
-      $this->masterSoalForm->rules(),
-      [],
-      $this->masterSoalForm->attributes()
-    )['masterSoalForm'];
-        // Log nilai sebelum penyimpanan
-        $buatUuid = Str::uuid()->toString();
-        $validatedSoalForm['id'] = $buatUuid;
-        $validatedSoalForm['asesmen_id'] = $this->id;
-        $validatedSoalForm['dibuat_oleh'] = auth()->user()->username ?? 'admin';
-        $validatedSoalForm['diupdate_oleh'] = auth()->user()->username ?? 'admin';
-        $validatedSoalForm['tgl_dibuat'] = now();
-        $validatedSoalForm['tgl_diupdate'] = now();
-        $validatedSoalForm['jenis'] = 'essay';
+  // public function simpanSoal()
+  // {
+  //   $validatedSoalForm = $this->validate(
+  //     $this->masterSoalForm->rules(),
+  //     [],
+  //     $this->masterSoalForm->attributes()
+  //   )['masterSoalForm'];
+  //       // Log nilai sebelum penyimpanan
+  //       $buatUuid = Str::uuid()->toString();
+  //       $validatedSoalForm['id'] = $buatUuid;
+  //       $validatedSoalForm['asesmen_id'] = $this->id;
+  //       $validatedSoalForm['dibuat_oleh'] = auth()->user()->username ?? 'admin';
+  //       $validatedSoalForm['diupdate_oleh'] = auth()->user()->username ?? 'admin';
+  //       $validatedSoalForm['tgl_dibuat'] = now();
+  //       $validatedSoalForm['tgl_diupdate'] = now();
+  //       $validatedSoalForm['jenis'] = 'essay';
     
-        $pertanyaan = Pertanyaan::buat($validatedSoalForm);
+  //       $pertanyaan = Pertanyaan::buat($validatedSoalForm);
         
-        return $this->redirect('/asesmen-evaluator', navigate: true);
-        $this->success('Soal Asesmen sudah dibuat');
+  //       return $this->redirect('/asesmen-evaluator', navigate: true);
+  //       $this->success('Soal Asesmen sudah dibuat');
 
-    // \Illuminate\Support\Facades\DB::beginTransaction();
-    // try {
+  //   // \Illuminate\Support\Facades\DB::beginTransaction();
+  //   // try {
 
      
 
-    //   \Illuminate\Support\Facades\DB::commit();
+  //   //   \Illuminate\Support\Facades\DB::commit();
       
      
-    // } catch (\Throwable $th) {
-    //   \Illuminate\Support\Facades\DB::rollBack();
-    //   \Log::error('Data failed to store: ' . $th->getMessage());
-    //   $this->error('Data failed to store');
-    // }
-  }
+  //   // } catch (\Throwable $th) {
+  //   //   \Illuminate\Support\Facades\DB::rollBack();
+  //   //   \Log::error('Data failed to store: ' . $th->getMessage());
+  //   //   $this->error('Data failed to store');
+  //   // }
+  // }
   
-  public function simpan()
-  {
-    // $this->permission($this->basePageName.'-buat');
+  // public function simpan()
+  // {
+  //   // $this->permission($this->basePageName.'-buat');
 
-    $validatedForm = $this->validate(
-      $this->masterForm->rules(),
-      [],
-      $this->masterForm->attributes()
-    )['masterForm'];
+  //   $validatedForm = $this->validate(
+  //     $this->masterForm->rules(),
+  //     [],
+  //     $this->masterForm->attributes()
+  //   )['masterForm'];
 
 
-    \Illuminate\Support\Facades\DB::beginTransaction();
-    try {
+  //   \Illuminate\Support\Facades\DB::beginTransaction();
+  //   try {
 
-      // $validatedForm['id'] = str($validatedForm['name'])->slug('_');
-      $validatedForm['id'] = Str::uuid();
-      $validatedForm['dibuat_oleh'] = auth()->user()->username ?? 'admin';
-      $validatedForm['diupdate_oleh'] = auth()->user()->username ?? 'admin';
-      $validatedForm['tgl_dibuat'] = now();
-      // $validatedForm['apa_aktif'] = $this->masterForm['apa_aktif'];
+  //     // $validatedForm['id'] = str($validatedForm['name'])->slug('_');
+  //     $validatedForm['id'] = Str::uuid();
+  //     $validatedForm['dibuat_oleh'] = auth()->user()->username ?? 'admin';
+  //     $validatedForm['diupdate_oleh'] = auth()->user()->username ?? 'admin';
+  //     $validatedForm['tgl_dibuat'] = now();
+  //     // $validatedForm['apa_aktif'] = $this->masterForm['apa_aktif'];
 
-      $asesmendibuat = $this->masterModelAsesmen::create($validatedForm);
-      \Illuminate\Support\Facades\DB::commit();
-      // $this->create();
-      $this->success('Judul Asesmen sudah dibuat');
-      $this->dispatch('asesmen-judul-sudah-dibuat', idAsesmenJudul: $asesmendibuat->id); 
-      $this->bukaFormSoal();
+  //     $asesmendibuat = $this->masterModelAsesmen::create($validatedForm);
+  //     \Illuminate\Support\Facades\DB::commit();
+  //     // $this->create();
+  //     $this->success('Judul Asesmen sudah dibuat');
+  //     $this->dispatch('asesmen-judul-sudah-dibuat', idAsesmenJudul: $asesmendibuat->id); 
+  //     $this->bukaFormSoal();
       
      
-    } catch (\Throwable $th) {
-      \Illuminate\Support\Facades\DB::rollBack();
-      \Log::error('Data failed to store: ' . $th->getMessage());
-      $this->error('Data failed to store');
-    }
-  }
+  //   } catch (\Throwable $th) {
+  //     \Illuminate\Support\Facades\DB::rollBack();
+  //     \Log::error('Data failed to store: ' . $th->getMessage());
+  //     $this->error('Data failed to store');
+  //   }
+  // }
 
   public function tampil()
   {
@@ -194,8 +194,9 @@ class UbahAsesmenEvaluator extends Component
   {
 
     $masterData = $this->masterModelAsesmen::findOrFail($this->id);
+
        // Format date fields if necessary
-       if ($masterData->tgl_mulai) {
+      if ($masterData->tgl_mulai) {
         $masterData->tgl_mulai = \DateTime::createFromFormat('Y-m-d H:i:s', $masterData->tgl_mulai)->format('Y-m-d\TH:i');
     }
 
