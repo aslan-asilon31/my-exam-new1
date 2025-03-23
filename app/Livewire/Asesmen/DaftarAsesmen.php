@@ -10,8 +10,6 @@ use Livewire\Attributes\On;
 use Mary\Traits\Toast;
 use App\Models\Asesmen;
 
-
-
 class DaftarAsesmen extends Component
 {
     use Toast;
@@ -27,7 +25,7 @@ class DaftarAsesmen extends Component
     public function startTest()
     {
         return redirect()->route('Test');
-        $this->dispatch('test-started'); 
+        $this->dispatch('test-started');
     }
 
     public function mount()
@@ -38,6 +36,7 @@ class DaftarAsesmen extends Component
     public function initialize()
     {
         $this->asesmens = Asesmen::where('apa_aktif', true)->get();
+
     }
 
     // public function passId($id)
@@ -47,11 +46,11 @@ class DaftarAsesmen extends Component
     //     $this->dispatch('asesment-id', asesmenId: $this->id);
 
     // }
-    
+
     #[Layout('components.layouts.app_visitor')]
-    #[Title('Assesment List')] 
+    #[Title('Assesment List')]
     public function render()
     {
-        return view('livewire.Asesmen.halaman-list-asesmen');
+        return view('livewire.asesmen.daftar-asesmen');
     }
 }

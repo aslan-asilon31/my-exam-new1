@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Log;
 use App\Models\Pengguna; // Model pengguna
 use Illuminate\Http\JsonResponse; // Untuk tipe respons JSON
 use Illuminate\Http\Request; // Untuk Request
-use Illuminate\Support\Facades\Auth; // Untuk Auth
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException; // Untuk pengecualian validasi
 use App\Livewire\Auth\Forms\LoginForm;
 use Illuminate\Support\Facades\Hash;
@@ -39,27 +39,27 @@ class Login extends Component
             $this->loginForm->attributes()
           )['loginForm'] ?? [];
 
-            // Log nilai yang digunakan untuk otentikasi
-            Log::info('Attempting login with:', [
-                'surel' => $validatedLoginForm['surel'],
-                'sandi' => $validatedLoginForm['sandi']
-            ]);
-
-            // Mencoba untuk melakukan otentikasi
-            if (Auth::attempt(['surel' => $validatedLoginForm['surel'], 'sandi' => $validatedLoginForm['sandi']])) {
-                // Login berhasil
-                return redirect()->to('/dasbor');
-            } else {
-                // Login gagal
-                Log::warning('Login failed for:', ['surel' => $validatedLoginForm['surel']]);
-                throw ValidationException::withMessages([
-                    'sandi' => ['Surel atau sandi yang Anda masukkan salah.'],
-                ]);
-            }
-    }
 
 
-    #[Title('Halaman Login')] 
+        // $pengguna = Pengguna::where('surel', $validatedLoginForm['surel'])->first();
+
+        // if ($pengguna && password_verify($validatedLoginForm['sandi'], $pengguna->sandi)) {
+                // return redirect()->to('/dasbor');
+
+                if (Auth::attempt(['surel' => $validatedLoginForm['surel'], 'sandi' => $validatedLoginForm['sandi']])) {
+                    // Login berhasil
+                    return redirect()->intended('dasbor');
+                } else {
+                    // Login gagal
+                    Log::warning('Login failed for:', ['surel' => $validatedLoginForm['surel']]);
+                    throw ValidationException::withMessages([
+                        'sandi' => ['Surel atau sandi yang Anda masukkan salah.'],
+                    ]);
+                }
+        }
+
+
+    #[Title('Halaman Login')]
     public function render()
     {
 

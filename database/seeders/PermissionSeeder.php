@@ -20,51 +20,55 @@ class PermissionSeeder extends Seeder
                 app()[PermissionRegistrar::class]->forgetCachedPermissions();
 
                 // create permissions
-                Permission::create(['name' => 'view pertanyaan']);
-                Permission::create(['name' => 'create pertanyaan']);
+                Permission::create(['name' => 'lihat pertanyaan']);
+                Permission::create(['name' => 'buat pertanyaan']);
                 Permission::create(['name' => 'edit pertanyaan']);
-                Permission::create(['name' => 'delete pertanyaan']);
-                Permission::create(['name' => 'publish pertanyaan']);
-                Permission::create(['name' => 'unpublish pertanyaan']);
+                Permission::create(['name' => 'hapus pertanyaan']);
 
                 //create roles and assign existing permissions
                 $customerRole = Role::create(['name' => 'customer']);
-                $customerRole->givePermissionTo('view pertanyaan');
-                // $customerRole->givePermissionTo('edit pertanyaan');
-                // $customerRole->givePermissionTo('create pertanyaan');
-                // $customerRole->givePermissionTo('delete pertanyaan');
-        
+                $customerRole->givePermissionTo('lihat pertanyaan');
+
                 $marketingRole = Role::create(['name' => 'marketing']);
-                $marketingRole->givePermissionTo('view pertanyaan');
-                $marketingRole->givePermissionTo('create pertanyaan');
+                $marketingRole->givePermissionTo('lihat pertanyaan');
+                $marketingRole->givePermissionTo('buat pertanyaan');
                 $marketingRole->givePermissionTo('edit pertanyaan');
-                $marketingRole->givePermissionTo('delete pertanyaan');
-                $marketingRole->givePermissionTo('publish pertanyaan');
-                $marketingRole->givePermissionTo('unpublish pertanyaan');
-        
+                $marketingRole->givePermissionTo('hapus pertanyaan');
+
                 $developerRole = Role::create(['name' => 'developer']);
+                $adminRole = Role::create(['name' => 'admin']);
+
                 // gets all permissions via Gate::before rule
-        
+
                 // create demo users
                 $user = Pengguna::factory()->create([
                     'name' => 'Example user',
-                    'email' => 'writer@qadrlabs.com',
-                    'password' => bcrypt('12345678')
+                    'email' => 'customer@mail.com',
+                    'password' => Hash::make('123123123')
                 ]);
                 $user->assignRole($visitorRole);
-        
+
                 $user = Pengguna::factory()->create([
                     'name' => 'Example admin user',
-                    'email' => 'sales@qadrlabs.com',
-                    'password' => bcrypt('12345678')
+                    'email' => 'sales@mail.com',
+                    'password' => Hash::make('123123123')
                 ]);
                 $user->assignRole($salesRole);
-        
+
                 $user = Pengguna::factory()->create([
                     'name' => 'Example developer user',
-                    'email' => 'developer@qadrlabs.com',
-                    'password' => bcrypt('12345678')
+                    'email' => 'developer@mail.com',
+                    'password' => bcrypt('123123123')
                 ]);
                 $user->assignRole($developerRole);
+
+
+                $user = Pengguna::factory()->create([
+                    'name' => 'Example admin user',
+                    'email' => 'admin@mail.com',
+                    'password' => bcrypt('123123123')
+                ]);
+                $user->assignRole($adminRole);
+
     }
 }
