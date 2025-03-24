@@ -1,11 +1,11 @@
 <div>
+    {{-- <livewire:partials.component/> --}}
 
 
     <header class="bg-white shadow-md p-4 mb-10 rounded-md">
         <div class="container mx-auto flex justify-between items-center">
             <h1 class="text-sm md:text-md font-bold text-orange-900">Umedalife</h1>
             <span id="asesmen-durasi" class="font-bold text-orange-900">00:00</span>
-            {{ $asesmenDurasi }}
             <x-logout-button />
         </div>
     </header>
@@ -23,14 +23,14 @@
         <p hidden>Timer Soal Berjalan: <span id="timer-soal-berjalan">00:00</span></p>
         <div class="mb-6">
             <p class="text-gray-700 mb-4">{{ $pertanyaans[$indexJawaban]->pertanyaan }}?</p>
-
+       
             <textarea
                 wire:model="jawaban.{{ $indexJawaban }}"
                 class="form-control @error('jawaban.' . $indexJawaban) is-invalid @enderror w-full h-32 p-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
                 placeholder="Tulis jawaban Anda di sini..."
             ></textarea>
 
-
+      
             <div id="soal-durasi" class="text-md md:text-lg font-bold">00:00</div>
             {{-- <input type="hidden" id="value-durasi" value=""> --}}
         </div>
@@ -77,48 +77,18 @@
 
 
 
-<script>
-
-            // Set the countdown time in seconds
-            let countdownAssesmentTime = {{ $asesmenDurasi }};
-            // let countdownAssesmentTime = {{ $asesmenDurasi }};
-            // Update the exam countdown every second
-            const examInterval = setInterval(() => {
-                // Calculate minutes and seconds for exam timer
-                const minutes = Math.floor(countdownAssesmentTime / 60);
-                const seconds = countdownAssesmentTime % 60;
-
-                // Format the time as MM:SS
-                const formattedTime = `${minutes < 10 ? '0' : ''}${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-
-                // Display the formatted time
-                document.getElementById('asesmen-durasi').textContent = formattedTime;
-
-                // Decrease the countdown time
-                countdownAssesmentTime--;
-
-                // Check if the exam countdown is finished
-                if (countdownAssesmentTime < 0) {
-                    clearInterval(examInterval);
-                    document.getElementById('asesmen-durasi').textContent = "00:00";
-                    // alert('Durasi untuk soal ini selesai    !');
-                    // Emit finishExam event here if using Livewire
-                    // Livewire.emit('finishExam');
-                }
-            }, 1000);
-        </script>
 
 
 
     <script>
-        let timerSoalBerjalan1 = 0;
+        let timerSoalBerjalan1 = 0; 
 
         const timerSoalBerjalanInterval = setInterval(() => {
             const minutes = Math.floor(timerSoalBerjalan1 / 60);
             const seconds = timerSoalBerjalan1 % 60;
 
             const formattedTime = `${minutes < 10 ? '0' : ''}${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-
+            
             document.getElementById('timer-soal-berjalan').textContent = formattedTime;
 
             timerSoalBerjalan1++;
@@ -129,7 +99,7 @@
             } else {
                 countdownSoalTime--;
             }
-        }, 1000);
+        }, 1000); 
     </script>
 
     <script>
@@ -138,13 +108,13 @@
             const examInterval = setInterval(() => {
                 const minutes = Math.floor(countdownSoalTime / 60);
                 const seconds = countdownSoalTime % 60;
-
+    
                 const formattedTime = `${minutes < 10 ? '0' : ''}${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-
+                
                 document.getElementById('soal-durasi').textContent = formattedTime;
 
                 countdownSoalTime--;
-
+    
                 if (countdownSoalTime < 0) {
                     clearInterval(examInterval);
                     document.getElementById('soal-durasi').textContent = "00:00";

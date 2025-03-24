@@ -22,19 +22,17 @@ class SoalAsesmen extends Component
     public $examQuestion = false;
     public $examStarted = false;
     public $examFinished = false;
-    public $waktuAsesmen ;
+    public $waktuAsesmen = 3600;
     public $waktuAsesmenMulai;
     public $waktuSekarang;
     public $waktuAsesmenSelesai;
-    public $waktuAsesmenYangDihabiskan;
-
     public $questionTimer = 10;
     public $questionTimers = [];
 
     public $indexJawaban = 0;
     public $pertanyaans;
     public $userId;
-    public $asesmenDurasi = 0 ;
+    public $asesmenDurasi;
     public $pertanyaanId;
     public $hitungPertanyaan = [];
     public $jawaban;
@@ -75,9 +73,10 @@ class SoalAsesmen extends Component
         $this->nomorSoal = $this->indexJawaban+1;
         session([
 
-
-            // 'soal-sesi.waktuAsesmenMulai' => $this->waktuAsesmenMulai->format('Y-m-d H:i:s'),
-            // 'soal-sesi.waktuAsesmenSelesai' => $this->waktuAsesmenSelesai->format('Y-m-d H:i:s'),
+            'soal-sesi.jawabanSoalTerakhir' => $this->jawaban[$this->indexJawaban],
+            'soal-sesi.nomorSoalTerakhir' => $this->nomorSoal,
+            'soal-sesi.waktuAsesmenMulai' => $this->waktuAsesmenMulai->format('Y-m-d H:i:s'),
+            'soal-sesi.waktuAsesmenSelesai' => $this->waktuAsesmenSelesai->format('Y-m-d H:i:s'),
 
         ]);
 
@@ -89,7 +88,7 @@ class SoalAsesmen extends Component
      public function mount()
      {
 
-            //  session()->flush();
+    //          session()->flush();
 
     //  session()->forget('soal-sesi.userId');
     //  session()->forget('soal-sesi.asesmenId');
@@ -97,7 +96,7 @@ class SoalAsesmen extends Component
     //  session()->forget('soal-sesi.waktuAsesmenMulai');
 
 
-    //  Session::forget('soal-sesi');
+    //  Session::forget('soal-sesi.' . $this->userId);
     //  Session::forget('soal-sesi');
     //  Session::forget('waktuSoalSekarang');
     //  Session::forget('waktuSoal');
@@ -106,52 +105,20 @@ class SoalAsesmen extends Component
     //  dd(Session());
 
     $this->pertanyaans = Pertanyaan::where('asesmen_id', $this->id)->get();
-
-    $this->jawaban = array_fill(0, count($this->pertanyaans), '');
-
     $this->initialize();
-
-
-
     if (Session::has('soal-sesi')) {
         $soalState = Session::get('soal-sesi');
 
-
-        // Memastikan bahwa ada setidaknya satu elemen dalam soalState
-        if (isset($soalState[0])) {
-            // Mengatur index jawaban berdasarkan nomor soal dari elemen pertama
-            $this->indexJawaban = $soalState[0]['nomorSoal'] ?? 0;
-            // Mengatur jawaban untuk soal yang sesuai dengan nomor soal
-            $this->jawaban[$this->indexJawaban] = $soalState[0]['jawaban'] ?? '';
-        }
-
-        // Mengisi jawaban untuk semua soal yang ada dalam soalState
-        for ($i = 0; $i < count($soalState); $i++) {
-            if (isset($soalState[$i])) {
-                // Mengisi jawaban berdasarkan nomor soal
-                $nomorSoal = $soalState[$i]['nomorSoal'] ?? null;
-                if ($nomorSoal !== null) {
-                    $this->jawaban[$nomorSoal] = $soalState[$i]['jawaban'] ?? '';
-                }
-            }
-        }
-
-        // dd($nomorSoal);
-        $this->indexJawaban = $nomorSoal;
-        // $this->jawaban[$this->indexJawaban] = session('soal-sesi.jawabanSoalTerakhir', []);
-
-
-        // $this->indexJawaban = $soalState[0]['nomorSoal'] ?? 0;
-        // $this->jawaban[$this->indexJawaban] = $soalState[0]['jawaban'] ?? '';
-        // dd('tes');
+        $this->indexJawaban = session('soal-sesi.nomorSoalTerakhir', 0);
+        $this->jawaban[$this->indexJawaban] = session('soal-sesi.jawabanSoalTerakhir', []);
 
         // $this->currentQuestionIndex = $soalState['currentQuestionIndex'];
         // $this->answers = $soalState['answers'];
     } else {
+        // Inisialisasi jawaban kosong
         // $this->answers = array_fill(0, count($this->questions), '');
     }
 
-    // dd($this->jawaban[$this->indexJawaban]);
 
 
 
@@ -173,40 +140,28 @@ class SoalAsesmen extends Component
 
     public function initialize()
     {
+
+
+
+        // Ambil ID pengguna, jika tidak ada, gunakan ID default
         $userId = auth()->id() ?? 'eafe4ec3-2e7d-4147-9dbe-754a79ff7740';
 
-        $this->asesmen = Asesmen::where('id', $this->id)->firstOrFail()->toArray();
-        $this->waktuAsesmen = $this->asesmen['durasi'];
-
-        $jam = floor($this->waktuAsesmen / 3600); // Menghitung jam
-        $menit = floor(($this->waktuAsesmen % 3600) / 60); // Menghitung menit
-        $detik = $this->waktuAsesmen % 60; // Menghitung detik
-
-        $this->waktuAsesmenMulai = now();
+        // Inisialisasi waktu asesmen
+        $this->waktuAsesmen = 3600; // Durasi asesmen dalam detik (1 jam)
+        $this->waktuAsesmenMulai = now(); // Waktu mulai asesmen
+        $this->waktuSekarang = now(); // Waktu sekarang
         $this->waktuAsesmenSelesai = $this->waktuAsesmenMulai->copy()->addSeconds($this->waktuAsesmen); // Waktu selesai asesmen
 
-        if (!Session::has('soal-sesi.waktuAsesmen')) {
-            Session::put('soal-sesi.waktuAsesmen', [
-                'jam' => $jam,
-                'menit' => $menit,
-                'detik' => $detik,
-            ]);
-            Session::put('soal-sesi.waktuAsesmenMulai', $this->waktuAsesmenMulai->format('Y-m-d H:i:s'));
-            Session::put('soal-sesi.waktuAsesmenSelesai', $this->waktuAsesmenSelesai->format('Y-m-d H:i:s'));
-        }
 
-
+        // Inisialisasi waktu per soal
         $this->waktuSoalSekarang = now(); // Waktu sekarang untuk soal
         $this->waktuSoalMulai = 30; // Misalkan durasi soal dalam detik (30 detik)
         $this->waktuSoal = $this->waktuSoalMulai; // Durasi soal
         $this->waktuSoalSelesai = $this->waktuSoalSekarang->copy()->addSeconds($this->waktuSoal); // Waktu selesai soal
 
 
+
         $this->waktuSoal = $this->pertanyaans[$this->indexJawaban]->id;
-
-
-
-
     }
 
     #[On('durasi-soal-selesai')]
@@ -272,14 +227,8 @@ class SoalAsesmen extends Component
         if ($this->indexJawaban < count($this->pertanyaans) - 1) {
             $this->indexJawaban++;
 
-
             $this->dispatch('start-timers');
         } else {
-
-
-                // Hitung waktu yang telah dihabiskan
-                $currentTime = now(); // Waktu saat ini
-                $elapsedTime = $currentTime->diffInSeconds($this->waktuAsesmenMulai); // Hitung selisih waktu dalam detik
 
 
             if (isset($this->jawaban[$this->indexJawaban])) {
@@ -291,10 +240,9 @@ class SoalAsesmen extends Component
                 'user_id' => $this->userId,
                 'asesmen_id' => $this->id,
                 'pertanyaan_id' => $pertanyaanId,
-                'jawaban' => $this->jawaban[$this->indexJawaban],
+                // 'jawaban' => $this->jawaban[$this->indexJawaban],
                 'waktuSoalSekarang' => $this->waktuSoalSekarang->format('Y-m-d H:i:s'),
-                'waktuSoalSelesai' => $this->waktuAsesmenSelesai->format('Y-m-d H:i:s'),
-                'waktuAsesmenYangDihabiskan' => $elapsedTime,
+                'waktuSoalSelesai' => $this->waktuSoalSelesai->format('Y-m-d H:i:s'),
                 'nomorSoal' => $this->indexJawaban,
 
             ]);
@@ -312,19 +260,9 @@ class SoalAsesmen extends Component
     {
         if ($this->indexJawaban > 0) {
             $this->indexJawaban--;
-            // $this->jawaban = session('soal-sesi.jawabanSoalTerakhir', []);
+            $this->jawaban = session('soal-sesi.jawabanSoalTerakhir', []);
 
-
-            if (Session::has('soal-sesi')) {
-                $soalState = Session::get('soal-sesi');
-
-                // Memastikan bahwa ada elemen yang sesuai dengan indexJawaban
-                if (isset($soalState[$this->indexJawaban])) {
-                    // Mengambil nomor soal dan jawaban dari soalState
-                    $this->jawaban[$this->indexJawaban] = $soalState[$this->indexJawaban]['jawaban'] ?? '';
-                }
-            }
-
+            $this->dispatch('start-timers');
         }
     }
 
