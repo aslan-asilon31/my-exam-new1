@@ -1,4 +1,16 @@
 <div>
+
+    {{-- <x-header-layout/> --}}
+
+    <header class="bg-white shadow-md p-4 mb-10 rounded-md">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-sm md:text-md font-bold text-orange-900">Umedalife</h1>
+            <span id="asesmen-durasi" class="font-bold text-orange-900">00:00</span>
+            <x-logout-button />
+        </div>
+    </header>
+
+
     <div class="max-w-4xl  mx-auto bg-white p-8 rounded-md shadow-md transform transition-transform duration-300 hover:shadow-2xl hover:scale-105">
         <h1 class="text-xl md:text-2xl font-bold mb-6 text-center text-green-700">Tes Selesai!</h1>
         <p class="text-sm md:text-md text-gray-700 mb-4 text-center">Terima kasih telah menyelesaikan ujian. </p>

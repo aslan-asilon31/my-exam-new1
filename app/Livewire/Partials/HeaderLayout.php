@@ -38,7 +38,6 @@ class HeaderLayout extends Component
         $this->initialize($this->id);
     }
 
-
     #[On('asesment-durasi-id')] 
     public function initialize($asesmenId)
     {

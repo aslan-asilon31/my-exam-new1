@@ -1,5 +1,13 @@
 <div>
-    <livewire:partials.header-layout/>
+
+    <header class="bg-white shadow-md p-4 mb-10 rounded-md">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-sm md:text-md font-bold text-orange-900">Umedalife</h1>
+            <span id="asesmen-durasi" class="font-bold text-orange-900">00:00</span>
+            <x-logout-button />
+        </div>
+    </header>
+    
     
     @php
         // Set locale ke bahasa Indonesia
@@ -7,6 +15,8 @@
     @endphp
 
     <div class="flex justify-center">
+
+
         <div class=" h-screen max-w-4xl mx-auto bg-white p-8 rounded-md shadow-lg ">
             <h1 class="text-md sm:text-lg font-bold mb-6 text-orange-900 text-center">Daftar Asesmen</h1>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
@@ -42,5 +52,8 @@
             </div>
         </div>
     </div>
+
+    
+    
     
 </div>

@@ -3,6 +3,7 @@
 namespace App\Livewire\Asesmen;
 
 use Livewire\Component;
+use App\Models\Asesmen;
 use Illuminate\Support\Facades\Session;
 use Livewire\Attributes\On; 
 use Mary\Traits\Toast;
@@ -15,82 +16,244 @@ class SoalAsesmen extends Component
     public string $title = 'Ujian '; 
 
     public $questions = [];
+    public $asesmen =[];
     public $answers = [];
     public $examList = false;
     public $examQuestion = false;
     public $examStarted = false;
     public $examFinished = false;
-    public $examTimer = 3600; // 60 minutes in seconds
-    public $questionTimer = 10; // 10 seconds per question
+    public $waktuAsesmen = 3600; 
+    public $waktuAsesmenMulai; 
+    public $waktuSekarang; 
+    public $waktuAsesmenSelesai; 
+    public $questionTimer = 10; 
     public $questionTimers = [];
 
-    public $currentQuestionIndex = 0;
+    public $indexJawaban = 0;
     public $pertanyaans;
     public $userId;
+    public $asesmenDurasi;
     public $pertanyaanId;
     public $hitungPertanyaan = [];
-    public $jawaban = [];
-    public $lanjutkanSoal = false;
-    public $waktuSoalHabis = false;
+    public $jawaban;
+
+
+    public $waktuSoalSekarang ;
+    public $waktuSoalMulai ;
+    public $waktuSoal ;
+    public $waktuSoalSelesai ;
+    public $waktuSoalTerakhir ;
+    public $waktuSoalBerjalan = 0;
+    public $nomorSoal ;
+    public $nomorSoalTerakhir ;
+    public $nomorSoalTerakhirHasil ;
+
+    public $soalSelanjutnya = false ;
+
 
 
     #[\Livewire\Attributes\Locked]
     public string $id = '';
 
-    public function mount()
+
+    #[On('durasi-soal-berjalan-selesai')] 
+    public function updatewaktuSoalBerjalan($value)
     {
-        // dd($this->currentQuestionIndex);
-        // dd(Session());
-        // Session::forget('jawaban');
-        // Session::forget('soal-session');
-        $this->initialize();
-        $this->questionTimers = array_column($this->questions, 'timer');
 
-        // // Initialize answers array
-        // $this->answers = array_fill(0, count($this->questions), '');
+        session([
+            
+            'soal-sesi.waktuSoalBerjalan' => $value,
+        ]);
 
-        // // Initialize question timers
-        // $this->questionTimers = array_fill(0, count($this->questions), $this->questionTimer);
+    }
+
+    #[On('update-soal-terakhir')] 
+    public function updateSoalTerakhir()
+    {
+        $this->nomorSoal = $this->indexJawaban+1;
+        session([
+
+            'soal-sesi.jawabanSoalTerakhir' => $this->jawaban[$this->indexJawaban],
+            'soal-sesi.nomorSoalTerakhir' => $this->nomorSoal,
+            'soal-sesi.waktuAsesmenMulai' => $this->waktuAsesmenMulai->format('Y-m-d H:i:s'),
+            'soal-sesi.waktuAsesmenSelesai' => $this->waktuAsesmenSelesai->format('Y-m-d H:i:s'),
+            
+        ]);
+
     }
 
 
     
-    // public function nextQuestion()
-    // {
-    //     if ($this->currentQuestionIndex < count($this->pertanyaans) - 1) {
-    //         $this->currentQuestionIndex++;
-    //     }
-    // }
 
-    // public function previousQuestion()
-    // {
-    //     if ($this->currentQuestionIndex > 0) {
-    //         $this->currentQuestionIndex--;
-    //     }
-    // }
+     public function mount()
+     {
 
-    #[On('jawaban-belum-diisi')]
+    //          session()->flush();
+
+    //  session()->forget('soal-sesi.userId');
+    //  session()->forget('soal-sesi.asesmenId');
+    //  session()->forget('soal-sesi.pertanyaanId');
+    //  session()->forget('soal-sesi.waktuAsesmenMulai');
+
+
+    //  Session::forget('soal-sesi.' . $this->userId);
+    //  Session::forget('soal-sesi');
+    //  Session::forget('waktuSoalSekarang');
+    //  Session::forget('waktuSoal');
+    //  Session::forget('waktuSoalSelesai');
+    //  Session::forget('waktuSoalBerjalan');
+    //  dd(Session());
+
+            $this->initialize();
+            $this->pertanyaans = Pertanyaan::where('asesmen_id', $this->id)->get();
+     
+            $this->waktuSoal = $this->pertanyaans[$this->indexJawaban]->id;
+
+            $this->indexJawaban = session('soal-sesi.nomorSoalTerakhir', 0);
+            $this->jawaban[$this->indexJawaban] = session('soal-sesi.jawabanSoalTerakhir', []);
+            $this->pertanyaans = Pertanyaan::where('asesmen_id', $this->id)->get();
+
+            if ($this->indexJawaban >= count($this->pertanyaans)) {
+                $this->indexJawaban = count($this->pertanyaans) - 1; 
+            }
+
+     }
+     
+
+
+    
+
+    #[On('asesment-durasi-id')] 
+    public function durasiAsesmen($asesmenId)
+    {
+        $this->id = $asesmenId;
+        $this->asesmen = Asesmen::where('id', $this->id)->firstOrFail()->toArray();
+        $this->asesmenDurasi = $this->asesmen['durasi'];
+    }
+
+
     public function initialize()
     {
-        $this->pertanyaans = Pertanyaan::where('asesmen_id', $this->id)->get();
-        // Ambil jawaban dari session jika ada
-        // if (Session::has('jawaban')) {
-        //     $this->jawaban = Session::get('jawaban');
-        // }
 
-        $jawabanData = session('soal-session', []);
+        // Ambil ID pengguna, jika tidak ada, gunakan ID default
+        $userId = auth()->id() ?? 'eafe4ec3-2e7d-4147-9dbe-754a79ff7740'; 
 
-        // Pastikan untuk memeriksa apakah ada jawaban untuk currentQuestionIndex
-        if (isset($jawabanData[$this->currentQuestionIndex])) {
-            // Ambil jawaban sebagai string
-            $this->jawaban[$this->currentQuestionIndex] = $jawabanData[$this->currentQuestionIndex]['jawaban'] ?? '';
-            // dd($this->jawaban[$this->currentQuestionIndex]);
+        // Inisialisasi waktu asesmen
+        $this->waktuAsesmen = 3600; // Durasi asesmen dalam detik (1 jam)
+        $this->waktuAsesmenMulai = now(); // Waktu mulai asesmen
+        $this->waktuSekarang = now(); // Waktu sekarang
+        $this->waktuAsesmenSelesai = $this->waktuAsesmenMulai->copy()->addSeconds($this->waktuAsesmen); // Waktu selesai asesmen
+
+        
+        // Inisialisasi waktu per soal
+        $this->waktuSoalSekarang = now(); // Waktu sekarang untuk soal
+        $this->waktuSoalMulai = 30; // Misalkan durasi soal dalam detik (30 detik)
+        $this->waktuSoal = $this->waktuSoalMulai; // Durasi soal
+        $this->waktuSoalSelesai = $this->waktuSoalSekarang->copy()->addSeconds($this->waktuSoal); // Waktu selesai soal
+
+  
+    }
+
+    #[On('durasi-soal-selesai')]
+    public function durasiSoalSelesai($value)
+    {
+        if ($this->indexJawaban < count($this->pertanyaans) - 1 ) {
+            $this->indexJawaban++;
+
+            if (session()->get('soal-sesi.userId') === $this->userId) {
+                session([
+                    'soal-sesi.waktuSoalBerjalan' => $value,
+                ]);
+            }
+            
+
+            $this->waktuSoalBerjalan = now()->timestamp - $this->waktuSoalSekarang->timestamp;
+
+            return;
         } else {
-            // Jika tidak ada jawaban, set ke string kosong
-            $this->jawaban[$this->currentQuestionIndex] = '';
+            $this->redirect('/konfirmasi-selesai', navigate: true);
+            return;
+        }
+    }
+
+    #[On('durasi-soal-selesai')]
+    public function nextPage($value)
+    {
+        $this->waktuSoalBerjalan =$value;
+        if (session()->get('soal-sesi.userId') === $this->userId) {
+            session([
+                'soal-sesi.waktuSoalBerjalan' => $value,
+            ]);
         }
 
+        
+    }
 
+    public function nextQuestion()
+    {
+        if (session()->get('soal-sesi.userId') === $this->userId) {
+            session([
+                'soal-sesi.waktuSoalBerjalan' => $this->waktuSoalBerjalan,
+            ]);
+        }
+
+        $pertanyaanId = $this->pertanyaans[$this->indexJawaban]->id; 
+        
+        $this->dispatch('hentikan-waktu-soal-berjalan');
+
+        session()->put('soal-sesi.' . $this->indexJawaban, [
+
+            'user_id' => $this->userId,
+            'asesmen_id' => $this->id,
+            'pertanyaan_id' => $pertanyaanId,
+            'jawaban' => $this->jawaban[$this->indexJawaban],
+            'waktuSoalSekarang' => $this->waktuSoalSekarang->format('Y-m-d H:i:s'),
+            'waktuSoalSelesai' => $this->waktuSoalSelesai->format('Y-m-d H:i:s'),
+            'nomorSoal' => $this->indexJawaban,
+        ]);
+
+
+
+        if ($this->indexJawaban < count($this->pertanyaans) - 1) {
+            $this->indexJawaban++;
+
+            $this->dispatch('start-timers');
+        } else {
+
+
+            if (isset($this->jawaban[$this->indexJawaban])) {
+                session()->put('soal-sesi.jawaban.' . $this->indexJawaban, $this->jawaban[$this->indexJawaban]);
+            }
+
+            session()->put('soal-sesi.' . $this->indexJawaban, [
+
+                'user_id' => $this->userId,
+                'asesmen_id' => $this->id,
+                'pertanyaan_id' => $pertanyaanId,
+                // 'jawaban' => $this->jawaban[$this->indexJawaban],
+                'waktuSoalSekarang' => $this->waktuSoalSekarang->format('Y-m-d H:i:s'),
+                'waktuSoalSelesai' => $this->waktuSoalSelesai->format('Y-m-d H:i:s'),
+                'nomorSoal' => $this->indexJawaban,
+
+            ]);
+
+            $this->dispatch('update-soal-terakhir');
+
+            $this->nomorSoalTerakhirHasil = session('soal-sesi.nomorSoalTerakhir');
+
+            // Redirect to confirmation page if it's the last question
+            $this->redirect('/konfirmasi-selesai', navigate: true);
+        }
+    }
+
+    public function previousQuestion()
+    {
+        if ($this->indexJawaban > 0) {
+            $this->indexJawaban--;
+            $this->jawaban = session('soal-sesi.jawabanSoalTerakhir', []);
+
+            $this->dispatch('start-timers'); 
+        }
     }
 
     public function confirmStartTest()
@@ -111,9 +274,9 @@ class SoalAsesmen extends Component
         $this->testStarted = false;
         $this->testQuestion = true;
         $this->testList = false;
-        $this->currentQuestionIndex = 0;
+        $this->indexJawaban = 0;
         $this->testFinished = false;
-        $this->questionTimers[$this->currentQuestionIndex] = $this->questionTimer;
+        $this->questionTimers[$this->indexJawaban] = $this->questionTimer;
         $this->dispatch('start-timers');
     }
 
@@ -128,7 +291,7 @@ class SoalAsesmen extends Component
         $this->testFinished = false;
         $this->testTimer = 3600; 
 
-        $this->questionTimers[$this->currentQuestionIndex] = $this->questionTimer;
+        $this->questionTimers[$this->indexJawaban] = $this->questionTimer;
 
         $this->dispatch('start-timers');
         return;
@@ -138,8 +301,8 @@ class SoalAsesmen extends Component
     public function jawabanBelumDiisi()
     {
 
-        if ($this->currentQuestionIndex < count($this->pertanyaans) - 1 ) {
-            $this->currentQuestionIndex++;
+        if ($this->indexJawaban < count($this->pertanyaans) - 1 ) {
+            $this->indexJawaban++;
             return; 
     
         } else {
@@ -150,71 +313,9 @@ class SoalAsesmen extends Component
 
     }
 
-    #[On('durasi-soal-selesai')]
-    public function durasiSoalSelesai()
-    {
-        if ($this->currentQuestionIndex < count($this->pertanyaans) - 1 ) {
-            $this->currentQuestionIndex++;
 
-            return;
-        } else {
-            $this->redirect('/konfirmasi-selesai', navigate: true);
-            return;
-        }
+    
 
-
-    }
-
-    public function nextQuestion()
-    {
-        // Validasi jawaban
-        if (empty($this->jawaban[$this->currentQuestionIndex])) {
-            $this->toast(
-                type: 'error',
-                title: 'Failed',
-                description: "Silakan isi jawaban sebelum melanjutkan ke soal berikutnya",               
-                position: 'toast-top toast-end',    
-                icon: 'o-information-circle',      
-                css: 'alert-info',                  
-                timeout: 3000,                      
-                redirectTo: null                    
-            );
-            $this->dispatch('jawaban-belum-diisi');
-            return;
-        }
-    
-        // Simpan jawaban ke session
-        $userId = auth()->id() ?? 'eafe4ec3-2e7d-4147-9dbe-754a79ff7740'; 
-        $pertanyaanId = $this->pertanyaans[$this->currentQuestionIndex]->id; 
-        
-        session()->put('soal-session.' . $this->currentQuestionIndex, [
-            'user_id' => $userId,
-            'asesmen_id' => $this->id,
-            'pertanyaan_id' => $pertanyaanId,
-            'jawaban' => $this->jawaban[$this->currentQuestionIndex]
-        ]);
-    
-        // Pindah ke soal berikutnya
-        if ($this->currentQuestionIndex < count($this->pertanyaans) - 1) {
-            $this->currentQuestionIndex++;
-            $this->jawaban[$this->currentQuestionIndex] = session('soal-session.' . $this->currentQuestionIndex, '');
-    
-            // Dispatch event untuk memulai timer dengan durasi soal baru
-            $this->dispatch('start-timers');
-        } else {
-            // Redirect ke halaman konfirmasi jika sudah soal terakhir
-            $this->redirect('/konfirmasi-selesai', navigate: true);
-        }
-    }
-    
-    public function previousQuestion()
-    {
-        if ($this->currentQuestionIndex > 0) {
-            $this->currentQuestionIndex--;
-            $this->jawaban[$this->currentQuestionIndex] = session('soal-session.' . $this->currentQuestionIndex, '');
-            $this->dispatch('start-timers'); // Dispatch event untuk reset timer
-        }
-    }
     
 
     public function finishTest()
@@ -226,7 +327,9 @@ class SoalAsesmen extends Component
 
     public function render()
     {
-        return view('livewire.asesmen.halaman-soal-asesmen')
+        return view('livewire.asesmen.halaman-soal-asesmen', [
+            'currentQuestion' => $this->questions[$this->indexJawaban] ?? null, // Ambil soal berdasarkan indeks
+        ])
         ->layout('components.layouts.app_visitor')
         ->title($this->title);
     }

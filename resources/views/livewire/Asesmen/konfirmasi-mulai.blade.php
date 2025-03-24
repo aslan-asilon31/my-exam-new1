@@ -1,7 +1,5 @@
 <div>
-    <livewire:Partials.Header/>
 
-    
     @php
         // Set locale ke bahasa Indonesia
         \Carbon\Carbon::setLocale('id');
@@ -15,18 +13,39 @@
                         <div class="absolute inset-0 bg-black opacity-50 rounded-md z-1"></div>
                         <div class="relative z-99">
                             <h2 class="text-sm md:text-md font-semibold text-white text-center">{{ $asesmen['judul'] }}</h2>
-                            <div class="py-4 flex flex-col md:flex-row justify-between">
-                                <div class="flex flex-col py-2">
-                                    <p class="text-gray-100 text-xs">Waktu:</p>
-                                    <p class="text-gray-100 text-[9px]">
-                                        {{ \Carbon\Carbon::parse($asesmen['tgl_mulai'])->translatedFormat('l, d F Y') }} - {{ \Carbon\Carbon::parse($asesmen['tgl_selesai'])->translatedFormat('l, d F Y') }} WIB
-                                    </p>
+                            <div class="py-4 flex">
+                                <!-- Kolom Kiri -->
+                                <div class="flex-1 pr-2">
+                                    <div class="flex flex-col py-2">
+                                        <p class="text-gray-100 text-xs">Hari :</p>
+                                        <p class="text-gray-100 text-[9px]">
+                                            {{ \Carbon\Carbon::parse($asesmen['tgl_mulai'])->translatedFormat('l') }} 
+                                        </p>
+                                    </div>
+                                    <div class="flex flex-col py-2">
+                                        <p class="text-gray-100 text-xs">Tanggal :</p>
+                                        <p class="text-gray-100 text-[9px]">
+                                            {{ \Carbon\Carbon::parse($asesmen['tgl_mulai'])->translatedFormat('d F Y') }} 
+                                        </p>
+                                    </div>
                                 </div>
-                                <div class="flex flex-col py-2">
-                                    <p class="text-gray-100 text-xs">Durasi:</p>
-                                    <p class="text-gray-100 text-[9px]">{{ $asesmen['durasi'] }} menit</p>
+                            
+                                <!-- Kolom Kanan -->
+                                <div class="flex-1 pl-2">
+                                    <div class="flex flex-col py-2">
+                                        <p class="text-gray-100 text-xs">Waktu :</p>
+                                        <p class="text-gray-100 text-[9px]">
+                                            {{ \Carbon\Carbon::parse($asesmen['tgl_mulai'])->translatedFormat('H:i') }} WIB
+                                        </p>
+                                    </div>
+                                    <div class="flex flex-col py-2">
+                                        <p class="text-gray-100 text-xs">Durasi :</p>
+                                        <p class="text-gray-100 text-[9px]  " id="durasi"> </p>
+                                    </div>
                                 </div>
                             </div>
+                            
+                                
                             
                         </div>
                     </div>
@@ -48,6 +67,22 @@
             </div>
         </div>
     </div>
+
+    <script>
+        // Nilai durasi dalam detik
+        const durasiDetik = {{ $asesmen['durasi'] }}; // Ganti dengan {{ $asesmen['durasi'] }} jika menggunakan PHP
+    
+        // Menghitung menit dan detik
+        const menit = Math.floor(durasiDetik / 60);
+        const detik = durasiDetik % 60;
+    
+        // Format output
+        const formattedDurasi = `${menit} menit ${detik} detik`;
+    
+        // Menampilkan durasi di elemen dengan id "durasi"
+        document.getElementById('durasi').textContent = formattedDurasi;
+    </script>
+
 
 </div>
 

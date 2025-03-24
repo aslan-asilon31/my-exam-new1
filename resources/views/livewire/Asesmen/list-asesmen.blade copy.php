@@ -1,6 +1,6 @@
 <div>
     <livewire:partials.header-layout/>
-
+    
     @php
         // Set locale ke bahasa Indonesia
         \Carbon\Carbon::setLocale('id');
@@ -24,10 +24,10 @@
                                 </div>
                                 <div class="flex flex-col p-2 text-left">
                                     <p class="text-gray-100 text-xs">Durasi:</p>
-                                    <p class="text-gray-100 text-[9px]">{{ $asesmen->durasi }} menit </p>
+                                    <p class="text-gray-100 text-[9px]">{{ $asesmen->durasi }} menit </p> 
                                 </div>
                             </div>
-
+                            
                             <a href="/konfirmasi-mulai/{{ $asesmen->id }}" class="mt-4 text-xs w-full  bg-orange-800 hover:bg-orange-900 text-white py-2 px-4 rounded">
                                 Mulai Assesment
                             </a>
@@ -38,9 +38,9 @@
                         <h2 class="text-sm md:text-md font-semibold">-</h2>
                     </div>
                 @endforelse
-
+                
             </div>
         </div>
     </div>
-
+    
 </div>

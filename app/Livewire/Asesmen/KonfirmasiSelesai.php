@@ -24,7 +24,7 @@ class KonfirmasiSelesai extends Component
 
     public function mount()
     {
-        // dd(Session());
+        dd(Session());
      
     }
 
@@ -82,13 +82,11 @@ class KonfirmasiSelesai extends Component
 
     }
     
-    // Fungsi untuk mengosongkan session pertanyaan
     public function clearSession()
     {
-        $userId = auth()->id(); // Ambil user ID dari auth
-        Session::forget('soal-session.' . $userId); // Mengosongkan semua jawaban untuk user ini
+        $userId = auth()->id(); 
+        Session::forget('soal-sesi.' . $userId); 
     }
-
 
     public function render()
     {
