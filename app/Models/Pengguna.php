@@ -35,10 +35,11 @@ class Pengguna extends Authenticatable
         'tgl_diupdate',
     ];
 
-    public function PenggunaAsesmens()
+    public function pengguna_asesmens()
     {
-        return $this->hasMany(PenggunaAsesmen::class);
+        return $this->hasMany(PenggunaAsesmen::class, 'pengguna_id', 'id');
     }
+    
 
     /**
      * The attributes that should be hidden for serialization.

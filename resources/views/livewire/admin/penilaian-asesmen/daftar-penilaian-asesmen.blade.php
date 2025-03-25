@@ -2,7 +2,7 @@
 
     <x-index-menu :url="$url" />
 
-    <livewire:admin.hasil-asesmen.komponen.tabel-hasil-asesmen />
-  
+    <livewire:admin.penilaian-asesmen.komponen.tabel-penilaian-asesmen />
+
 </x-card>
   

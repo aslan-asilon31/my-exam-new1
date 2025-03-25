@@ -27,7 +27,7 @@ final class TabelHasilAsesmen extends PowerGridComponent
     public string $tableName = 'asesmens';
     public string $sortField = 'tgl_dibuat';
     public string $sortDirection = 'desc';
-    public string $url = '/asesmen';
+    public string $url = '/hasil-asesmen';
 
     use WithExport;
     use WithTable;
@@ -52,9 +52,9 @@ final class TabelHasilAsesmen extends PowerGridComponent
                 ->select([
                     'penggunas.id',
                     'penggunas.nama',
-                    'pengguna_asesmens.tgl_dibuat' // Pastikan untuk memilih kolom tgl_dibuat dari tabel yang benar
+                    'pengguna_asesmens.tgl_dibuat' 
                 ])
-                ->orderBy('pengguna_asesmens.tgl_dibuat', 'desc') // Menyebutkan tabel untuk kolom tgl_dibuat
+                ->orderBy('pengguna_asesmens.tgl_dibuat', 'desc') 
                 ->limit(10)
                 ->offset(0);
     
@@ -93,9 +93,6 @@ final class TabelHasilAsesmen extends PowerGridComponent
 
             Column::make('Nama', 'nama')
                 ->sortable(),
-
-
-           
         ];
     }
 
@@ -104,8 +101,6 @@ final class TabelHasilAsesmen extends PowerGridComponent
         return [
             Filter::inputText('id', 'id')->placeholder('ID'),
             Filter::inputText('Nama', 'nama')->placeholder('nama'),
-            
-
     
         ];
     }

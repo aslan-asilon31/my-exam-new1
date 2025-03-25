@@ -12,17 +12,19 @@ class DetailPenggunaAsesmen extends Model
     protected $table = 'detail_pengguna_asesmen';
     public $timestamps = false;
     protected $fillable = [
-        'asesmen_user_id',
+        'pengguna_asesmen_id',
         'pertanyaan_id',
     ];
 
-    public function asesmenUser()
+    public function pengguna_assesmen()
     {
-        return $this->belongsTo(PenggunaAsesmen::class, 'asesmen_user_id');
+        return $this->belongsTo(PenggunaAsesmen::class, 'pengguna_asesmen_id');
     }
 
     public function pertanyaan()
     {
         return $this->belongsTo(Pertanyaan::class, 'pertanyaan_id');
     }
+
+
 }

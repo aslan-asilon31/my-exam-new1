@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\Admin\HasilAsesmen;
+namespace App\Livewire\Pengguna\HasilAsesmen;
 
 use Livewire\Component;
 use Livewire\Attributes\Title;
@@ -11,9 +11,9 @@ class DaftarHasilAsesmen extends Component
     public string $url = '/asesmen';
 
 
-    #[Title('Daftar Hasil Asesmens')] 
+    #[Title('Daftar Hasil Asesmen')] 
     public function render()
     {
-        return view('livewire.admin.hasil-asesmen.daftar-hasil-asesmen');
+        return view('livewire.pengguna.hasil-asesmen.daftar-hasil-asesmen');
     }
 }

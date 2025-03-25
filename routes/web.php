@@ -28,7 +28,10 @@ Route::get('/asesmen-evaluator/ubah/{id}', \App\Livewire\Admin\AsesmenEvaluator\
 
 Route::get('/asesmen-partisipan', \App\Livewire\Admin\AsesmenPartisipan\DaftarAsesmenPartisipan::class)->name('daftar-asesmen-partisipan');
 
-Route::get('/hasil-asesmen', \App\Livewire\Admin\HasilAsesmen\DaftarHasilAsesmen::class)->name('daftar-hasil-asesmen');
+
+Route::get('/penilaian-asesmen', \App\Livewire\Admin\PenilaianAsesmen\DaftarPenilaianAsesmen::class)->name('daftar-penilaian-asesmen');
+Route::get('/penilaian-asesmen/{id}', \App\Livewire\Admin\PenilaianAsesmen\PenilaianAsesmenCrud::class)->name('daftar-penilaian-asesmen-detail');
+Route::get('/penilaian-asesmen/{id}/readonly', \App\Livewire\Admin\PenilaianAsesmen\PenilaianAsesmenCrud::class)->name('penilaian-asesmen-crud-ubah')->defaults('readonly', true);
 
 Route::get('/laporan-asesmen', \App\Livewire\Admin\LaporanAsesmen\DaftarLaporanAsesmen::class)->name('daftar-laporan-asesmen');
 
@@ -39,8 +42,8 @@ Route::get('/laporan-asesmen', \App\Livewire\Admin\LaporanAsesmen\DaftarLaporanA
 // Route::get('/roles', \App\Livewire\Admin\DaftarAsesmen::class)->name('role');
 // Route::get('/permissions', \App\Livewire\Admin\DaftarAsesmen::class)->name('permission');
 
-
-
+# halaman pengguna admin
+Route::get('/hasil-asesmen', \App\Livewire\Pengguna\HasilAsesmen\DaftarHasilAsesmen::class)->name('daftar-hasil-asesmen');
 
 # customer
 Route::get('/daftar-asesmen', \App\Livewire\Asesmen\DaftarAsesmen::class)->name('daftar-asesmen');

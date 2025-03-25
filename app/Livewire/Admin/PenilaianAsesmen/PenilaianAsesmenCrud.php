@@ -1,17 +1,19 @@
 <?php
 
-namespace App\Livewire\Admin\Asesmen;
+namespace App\Livewire\Admin\PenilaianAsesmen;
 
 use App\Livewire\Admin\Asesmen\Forms\AsesmenForm;
 use Livewire\Component;
-use App\Models\Page;
-use App\Models\Asesmen;
+use App\Models\Pengguna;
+use App\Models\PenggunaAsesmen;
+use App\Models\DetailPenggunaAsesmen;
+use Illuminate\Support\Facades\DB;
 
-class AsesmenCrud extends Component
+class PenilaianAsesmenCrud extends Component
 {
   public function render()
   {
-    return view('livewire.admin.asesmen-crud')
+    return view('livewire.admin.penilaian-asesmen.penilaian-crud')
       ->title($this->title);
   }
 
@@ -44,22 +46,22 @@ class AsesmenCrud extends Component
   #[\Livewire\Attributes\Locked]
   public array $options = [];
 
-  #[\Livewire\Attributes\Locked]
-  protected $masterModel = \App\Models\Asesmen::class;
+  public $masterPengguna;
 
-  public AsesmenForm $masterForm;
+  #[\Livewire\Attributes\Locked]
+  protected $masterModel = \App\Models\Pengguna::class;
+
+  // public PenggunaForm $masterForm;
 
   public function mount()
   {
     if ($this->id && $this->readonly) {
       $this->title .= ' (Show)';
       $this->show();
-    } else if ($this->id) {
-      $this->title .= ' (Edit)';
-      $this->edit();
     } else {
-      $this->title .= ' (Create)';
-      $this->create();
+      $this->title .= ' (Edit)';
+
+      $this->edit();
     }
     $this->initialize();
   }
@@ -113,14 +115,22 @@ class AsesmenCrud extends Component
     $this->isDisabled = true;
     $masterData = $this->masterModel::findOrFail($this->id);
     $this->masterForm->fill($masterData);
+    
   }
 
   public function edit()
   {
     // $this->permission($this->basePageName.'-update');
 
-    $masterData = $this->masterModel::findOrFail($this->id);
-    $this->masterForm->fill($masterData);
+    // $this->masterPengguna = Pengguna::findOrFail($this->id)->get();
+    $penggunaAsesmen = PenggunaAsesmen::where('pengguna_id',$this->id)->latest('tgl_mulai')->first()->toArray();
+    
+
+    $this->masterPengguna = DetailPenggunaAsesmen::where('asesmen_user_id', $penggunaAsesmen['id'])
+          ->get(); // Mengambil entri terakhir
+
+    // $this->masterPengguna = Pengguna::where('id',$this->id)->first(); 
+    // $this->masterForm->fill($record);
   }
 
   public function update()
