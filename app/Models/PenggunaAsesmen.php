@@ -14,13 +14,13 @@ class PenggunaAsesmen extends Model
     public $timestamps = false;
     protected $fillable = [
         'id',
-        'user_id',
+        'pengguna_id',
         'asesmen_id',
         'tgl_mulai',
-        'tgl_selesai', // Pastikan untuk menambahkan kolom ini jika ada
+        'tgl_selesai', 
     ];
 
-    public function user()
+    public function pengguna()
     {
         return $this->belongsTo(User::class);
     }
@@ -29,4 +29,5 @@ class PenggunaAsesmen extends Model
     {
         return $this->belongsTo(Asesmen::class);
     }
+
 }

@@ -14,6 +14,6 @@ class DaftarHasilAsesmen extends Component
     #[Title('Daftar Hasil Asesmens')] 
     public function render()
     {
-        return view('livewire.admin.asesmen.daftar-hasil-asesmen');
+        return view('livewire.admin.hasil-asesmen.daftar-hasil-asesmen');
     }
 }

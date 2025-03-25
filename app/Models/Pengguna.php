@@ -25,6 +25,7 @@ class Pengguna extends Authenticatable
     protected $keyType = 'string'; 
 
     protected $fillable = [
+        'id',
         'nama',
         'surel',
         'sandi',
@@ -33,6 +34,11 @@ class Pengguna extends Authenticatable
         'tgl_dibuat',
         'tgl_diupdate',
     ];
+
+    public function PenggunaAsesmens()
+    {
+        return $this->hasMany(PenggunaAsesmen::class);
+    }
 
     /**
      * The attributes that should be hidden for serialization.

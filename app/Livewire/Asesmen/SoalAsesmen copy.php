@@ -217,12 +217,11 @@ class SoalAsesmen extends Component
         }
     }
 
-
-    public function finishTest()
+    #[On('assesmen-selesai')]
+    public function finishTest($value)
     {
-        dd('finish');
-        $this->testFinished = true;
-        $this->testStarted = false;
+        dd('finish',$value);
+        dd(Session());
     }
 
     public function render()

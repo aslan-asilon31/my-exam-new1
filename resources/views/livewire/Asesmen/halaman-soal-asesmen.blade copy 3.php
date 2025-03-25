@@ -17,7 +17,7 @@
     @else
         <h1 class="text-sm md:text-md font-bold mb-6 text-orange-900 text-center">
 
-            Soal {{ $indexJawaban +1  }} dari {{ count($pertanyaans) }}
+            Soal {{ $indexJawaban + 1  }} dari {{ count($pertanyaans) }}
         </h1>
         <p hidden>Timer Soal Berjalan: <span id="timer-soal-berjalan">00:00</span></p>
         <div class="mb-6">
@@ -30,14 +30,14 @@
             ></textarea>
 
 
-            <div id="soal-durasi" class="text-md md:text-lg font-bold"> {{ $waktuSoal }}</div>
-
+            <div id="soal-durasi" class="text-md md:text-lg font-bold">00:00</div>
+            {{-- <input type="hidden" id="value-durasi" value=""> --}}
         </div>
 
         <div class="flex justify-between mt-8">
 
             <button
-                wire:click="soalSebelumnya"
+                wire:click="previousQuestion"
                 class="text-xs md:text-sm bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                 {{ $indexJawaban == 0 ? 'disabled' : '' }}
             >
@@ -46,54 +46,13 @@
             
 
             <button
-                wire:click="soalSelanjutnya"
+                wire:click="nextQuestion"
                 class="text-xs md:text-sm bg-orange-900 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
             >
                 Selanjutnya
             </button>
         </div>
     @endif
-
-
-    <script>
-        // Ambil waktu yang telah berlalu dari local storage, jika ada
-        let elapsedTime = localStorage.getItem('elapsedTime') ? parseInt(localStorage.getItem('elapsedTime')) : 0;
-    
-        // Durasi asesmen dalam detik, dikurangi dengan waktu yang telah berlalu
-        let countdownAssesmentTime = {{ $asesmenDurasi }} - Math.floor(elapsedTime / 1000);
-        if (countdownAssesmentTime < 0) {
-            countdownAssesmentTime = 0;
-        }
-    
-        // Update tampilan durasi asesmen
-        const updateDisplay = () => {
-            const minutes = Math.floor(countdownAssesmentTime / 60);
-            const seconds = countdownAssesmentTime % 60;
-            const formattedTime = `${minutes < 10 ? '0' : ''}${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-            document.getElementById('asesmen-durasi').innerText = formattedTime;
-        };
-    
-        // Interval untuk menghitung mundur
-        const examIntervalAsesmen = setInterval(() => {
-            if (countdownAssesmentTime <= 0) {
-                clearInterval(examIntervalAsesmen);
-                document.getElementById('asesmen-durasi').innerText = "00:00"; 
-                
-                // Kirim nilai ke Livewire controller
-                Livewire.emit('assesmenSelesai', {{ $asesmenDurasi }}); // Ganti dengan nilai yang sesuai jika perlu
-            } else {
-                countdownAssesmentTime--;
-                updateDisplay();
-            }
-    
-            // Simpan waktu yang telah berlalu ke local storage
-            localStorage.setItem('elapsedTime', ({{ $asesmenDurasi }} - countdownAssesmentTime) * 1000);
-        }, 1000);
-    
-        // Tampilkan waktu saat pertama kali dimuat
-        updateDisplay();
-    </script>
-
 
 
 
@@ -117,6 +76,7 @@
         let elapsedTime = localStorage.getItem('elapsedTime') ? parseInt(localStorage.getItem('elapsedTime')) : 0;
 
         let countdownAssesmentTime = {{ $asesmenDurasi }} - Math.floor(elapsedTime / 1000); // Mengurangi waktu yang telah berlalu
+
         if (countdownAssesmentTime < 0) {
             countdownAssesmentTime = 0;
         }
@@ -132,6 +92,7 @@
             localStorage.setItem('elapsedTime', elapsedTime);
 
             countdownAssesmentTime--;
+
 
             if (countdownAssesmentTime < 0) {
                 clearInterval(examIntervalAsesmen);
@@ -151,6 +112,36 @@
         })
     </script>
 
+    {{-- <script>
+        document.addEventListener('livewire:init', () => {
+            Livewire.on('ambil-value-asesmen', (event) => {
+                //
+            });
+        });
+    </script> --}}
+
+
+    {{-- <script>
+        let timerSoalBerjalan1 = 0;
+
+        const timerSoalBerjalanInterval = setInterval(() => {
+            const minutes = Math.floor(timerSoalBerjalan1 / 60);
+            const seconds = timerSoalBerjalan1 % 60;
+
+            const formattedTime = `${minutes < 10 ? '0' : ''}${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+
+            document.getElementById('timer-soal-berjalan').textContent = formattedTime;
+
+            timerSoalBerjalan1++;
+
+            if (countdownSoalTime <= 0) {
+                clearInterval(timerSoalBerjalanInterval);
+                Livewire.dispatch('durasi-soal-berjalan-selesai', { value: timerSoalBerjalan1 });
+            } else {
+                countdownSoalTime--;
+            }
+        }, 1000);
+    </script> --}}
 
     <script>
             let countdownSoalTime = {{ $waktuSoal }};
@@ -161,7 +152,7 @@
 
                 const formattedTime = `${minutes < 10 ? '0' : ''}${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
 
-                // document.getElementById('soal-durasi').textContent = formattedTime;
+                document.getElementById('soal-durasi').textContent = formattedTime;
 
                 countdownSoalTime--;
 

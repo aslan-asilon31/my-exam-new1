@@ -1,9 +1,12 @@
 <div>
 
-    @php
-        // Set locale ke bahasa Indonesia
-        \Carbon\Carbon::setLocale('id');
-    @endphp
+    <header class="bg-white shadow-md p-4 mb-10 rounded-md">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-sm md:text-md font-bold text-orange-900">Umedalife</h1>
+            <span id="asesmen-durasi" class="text-sm md:text-md font-bold text-orange-900">{{ $this->asesmenDurasi }}</span>
+            <x-logout-button />
+        </div>
+    </header>
 
     <div class=" ">
         <div class="w-96 h-screen bg-white p-8 rounded-md shadow-lg ">
@@ -25,7 +28,13 @@
                                     <div class="flex flex-col py-2">
                                         <p class="text-gray-100 text-xs">Tanggal :</p>
                                         <p class="text-gray-100 text-[9px]">
-                                            {{ \Carbon\Carbon::parse($asesmen['tgl_mulai'])->translatedFormat('d F Y') }} 
+                                            {{ \Carbon\Carbon::parse($asesmen['tgl_mulai'])->translatedFormat('d F Y') }}  
+                                        </p>
+                                    </div>
+                                    <div class="flex flex-col py-2">
+                                        <p class="text-gray-100 text-xs">Nama :</p>
+                                        <p class="text-gray-100 text-[9px]">
+                                            {{ $userName }}  
                                         </p>
                                     </div>
                                 </div>
@@ -35,12 +44,18 @@
                                     <div class="flex flex-col py-2">
                                         <p class="text-gray-100 text-xs">Waktu :</p>
                                         <p class="text-gray-100 text-[9px]">
-                                            {{ \Carbon\Carbon::parse($asesmen['tgl_mulai'])->translatedFormat('H:i') }} WIB
+                                            {{ \Carbon\Carbon::parse($asesmen['tgl_mulai'])->translatedFormat('H:i') }} WIB - {{ \Carbon\Carbon::parse($asesmen['tgl_selesai'])->translatedFormat('H:i') }} WIB
                                         </p>
                                     </div>
                                     <div class="flex flex-col py-2">
                                         <p class="text-gray-100 text-xs">Durasi :</p>
-                                        <p class="text-gray-100 text-[9px]  " id="durasi"> </p>
+                                        <p class="text-gray-100 text-[9px]  " id="">  {{ $this->asesmenDurasi }} </p>
+                                    </div>
+                                    <div class="flex flex-col py-2">
+                                        <p class="text-gray-100 text-xs">Email :</p>
+                                        <p class="text-gray-100 text-[9px]">
+                                            {{ $userEmail }}  
+                                        </p>
                                     </div>
                                 </div>
                             </div>
