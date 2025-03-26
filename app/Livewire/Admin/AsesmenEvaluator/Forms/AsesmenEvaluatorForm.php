@@ -10,8 +10,8 @@ class AsesmenEvaluatorForm extends Form
 
   public string|null $id = null;
   public string|null $judul = null;
+  public int|null $durasi = 0;
   public string|null $deskripsi = null;
-  public string|null $durasi = null;
   public string|null $tgl_mulai = null;
   public string|null $tgl_selesai = null;
   public int|null $no_urut = 0;
@@ -23,7 +23,7 @@ class AsesmenEvaluatorForm extends Form
           'masterForm.id' => 'nullable|string',
           'masterForm.judul' => 'required|string|max:255',
           'masterForm.deskripsi' => 'required|string',
-          'masterForm.durasi' => 'required|integer|min:1',
+          'masterForm.durasi' => 'nullable|integer|min:1',
           'masterForm.tgl_mulai' => 'required|date',
           'masterForm.tgl_selesai' => 'required|date|after_or_equal:tgl_mulai',
           'masterForm.no_urut' => 'required|numeric|min:0',

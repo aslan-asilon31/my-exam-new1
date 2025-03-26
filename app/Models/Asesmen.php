@@ -40,4 +40,9 @@ class Asesmen extends Model
     {
         return $this->hasMany(Pertanyaan::class, 'asesmen_id', 'id');
     }
+    
+    public function asesmen()
+    {
+        return $this->belongsTo(PenggunaAsesmen::class,'asesmen_id');
+    }
 }

@@ -14,12 +14,12 @@ class AsesmenUserDetailSeeder extends Seeder
         $data = [
             [
                 'id' => Str::uuid(),
-                'asesmen_user_id' => 'uuid-asesmen-user-1', // Ganti dengan UUID yang valid
+                'pengguna_asesmen_id' => 'uuid-asesmen-user-1', // Ganti dengan UUID yang valid
                 'pertanyaan_id' => 'uuid-pertanyaan-1', // Ganti dengan UUID yang valid
             ],
             [
                 'id' => Str::uuid(),
-                'asesmen_user_id' => 'uuid-asesmen-user-2', // Ganti dengan UUID yang valid
+                'pengguna_asesmen_id' => 'uuid-asesmen-user-2', // Ganti dengan UUID yang valid
                 'pertanyaan_id' => 'uuid-pertanyaan-2', // Ganti dengan UUID yang valid
             ],
             // Tambahkan lebih banyak data sesuai kebutuhan

@@ -96,7 +96,7 @@ class KonfirmasiMulai extends Component
 
         
         session()->put('soal-sesi',[
-            'user_id' => $this->userId,
+            'pengguna_id' => $this->userId,
             'user_name' => $this->userName,
             'user_email' => $this->userEmail,
             'asesmen_id' => $this->asesmen['id'],

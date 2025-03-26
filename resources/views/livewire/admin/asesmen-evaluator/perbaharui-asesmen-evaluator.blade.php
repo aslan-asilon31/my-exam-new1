@@ -1,4 +1,10 @@
-<x-card :title="$title" shadow separator class="border shadow">
+
+<div>
+
+
+
+  <x-card :title="$title" shadow separator class="border shadow">
+    <div id="summernote"></div>
 
     <div class="grid grid-cols-2 mb-4">
       <div>
@@ -45,6 +51,9 @@
             inline />
           </div>
 
+
+
+
           
           <div class="mb-3">
             <x-datetime label="Tanggal Mulai" wire:model="masterForm.tgl_mulai" icon="o-calendar" type="datetime-local"/>
@@ -59,10 +68,7 @@
             <x-choices-offline wire:model="masterForm.apa_aktif" label="Apakah Aktif ?" :options="[['id' => 0, 'name' => 'Tidak Aktif'], ['id' => 1, 'name' => 'Aktif']]" single searchable
               :readonly="$isReadonly" />
           </div>
-                    
-          <div class="mb-3">
-            <x-input label="Durasi" wire:model.blur="masterForm.durasi" id="masterForm.durasi" name="masterForm.durasi" placeholder="Durasi" />
-          </div>
+       
 
         </div>
 
@@ -100,6 +106,8 @@
               />
             </div>
 
+
+
             <div class="mb-3">
                 <x-input label="Bobot" wire:model.blur="masterSoalForm.bobot" id="masterSoalForm.bobot" name="masterSoalForm.bobot" placeholder="Bobot" />
             </div>
@@ -122,5 +130,8 @@
           </div>
       </x-form>
     @endif
+
+
   
   </x-card>
+</div>

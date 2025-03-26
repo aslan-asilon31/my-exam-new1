@@ -213,7 +213,7 @@ class SoalAsesmen extends Component
 
         session()->put('soal-sesi.' . $this->indexJawaban, [
 
-            'user_id' => $this->userId,
+            'pengguna_id' => $this->userId,
             'asesmen_id' => $this->id,
             'pertanyaan_id' => $pertanyaanId,
             'jawaban' => $this->jawaban[$this->indexJawaban],
@@ -237,7 +237,7 @@ class SoalAsesmen extends Component
 
             session()->put('soal-sesi.' . $this->indexJawaban, [
 
-                'user_id' => $this->userId,
+                'pengguna_id' => $this->userId,
                 'asesmen_id' => $this->id,
                 'pertanyaan_id' => $pertanyaanId,
                 // 'jawaban' => $this->jawaban[$this->indexJawaban],

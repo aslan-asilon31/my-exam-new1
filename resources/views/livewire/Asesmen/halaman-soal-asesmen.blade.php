@@ -10,20 +10,32 @@
     </header>
 
 
-<div class="w-96 h-screen bg-white p-8 rounded-md shadow-md transform transition-transform duration-300 hover:shadow-2xl hover:scale-105">
+<div class="mx-auto max-w-full h-screen bg-white p-8 rounded-md shadow-md transform transition-transform duration-300 hover:shadow-2xl hover:scale-105">
 
     @if ($pertanyaans->isEmpty())
         <p class="text-gray-700 text-center">Tidak ada pertanyaan tersedia.</p>
     @else
         <h1 class="text-sm md:text-md font-bold mb-6 text-orange-900 text-center">
 
-            Soal {{ $indexJawaban +1  }} dari {{ count($pertanyaans) }}
+
+          <p> Soal {{ $indexJawaban +1  }} dari {{ count($pertanyaans) }}</p>
+
+            <hr class="my-5" />
+            
         </h1>
         <p hidden>Timer Soal Berjalan: <span id="timer-soal-berjalan">00:00</span></p>
-        <div class="mb-6">
-            <p class="text-gray-700 mb-4">{{ $pertanyaans[$indexJawaban]->pertanyaan }}?</p>
+        <div class="mb-6 ">
 
-            <textarea
+      
+            <div class="w-full flex justify-center text-center">
+                <div class="mb-3 flex w-64 ">
+                  <div id="summernote-soal" class="summernote-editor">
+                    {!! $pertanyaans[$indexJawaban]->pertanyaan !!}
+                  </div>
+                </div>
+            </div>
+
+            <textarea 
                 wire:model="jawaban.{{ $indexJawaban }}"
                 class="form-control @error('jawaban.' . $indexJawaban) is-invalid @enderror w-full h-32 p-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
                 placeholder="Tulis jawaban Anda di sini..."
@@ -173,6 +185,41 @@
             }, 1000);
 
     </script>
+
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote-lite.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote-lite.min.js"></script>
+
+    
+    
+    <script>
+        $(document).ready(function() {
+            $('#summernote-soal').summernote({
+                height: 'auto', // Set height to auto to fit content
+                toolbar: false, // Disable the toolbar for read-only mode
+                focus: true,
+                callbacks: {
+                onInit: function() {
+                    // Optional: Add any additional styles or classes if needed
+                    $(this).css('overflow', 'visible'); // Ensure overflow is visible
+                }
+            }
+            });
+    
+            // Set the content of the Summernote editor
+            $('#summernote-soal').summernote('code', $('#summernote-soal').html());
+        });
+    </script>
+
+    <style>
+        .summernote-editor {
+            border: 1px solid #ccc; /* Optional: Add a border for better visibility */
+            padding: 10px; /* Optional: Add padding */
+            border-radius: 5px; /* Optional: Add rounded corners */
+        }
+    </style>
+    
+
 
 </div>
 

@@ -34,7 +34,7 @@ class SoalAsesmen extends Component
     public $questionTimers = [];
 
     public $indexJawaban = 0;
-    public $pertanyaans;
+    public $pertanyaans  = [];
     public $userId;
     public $asesmenDurasi = 0 ;
     public $pertanyaanId;

@@ -25,14 +25,14 @@ class PenggunaAsesmen extends Model
         return $this->belongsTo(Pengguna::class);
     }
 
-    public function pengguna_asesmens()
+    public function asesmen()
     {
-        return $this->belongsTo(Asesmen::class);
+        return $this->belongsTo(Asesmen::class, 'asesmen_id');
     }
 
     public function detail_pengguna_asesmens()
     {
-        return $this->hasMany(DetailPenggunaAsesmen::class, 'pengguna_asesmen_id', 'id');
+        return $this->hasMany(DetailPenggunaAsesmen::class, 'pengguna_asesmen_id');
     }
 
 }

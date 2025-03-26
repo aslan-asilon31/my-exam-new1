@@ -19,7 +19,8 @@ Route::get('/', \App\Livewire\Auth\Login::class)->name('login');
 Route::get('/register', \App\Livewire\Auth\Register::class)->name('register');
 
 # admin
-Route::get('/dasbor', \App\Livewire\Admin\Dasbor\Dasbor::class)->name('dashbor');
+Route::get('/dasbor', \App\Livewire\Admin\Dasbor\Dasbor::class)->name('dasbor');
+Route::get('/dasbor-user', \App\Livewire\User\DasborUser\DasborUser::class)->name('dasbor-user');
 
 // Route::get('/asesmen-evaluator', \App\Livewire\Admin\AsesmenEvaluator\DaftarAsesmenEvaluator::class)->name('daftar-asesmen-evaluator');
 Route::get('/asesmen-evaluator', \App\Livewire\Admin\AsesmenEvaluator\DaftarAsesmenEvaluator::class);
@@ -27,7 +28,6 @@ Route::get('/asesmen-evaluator/buat', \App\Livewire\Admin\AsesmenEvaluator\Perba
 Route::get('/asesmen-evaluator/ubah/{id}', \App\Livewire\Admin\AsesmenEvaluator\UbahAsesmenEvaluator::class)->name('ubah-asesmen-evaluator');
 
 Route::get('/asesmen-partisipan', \App\Livewire\Admin\AsesmenPartisipan\DaftarAsesmenPartisipan::class)->name('daftar-asesmen-partisipan');
-
 
 Route::get('/penilaian-asesmen', \App\Livewire\Admin\PenilaianAsesmen\DaftarPenilaianAsesmen::class)->name('daftar-penilaian-asesmen');
 Route::get('/penilaian-asesmen/{id}', \App\Livewire\Admin\PenilaianAsesmen\PenilaianAsesmenCrud::class)->name('daftar-penilaian-asesmen-detail');

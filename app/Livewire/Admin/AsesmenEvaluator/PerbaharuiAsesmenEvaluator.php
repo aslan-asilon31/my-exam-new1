@@ -8,6 +8,8 @@ use Livewire\Component;
 use App\Models\Page;
 use App\Models\Pertanyaan;
 use App\Models\Asesmen;
+use Carbon\Carbon;
+
 use Illuminate\Support\Str;
 use Livewire\Attributes\On; 
 
@@ -61,6 +63,8 @@ class PerbaharuiAsesmenEvaluator extends Component
 
   public AsesmenEvaluatorForm $masterForm;
   public AsesmenSoalForm $masterSoalForm;
+  public $masterSoalForm1;
+  public $asesmen;
 
   public function mount()
   {
@@ -84,6 +88,7 @@ class PerbaharuiAsesmenEvaluator extends Component
   public function buat()
   {
 
+
     $this->masterForm->reset();
 
   }
@@ -97,7 +102,6 @@ class PerbaharuiAsesmenEvaluator extends Component
     $this->masterSoalForm->id = $this->id;
     // $this->masterSoalForm->no_urut = (int) $this->masterModelSoal::where('asesmen_id',$this->id)
     // ?->max('no_urut') + 1;
-
     return [
         $this->tampilFormJudulAsesmen = false,
         $this->tampilFormSoalAsesmen = true,
@@ -114,6 +118,8 @@ class PerbaharuiAsesmenEvaluator extends Component
   
   public function simpanSoal()
   {
+    dd($this->masterSoalForm);
+
     $validatedSoalForm = $this->validate(
       $this->masterSoalForm->rules(),
       [],
@@ -129,7 +135,10 @@ class PerbaharuiAsesmenEvaluator extends Component
         $validatedSoalForm['tgl_diupdate'] = now();
         $validatedSoalForm['jenis'] = 'essay';
     
-        $pertanyaan = Pertanyaan::buat($validatedSoalForm);
+      dd($validatedSoalForm);
+
+
+        $pertanyaan = Pertanyaan::create($validatedSoalForm);
         
         return $this->redirect('/asesmen-evaluator', navigate: true);
         $this->success('Soal Asesmen sudah dibuat');
@@ -159,6 +168,12 @@ class PerbaharuiAsesmenEvaluator extends Component
       $this->masterForm->attributes()
     )['masterForm'];
 
+    $tglMulai = \Carbon\Carbon::parse($validatedForm['tgl_mulai']);
+    $tglSelesai = \Carbon\Carbon::parse($validatedForm['tgl_selesai']);
+    $durasi = $tglMulai->diffInSeconds($tglSelesai);
+
+    $validatedForm['durasi'] = $tglMulai->diffInSeconds($tglSelesai);
+
 
     \Illuminate\Support\Facades\DB::beginTransaction();
     try {
@@ -168,16 +183,18 @@ class PerbaharuiAsesmenEvaluator extends Component
       $validatedForm['dibuat_oleh'] = auth()->user()->username ?? 'admin';
       $validatedForm['diupdate_oleh'] = auth()->user()->username ?? 'admin';
       $validatedForm['tgl_dibuat'] = now();
-      // $validatedForm['apa_aktif'] = $this->masterForm['apa_aktif'];
+      $validatedForm['tgl_diupdate'] = now();
+      $validatedForm['durasi'] = $durasi;
+      $validatedForm['apa_aktif'] = $validatedForm['apa_aktif'];
 
       $asesmendibuat = $this->masterModelAsesmen::create($validatedForm);
       \Illuminate\Support\Facades\DB::commit();
       // $this->create();
       $this->success('Judul Asesmen sudah dibuat');
-      $this->dispatch('asesmen-judul-sudah-dibuat', idAsesmenJudul: $asesmendibuat->id); 
-      return $this->redirect("/asesmen-evaluator/ubah/". $asesmendibuat->id, navigate: true);
+      $this->dispatch("asesmen-judul-sudah-dibuat"); 
+      $this->redirect("/asesmen-evaluator/ubah/". $asesmendibuat->id, navigate: true);
       $this->bukaFormSoal();
-     
+
     } catch (\Throwable $th) {
       \Illuminate\Support\Facades\DB::rollBack();
       \Log::error('Data failed to store: ' . $th->getMessage());

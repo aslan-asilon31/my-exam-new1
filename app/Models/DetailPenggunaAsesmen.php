@@ -18,7 +18,7 @@ class DetailPenggunaAsesmen extends Model
 
     public function pengguna_assesmen()
     {
-        return $this->belongsTo(PenggunaAsesmen::class, 'pengguna_asesmen_id');
+        return $this->hasMany(PenggunaAsesmen::class,'id');
     }
 
     public function pertanyaan()

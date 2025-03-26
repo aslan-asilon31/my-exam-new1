@@ -1,9 +1,11 @@
 <?php
 
-namespace App\Livewire\Admin\AsesmenEvaluator\Komponen;
+namespace App\Livewire\Admin\PenilaianAsesmen\Komponen;
 
 use App\Helpers\Table\Traits\WithTable;
 use App\Models\Asesmen;
+use App\Models\PenggunaAsesmen;
+use App\Models\Pengguna;
 use App\Models\Position;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -20,12 +22,12 @@ use PowerComponents\LivewirePowerGrid\PowerGridComponent;
 use PowerComponents\LivewirePowerGrid\Traits\WithExport;
 use PowerComponents\LivewirePowerGrid\Components\SetUp\Exportable; 
 
-final class TabelAsesmenEvaluator extends PowerGridComponent
+final class TabelPenilaianAsesmen extends PowerGridComponent
 {
     public string $tableName = 'asesmens';
     public string $sortField = 'tgl_dibuat';
     public string $sortDirection = 'desc';
-    public string $url = '/asesmen-evaluator';
+    public string $url = '/penilaian-asesmen';
 
     use WithExport;
     use WithTable;
@@ -45,18 +47,21 @@ final class TabelAsesmenEvaluator extends PowerGridComponent
 
     public function datasource(): Builder
     {
-        return Asesmen::query()
-            ->select([
-                'asesmens.id',
-                'asesmens.judul',
-                'asesmens.deskripsi',
-                'asesmens.durasi',
-                'asesmens.tgl_mulai',
-                'asesmens.tgl_selesai',
-                'asesmens.dibuat_oleh',
-                'asesmens.diupdate_oleh',
-                'asesmens.tgl_dibuat',
-            ]);
+        return Pengguna::query()
+                ->join('pengguna_asesmens', 'pengguna_asesmens.pengguna_id', '=', 'penggunas.id')
+                ->select([
+                    'penggunas.id',
+                    'penggunas.nama',
+                    'penggunas.surel',
+                    'pengguna_asesmens.tgl_mulai',
+                    'pengguna_asesmens.tgl_selesai',
+                    'pengguna_asesmens.tgl_dibuat' ,
+                    'pengguna_asesmens.tgl_diupdate' 
+                ])
+                ->orderBy('pengguna_asesmens.tgl_dibuat', 'desc') 
+                ->limit(10)
+                ->offset(0);
+    
     }
 
     public function relationSearch(): array
@@ -73,73 +78,46 @@ final class TabelAsesmenEvaluator extends PowerGridComponent
         return PowerGrid::fields()
             ->add('action', fn($record) => Blade::render('
                 <x-dropdown no-x-anchor class="btn-sm">
-                    <x-menu-item title="Edit" Link="/asesmen-evaluator/ubah/' . e($record->id) . '"/>
+                    <x-menu-item title="Lihat Detail" Link="/penilaian-asesmen/' . e($record->id) . '/readonly" />
+                    <x-menu-item title="Ubah/Beri nilai" Link="/penilaian-asesmen/' . e($record->id) . '"/>
                 </x-dropdown>'))
-            ->add('judul', fn($record) => $record->judul)
-            ->add('deskripsi')
-            ->add('durasi')
-            ->add('tgl_mulai')
-            ->add('tgl_selesai')
-            ->add('dibuat_oleh')
-            ->add('diupdate_oleh')
-            ->add('tgl_dibuat');
+            ->add('nama', fn($record) => $record->nama)
+            ->add('surel', fn($record) => $record->surel)
+            ->add('tgl_mulai', fn($record) => $record->tgl_mulai)
+            ->add('tgl_selesai', fn($record) => $record->tgl_selesai)
+            ->add('tgl_dibuat', fn($record) => $record->tgl_dibuat)
+            ->add('tgl_diupdate', fn($record) => $record->tgl_diupdate);
     }
 
     public function columns(): array
     {
         return [
-            Column::make('Action', 'action')
+            Column::make('', 'action')
                 ->visibleInExport(false)
                 ->bodyAttribute('text-center'),
-
-            Column::make('ID', 'id')
-                ->visibleInExport(false) // Hide ID column in export
+            Column::make('Nama', 'nama')
+                ->sortable(),
+            Column::make('Tanggal Asesmen Mulai', 'tgl_mulai')
+                ->sortable(),
+            Column::make('Tanggal Asesmen Selesai', 'tgl_selesai')
+                ->sortable(),
+            Column::make('Tanggal Dibuat', 'tgl_dibuat')
+                ->sortable(),
+            Column::make('Tanggal Diupdate', 'tgl_diupdate')
                 ->sortable(),
 
-            Column::make('Judul', 'judul')
-                ->sortable(),
-
-            Column::make('Deskripsi', 'deskripsi')
-                ->sortable()
-                ->searchable(),
-
-            Column::make('Durasi', 'durasi')
-                ->sortable(),
-
-            Column::make('Tanggal mulai', 'tgl_mulai')
-                ->sortable(),
-            Column::make('Tanggal selesai', 'tgl_selesai')
-                ->sortable(),
-            Column::make('Dibuat oleh', 'dibuat_oleh')
-                ->sortable(),
-            Column::make('Dibuat oleh', 'diupdate_oleh')
-                ->sortable(),
-
-            Column::make('diupdate oleh', 'diupdate_oleh')
-                ->sortable(),
-
-            Column::make('tgl_dibuat', 'diupdate_oleh')
-                ->sortable(),
-
-           
         ];
     }
 
     public function filters(): array
     {
         return [
-            Filter::inputText('id', 'id')->placeholder('ID'),
-            Filter::inputText('judul', 'judul')->placeholder('Judul'),
-            Filter::inputText('deskripsi', 'deskripsi')->placeholder('Deskripsi'),
-            Filter::inputText('durasi', 'durasi')->placeholder('Durasi'),
-            Filter::inputText('email', 'email')->placeholder('Email'),
-            Filter::datetimepicker('tgl_mulai', 'tgl_dibuat')
-                ->params(['timezone' => 'Asia/Jakarta']),
-         
-            Filter::inputText('dibuat_oleh', 'dibuat_oleh')->placeholder('dibuat_oleh'),
-            Filter::inputText('diupdate_oleh', 'diupdate_oleh')->placeholder('diupdate_oleh'),
-        
-
+            Filter::inputText('Nama', 'nama')->placeholder('nama'),
+            Filter::inputText('Surel', 'surel')->placeholder('surel'),
+            Filter::inputText('Tanggal Mulai', 'tgl_mulai')->placeholder('tgl_mulai'),
+            Filter::inputText('Tanggal Selesai', 'tgl_selesai')->placeholder('tgl_selesai'),
+            Filter::inputText('Tanggal Dibuat', 'tgl_dibuat')->placeholder('tgl_dibuat'),
+            Filter::inputText('Tanggal Diupdate', 'tgl_diupdate')->placeholder('tgl_diupdate'),
     
         ];
     }

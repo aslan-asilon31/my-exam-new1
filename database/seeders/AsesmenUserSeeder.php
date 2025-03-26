@@ -12,7 +12,7 @@ class AsesmenUserSeeder extends Seeder
     {
         AsesmenUser::create([
             'id' => Str::uuid(),
-            'user_id' => 1, // Ganti dengan ID user yang valid
+            'pengguna_id' => 1, // Ganti dengan ID user yang valid
             'asesmen_id' => 'your-asesmen-uuid', // Ganti dengan UUID asesmen yang valid
             'tgl_mulai' => now(),
             'tgl_selesai' => now()->addHours(1), // Misalnya, 1 jam setelah mulai

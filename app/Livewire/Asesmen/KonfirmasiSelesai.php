@@ -96,7 +96,7 @@ class KonfirmasiSelesai extends Component
         // $jawabanData = Session::get();
             //  dd(Session());
         $penggunaAsesmen = PenggunaAsesmen::create([
-            'user_id' => 'eafe4ec3-2e7d-4147-9dbe-754a79ff7740', // Ambil user ID dari auth
+            'pengguna_id' => 'eafe4ec3-2e7d-4147-9dbe-754a79ff7740', // Ambil user ID dari auth
             'asesmen_id' => $jawabanData[0]['asesmen_id'], // Pastikan Anda memiliki asesmen_id yang sesuai
             'pertanyaan_id' => $jawabanData[0]['pertanyaan_id'], // Ambil pertanyaan_id dari jawaban
             'tgl_mulai' => now(), // Atur tanggal mulai
@@ -107,7 +107,7 @@ class KonfirmasiSelesai extends Component
         foreach ($jawabanData as $jawaban) {
             $detailPenggunaAsesmen[] = [
                 'id' => (string) Str::uuid(),
-                'asesmen_user_id' =>  $penggunaAsesmen->id, // Pastikan Anda memiliki asesmen_id yang sesuai
+                'pengguna_asesmen_id' =>  $penggunaAsesmen->id, // Pastikan Anda memiliki asesmen_id yang sesuai
                 'pertanyaan_id' => (string) $jawaban['pertanyaan_id'], // Ambil pertanyaan_id dari jawaban
                 'jawaban' => $jawaban['jawaban'], // Ambil jawaban dari jawaban
                 'poin' => 0, // Ambil jawaban dari jawaban

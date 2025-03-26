@@ -3,6 +3,7 @@
 namespace App\Livewire\Admin\Pertanyaan;
 
 use Livewire\Component;
+use App\Models\Asesmen;
 use App\Models\Pertanyaan;
 use App\Livewire\Admin\Pertanyaan\Forms\PertanyaanForm;
 use Illuminate\Support\Facades\Request;
@@ -12,11 +13,15 @@ use Illuminate\Support\Str;
 
 class DaftarPertanyaan extends Component
 {
+    public Asesmen $asesmen;
     public $soals = [];
     public $idSoal = '';
+    public $idAsesmen = '';
     public $title = '';
     public $modalPertanyaan = false;
     public $modalPertanyaanHapus = false;
+    public $description = "";
+
     
 
     public PertanyaanForm $masterSoalForm;
@@ -38,8 +43,10 @@ class DaftarPertanyaan extends Component
   public array $options = [];
 
 
-
     public string $url = '/pertanyaan';
+
+    use \Livewire\WithFileUploads;
+    use \Mary\Traits\Toast;
 
     public function initialize()
     {
@@ -49,6 +56,7 @@ class DaftarPertanyaan extends Component
 
     public function mount()
     {
+
       if ($this->idSoal) {
         $this->title .= ' (Ubah)';
         $this->ubah($id);
@@ -65,18 +73,17 @@ class DaftarPertanyaan extends Component
       $this->idSoal = null;
     }
 
+
     public function simpan()
     {
+
       $validatedSoalForm = $this->validate(
         $this->masterSoalForm->rules(),
         [],
         $this->masterSoalForm->attributes()
       )['masterSoalForm'];
 
-          // Log nilai sebelum penyimpanan
-          $buatUuid = Str::uuid()->toString();
-          $validatedSoalForm['id'] = $buatUuid;
-          $validatedSoalForm['asesmen_id'] = $this->id;
+          $validatedSoalForm['asesmen_id'] = "95e36db6-dfa4-4b5e-955e-c9d3e56ae72a";
           $validatedSoalForm['dibuat_oleh'] = auth()->user()->username ?? 'admin';
           $validatedSoalForm['diupdate_oleh'] = auth()->user()->username ?? 'admin';
           $validatedSoalForm['tgl_dibuat'] = now();
@@ -85,22 +92,8 @@ class DaftarPertanyaan extends Component
       
           $pertanyaan = Pertanyaan::create($validatedSoalForm);
           
-          return $this->redirect('/asesmen-evaluator', navigate: true);
           $this->success('Soal Asesmen sudah dibuat');
   
-      // \Illuminate\Support\Facades\DB::beginTransaction();
-      // try {
-  
-       
-  
-      //   \Illuminate\Support\Facades\DB::commit();
-        
-       
-      // } catch (\Throwable $th) {
-      //   \Illuminate\Support\Facades\DB::rollBack();
-      //   \Log::error('Data failed to store: ' . $th->getMessage());
-      //   $this->error('Data failed to store');
-      // }
     }
 
     public function ubah($id)
@@ -114,7 +107,7 @@ class DaftarPertanyaan extends Component
 
     public function update()
     {
-
+      
       // $this->permission($this->basePageName.'-update');
       $validatedForm = $this->validate(
         $this->masterSoalForm->rules(),
@@ -124,13 +117,6 @@ class DaftarPertanyaan extends Component
   
       $masterData = Pertanyaan::findOrFail($this->idSoal);
 
-    //   $validatedSoalForm['id'] = $buatUuid;
-    //   $validatedSoalForm['asesmen_id'] = $this->id;
-    //   $validatedSoalForm['dibuat_oleh'] = auth()->user()->username ?? 'admin';
-    //   $validatedSoalForm['diupdate_oleh'] = auth()->user()->username ?? 'admin';
-    //   $validatedSoalForm['tgl_dibuat'] = now();
-    //   $validatedSoalForm['tgl_diupdate'] = now();
-    //   $validatedSoalForm['jenis'] = 'essay';
   
       \Illuminate\Support\Facades\DB::beginTransaction();
       try {
@@ -141,10 +127,11 @@ class DaftarPertanyaan extends Component
   
         \Illuminate\Support\Facades\DB::commit();
   
-        $this->success('Data has been updated');
+        $this->success('Soal Asesmen sudah dibuat');
+
       } catch (\Throwable $th) {
         \Illuminate\Support\Facades\DB::rollBack();
-        $this->error('Data failed to update');
+        $this->error('Soal Asesmen gagal dibuat');
       }
     }
 

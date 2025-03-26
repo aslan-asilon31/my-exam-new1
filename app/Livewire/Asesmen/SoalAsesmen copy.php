@@ -189,7 +189,7 @@ class SoalAsesmen extends Component
         $pertanyaanId = $this->pertanyaans[$this->currentQuestionIndex]->id; 
         
         session()->put('soal-session.' . $this->currentQuestionIndex, [
-            'user_id' => $userId,
+            'pengguna_id' => $userId,
             'asesmen_id' => $this->id,
             'pertanyaan_id' => $pertanyaanId,
             'jawaban' => $this->jawaban[$this->currentQuestionIndex]
@@ -221,6 +221,7 @@ class SoalAsesmen extends Component
     public function finishTest($value)
     {
         dd('finish',$value);
+        session('soal-session.' . $this->currentQuestionIndex, '');
         dd(Session());
     }
 

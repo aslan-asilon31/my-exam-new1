@@ -17,8 +17,8 @@ class PertanyaanForm extends Form
     public function rules()
     {
         return [
-            'masterSoalForm.pertanyaan' => 'required|string|max:255',
-            'masterSoalForm.durasi' => 'required|integer|min:1',
+            'masterSoalForm.pertanyaan' => 'required|string',
+            'masterSoalForm.durasi' => 'nullable|integer|min:1',
             'masterSoalForm.bobot' => 'required|numeric|min:0',
             'masterSoalForm.no_urut' => 'required|integer',
             'masterSoalForm.apa_aktif' => 'boolean',
