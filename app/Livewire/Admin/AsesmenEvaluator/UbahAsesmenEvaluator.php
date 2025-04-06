@@ -9,13 +9,13 @@ use App\Models\Page;
 use App\Models\Pertanyaan;
 use App\Models\Asesmen;
 use Illuminate\Support\Str;
-use Livewire\Attributes\On; 
+use Livewire\Attributes\On;
 
 class UbahAsesmenEvaluator extends Component
 {
 
-  public string $selectedTab = 'asesmen-tab'; 
-  
+  public string $selectedTab = 'asesmen-tab';
+
   public function render()
   {
     return view('livewire.admin.asesmen-evaluator.ubah-asesmen')
@@ -30,7 +30,7 @@ class UbahAsesmenEvaluator extends Component
   public $tampilFormSoalAsesmen = false;
   public $tampilJudulSoal = '';
 
-  
+
   #[\Livewire\Attributes\Locked]
   private string $basePageName = 'asesmen-evaluator';
 
@@ -104,9 +104,9 @@ class UbahAsesmenEvaluator extends Component
         $this->tampilFormJudulAsesmen = false,
         $this->tampilFormSoalAsesmen = true,
     ];
-  
+
   }
-  
+
   // public function simpanSoal()
   // {
   //   $validatedSoalForm = $this->validate(
@@ -123,27 +123,27 @@ class UbahAsesmenEvaluator extends Component
   //       $validatedSoalForm['tgl_dibuat'] = now();
   //       $validatedSoalForm['tgl_diupdate'] = now();
   //       $validatedSoalForm['jenis'] = 'essay';
-    
+
   //       $pertanyaan = Pertanyaan::buat($validatedSoalForm);
-        
+
   //       return $this->redirect('/asesmen-evaluator', navigate: true);
   //       $this->success('Soal Asesmen sudah dibuat');
 
   //   // \Illuminate\Support\Facades\DB::beginTransaction();
   //   // try {
 
-     
+
 
   //   //   \Illuminate\Support\Facades\DB::commit();
-      
-     
+
+
   //   // } catch (\Throwable $th) {
   //   //   \Illuminate\Support\Facades\DB::rollBack();
   //   //   \Log::error('Data failed to store: ' . $th->getMessage());
   //   //   $this->error('Data failed to store');
   //   // }
   // }
-  
+
   // public function simpan()
   // {
   //   // $this->permission($this->basePageName.'-buat');
@@ -169,10 +169,10 @@ class UbahAsesmenEvaluator extends Component
   //     \Illuminate\Support\Facades\DB::commit();
   //     // $this->create();
   //     $this->success('Judul Asesmen sudah dibuat');
-  //     $this->dispatch('asesmen-judul-sudah-dibuat', idAsesmenJudul: $asesmendibuat->id); 
+  //     $this->dispatch('asesmen-judul-sudah-dibuat', idAsesmenJudul: $asesmendibuat->id);
   //     $this->bukaFormSoal();
-      
-     
+
+
   //   } catch (\Throwable $th) {
   //     \Illuminate\Support\Facades\DB::rollBack();
   //     \Log::error('Data failed to store: ' . $th->getMessage());

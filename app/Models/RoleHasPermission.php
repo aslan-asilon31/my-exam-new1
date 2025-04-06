@@ -16,7 +16,7 @@ use Illuminate\Support\Collection;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 
-class Role extends Authenticatable
+class RoleHasPermission extends Authenticatable
 {
     use HasApiTokens;
     use HasRoles;
@@ -30,36 +30,23 @@ class Role extends Authenticatable
      * @var array<int, string>
      */
 
-    protected $table = 'roles';
+    protected $table = 'role_has_permissions';
     protected $primaryKey = 'id';
+    public $timestamps = false;
 
     protected $fillable = [
-        'name', 'guard_name'
+        'permission_id','role_id'
     ];
 
 
-    public function getRolesWithPermissions()
+    public function role()
     {
-        $this->roles = Role::with(['permissions' => function($q) {
-            $q->select([
-                'id',
-                'name',
-                'guard_name',
-            ]);
-        }])
-        ->orderBy('id') // Mengurutkan berdasarkan ID role
-        ->get();
+        return $this->belongsTo(Role::class, 'role_id');
     }
 
-
-    public function role_has_permissions(): HasMany
+    public function permission()
     {
-        return $this->hasMany(RoleHasPermission::class, 'id');
+        return $this->belongsTo(Permission::class, 'permission_id');
     }
 
-
-    public function model_has_roles(): HasMany
-    {
-        return $this->hasMany(RoleHasPermission::class, 'id');
-    }
 }

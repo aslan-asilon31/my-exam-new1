@@ -2,73 +2,57 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Permission;
-use Spatie\Permission\Models\Pengguna;
-use Spatie\Permission\Models\Role;
-use Spatie\Permission\PermissionRegistrar;
 
 class PermissionSeeder extends Seeder
 {
     /**
      * Run the database seeds.
+     *
+     * @return void
      */
-    public function run(): void
+    public function run()
     {
-                // reset cahced roles and permission
-                app()[PermissionRegistrar::class]->forgetCachedPermissions();
+        // Permission::truncate();
 
-                // create permissions
-                Permission::create(['name' => 'lihat pertanyaan']);
-                Permission::create(['name' => 'buat pertanyaan']);
-                Permission::create(['name' => 'edit pertanyaan']);
-                Permission::create(['name' => 'hapus pertanyaan']);
+        $permissions = [
+            'role-lihat',
+            'role-buat',
+            'role-edit',
+            'role-hapus',
+            'permission-lihat',
+            'permission-buat',
+            'permission-edit',
+            'permission-hapus',
+            'pengguna-lihat',
+            'pengguna-buat',
+            'pengguna-edit',
+            'pengguna-hapus',
 
-                //create roles and assign existing permissions
-                $customerRole = Role::create(['name' => 'customer']);
-                $customerRole->givePermissionTo('lihat pertanyaan');
+            'hasil_asesmen-lihat',
+            'hasil_asesmen-buat',
+            'hasil_asesmen-edit',
+            'hasil_asesmen-hapus',
 
-                $marketingRole = Role::create(['name' => 'marketing']);
-                $marketingRole->givePermissionTo('lihat pertanyaan');
-                $marketingRole->givePermissionTo('buat pertanyaan');
-                $marketingRole->givePermissionTo('edit pertanyaan');
-                $marketingRole->givePermissionTo('hapus pertanyaan');
+            'penilaian_asesmen-lihat',
+            'penilaian_asesmen-buat',
+            'penilaian_asesmen-edit',
+            'penilaian_asesmen-hapus',
 
-                $developerRole = Role::create(['name' => 'developer']);
-                $adminRole = Role::create(['name' => 'admin']);
+            'asesmen_evaluator-lihat',
+            'asesmen_evaluator-buat',
+            'asesmen_evaluator-edit',
+            'asesmen_evaluator-hapus',
 
-                // gets all permissions via Gate::before rule
+            'pertanyaan-lihat',
+            'pertanyaan-buat',
+            'pertanyaan-edit',
+            'pertanyaan-hapus',
+        ];
 
-                // create demo users
-                $user = Pengguna::factory()->create([
-                    'name' => 'Example user',
-                    'email' => 'customer@mail.com',
-                    'password' => Hash::make('123123123')
-                ]);
-                $user->assignRole($visitorRole);
-
-                $user = Pengguna::factory()->create([
-                    'name' => 'Example admin user',
-                    'email' => 'sales@mail.com',
-                    'password' => Hash::make('123123123')
-                ]);
-                $user->assignRole($salesRole);
-
-                $user = Pengguna::factory()->create([
-                    'name' => 'Example developer user',
-                    'email' => 'developer@mail.com',
-                    'password' => bcrypt('123123123')
-                ]);
-                $user->assignRole($developerRole);
-
-
-                $user = Pengguna::factory()->create([
-                    'name' => 'Example admin user',
-                    'email' => 'admin@mail.com',
-                    'password' => bcrypt('123123123')
-                ]);
-                $user->assignRole($adminRole);
-
+        foreach ($permissions as $permission) {
+            Permission::create(['name' => $permission,'guard_name' => 'web']);
+        }
     }
 }

@@ -1,4 +1,4 @@
-<x-card :title="$title" shadow separator class="border shadow">
+<x-card :title="$title"  :url="$url" shadow separator class="border shadow">
 
     <div class="grid grid-cols-2 mb-4">
       <div>
@@ -8,11 +8,11 @@
         @if ($id)
           <x-button label="Create" link="{{ $url . '/create' }}" class="btn-ghost btn-outline" />
         @endif
-  
+
         @if ($id && $isReadonly)
           <x-button label="Edit" link="{{ $url . '/edit/' . $id }}" class="btn-ghost btn-outline" />
         @endif
-  
+
       </div>
       <div class="text-right">
         @if ($id && !$isReadonly)
@@ -21,8 +21,8 @@
         @endif
       </div>
     </div>
-  
-    
+
+
     <x-form wire:submit="{{ $id ? 'ubah' : 'simpan' }}" wire:confirm="Are you sure?">
         <div id="judul-asesmen">
 
@@ -30,11 +30,11 @@
           <div class="mb-3">
             <x-input wire:model="masterForm.id" id="masterForm.id" name="masterForm.id" placeholder="Id" hidden />
           </div>
-          
+
           <div class="mb-3">
             <x-input label="Judul" wire:model.blur="masterForm.judul" id="masterForm.judul" name="masterForm.judul" placeholder="Judul" />
           </div>
-          
+
           <div class="mb-3">
             <x-textarea
               label="Deskripsi"
@@ -45,7 +45,7 @@
             inline />
           </div>
 
-          
+
           <div class="mb-3">
             <x-datetime label="Tanggal Mulai" wire:model="masterForm.tgl_mulai" icon="o-calendar" />
           </div>
@@ -53,13 +53,13 @@
           <div class="mb-3">
             <x-datetime label="Tanggal Selesai" wire:model="masterForm.tgl_selesai" icon="o-calendar" />
           </div>
-          
-          
+
+
           <div class="mb-3">
             <x-choices-offline wire:model="masterForm.apa_aktif" label="Apakah Aktif ?" :options="[['id' => 0, 'name' => 'Tidak Aktif'], ['id' => 1, 'name' => 'Aktif']]" single searchable
               :readonly="$isReadonly" />
           </div>
-                    
+
           <div class="mb-3">
             <x-input label="Durasi" wire:model.blur="masterForm.durasi" id="masterForm.durasi" name="masterForm.durasi" placeholder="Durasi" />
           </div>
@@ -72,10 +72,10 @@
           <x-button type="submit" :label="$id ? 'ubah' : 'Simpan'" class="btn-success btn-sm text-white" />
         </div>
       @endif
-      
-      
+
+
     </x-form>
-   
+
 
     <x-menu-separator />
 
@@ -87,7 +87,7 @@
         <x-menu-separator />
 
           <div id="pertanyaan">
-            
+
 
 
             <div class="mb-3">
@@ -107,7 +107,7 @@
             <div class="mb-3">
                 <x-input label="Nomor Urut" wire:model.blur="masterSoalForm.no_urut" id="masterSoalForm.no_urut" name="masterSoalForm.no_urut" placeholder="Nomor Urut" />
             </div>
-            
+
             <div class="mb-3">
                 <x-input type="number" label="Durasi" wire:model.blur="masterSoalForm.durasi" id="masterSoalForm.durasi" name="masterSoalForm.durasi" placeholder="Durasi" />
             </div>
@@ -122,5 +122,5 @@
           </div>
       </x-form>
     @endif
-  
+
   </x-card>

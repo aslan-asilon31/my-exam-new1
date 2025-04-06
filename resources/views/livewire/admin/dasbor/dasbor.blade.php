@@ -1,22 +1,23 @@
 <div>
 
+    <x-card  :title="$title"  :url="$url" >
 
-    <!-- TABLE  -->
-    <x-card>
-        <x-table :headers="$headers" :rows="$penggunas" :sort-by="$sortBy">
-            @scope('actions', $pengguna)
-            <x-button icon="o-trash" wire:click="delete({{ $pengguna['id'] }})" spinner class="btn-ghost btn-sm text-red-500" />
-            @endscope
-        </x-table>
+        <div class="flex items-center space-x-4">
+        <img src="{{ asset('path/to/profile-image.jpg') }}" alt="Profile Image" class="w-16 h-16 rounded-full border border-gray-300">
+
+        <div>
+            <h1 class="text-xl font-semibold text-gray-800">Selamat Datang, {{ Auth::user()->name }}</h1>
+            <p class="text-sm text-gray-600">Role: {{ $user_role }}</p> <!-- Mengambil role pertama dari user -->
+        </div>
+    </div>
+
+    <div class="mt-6">
+        <h2 class="text-lg font-medium text-gray-700">Dashboard Content</h2>
+
+    </div>
+
     </x-card>
 
-    <!-- FILTER DRAWER -->
-    <x-drawer wire:model="drawer" title="Filters" right separator with-close-button class="lg:w-1/3">
-        <x-input placeholder="Search..." wire:model.live.debounce="search" icon="o-magnifying-glass" @keydown.enter="$wire.drawer = false" />
 
-        <x-slot:actions>
-            <x-button label="Reset" icon="o-x-mark" wire:click="clear" spinner />
-            <x-button label="Done" icon="o-check" class="btn-primary" @click="$wire.drawer = false" />
-        </x-slot:actions>
-    </x-drawer>
+
 </div>

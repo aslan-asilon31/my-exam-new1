@@ -6,35 +6,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Spatie\Permission\Traits\HasRoles;
 
-
-class User extends Authenticatable
+class Role extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable, HasRoles;
+    use HasFactory, Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var list<string>
-     */
-
-    protected $table = 'users';
-    public $timestamps = false;
-    public $incrementing = false;
-    protected $keyType = 'string';
-
-    protected $fillable = [
-        'name',
-        'email',
-        'password',
-        'created_by',
-        'updated_by',
-        'created_at',
-        'updated_at',
-
-    ];
+  
+    protected $guarded = [];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -42,8 +21,8 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $hidden = [
-        'sandi',
-        'ingat_token',
+        'password',
+        'remember_token',
     ];
 
     /**

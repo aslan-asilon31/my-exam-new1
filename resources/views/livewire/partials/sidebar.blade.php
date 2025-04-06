@@ -4,6 +4,7 @@
         {{-- BRAND --}}
         <x-app-brand class="p-5 pt-3" />
 
+
         {{-- MENU --}}
         <x-menu activate-by-route>
 
@@ -15,13 +16,23 @@
             </x-menu-sub>
             <x-menu-separator />
 
-            
+
             <x-menu-item title="Dashboard" icon="o-home" link="/"  :class="request()->is('dasbor') ? 'active' : ''" />
             <x-menu-separator title="Management" icon="o-sparkles" />
             <x-menu-item title="Asesmen Evaluator" icon="o-squares-2x2" link="/asesmen-evaluator" :class="request()->is('asesmen-evaluator') ? 'active' : ''" />
             <x-menu-item title="Penilaian Asesmen" icon="o-squares-2x2" link="/penilaian-asesmen" :class="request()->is('daftar-penilaian-asesmen-detail') || request()->is('daftar-penilaian-asesmen-crud-ubah') ? 'active' : ''" />
             <x-menu-item title="Hasil Asesmen" icon="o-squares-2x2" link="/hasil-asesmen" :class="request()->is('hasil-asesmen') ? 'active' : ''" />
             <x-menu-item title="Pengguna" icon="o-squares-2x2" link="/pengguna" :class="request()->is('pengguna') ? 'active' : ''" />
+
+            <x-menu-separator title="Role & Permission" icon="o-sparkles" />
+
+            @can('role-lihat');
+            <x-menu-item title="Role" icon="o-squares-2x2" link="/role" :class="request()->is('role') ? 'active' : ''" />
+            @endcan
+
+            @can('permission-lihat');
+            <x-menu-item title="Permission" icon="o-squares-2x2" link="/permission" :class="request()->is('permission') ? 'active' : ''" />
+            @endcan
         </x-menu>
     </x-slot:sidebar>
 </div>

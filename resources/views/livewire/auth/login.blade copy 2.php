@@ -79,9 +79,9 @@
             <h1 class="text-3xl font-semibold mb-6 text-black text-center">{{ $title }}</h1>
 
             <x-form wire:submit="login" class="space-y-4">
-                <x-input wire:model="email" label="email" placeholder="email" icon-right="o-user"
+                <x-input wire:model="loginForm.surel" label="email" placeholder="email" icon-right="o-user"
                   right />
-                <x-password wire:model="password" class="block text-sm font-medium text-gray-700" label="password"  placeholder="password"
+                <x-password wire:model="loginForm.sandi" class="block text-sm font-medium text-gray-700" label="sandi"  placeholder="sandi"
                   password-icon="o-lock-closed" password-visible-icon="o-lock-open" right />
 
                 <x-button type="submit" spinner="login" class="block text-sm font-medium text-gray-700" class="bg-blue-700 hover:bg-blue-400 text-white btn-block">

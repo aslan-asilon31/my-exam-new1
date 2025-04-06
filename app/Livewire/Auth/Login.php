@@ -3,67 +3,55 @@
 namespace App\Livewire\Auth;
 
 use Livewire\Component;
-use App\Models\Asesmen;
-use Livewire\Attributes\On;
-use Livewire\Attributes\Title;
-use Livewire\Attributes\Layout;
-use Illuminate\Support\Facades\Log;
-
-use App\Models\Pengguna; // Model pengguna
-use Illuminate\Http\JsonResponse; // Untuk tipe respons JSON
-use Illuminate\Http\Request; // Untuk Request
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Validation\ValidationException; // Untuk pengecualian validasi
-use App\Livewire\Auth\Forms\LoginForm;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\ValidationException;
 
 class Login extends Component
 {
-
+    public $email;
+    public $password;
     public  $title = "Halaman Login";
-    public LoginForm $loginForm;
+
+
+    protected $rules = [
+        'email' => 'required|email',
+        'password' => 'required|min:5',
+    ];
+
+
 
     public function mount()
     {
-      if (\Illuminate\Support\Facades\Auth::check()) {
-        return redirect()->intended('dasbor');
-      }
+        if (Auth::check()) {
+            $user = Auth::user();
+            if ($user->hasRole('developer')|| $user->hasRole('admin')) {
+                return redirect()->to('/dasbor');
+            } else {
+                return redirect()->to('/dasbor-user');
+            }
+
+        }
     }
+
 
 
     public function login()
     {
-        $validatedLoginForm = $this->validate(
-            $this->loginForm->rules(),
-            [],
-            $this->loginForm->attributes()
-          )['loginForm'] ?? [];
+        $this->validate();
 
-
-
-        // $pengguna = Pengguna::where('surel', $validatedLoginForm['surel'])->first();
-
-        // if ($pengguna && password_verify($validatedLoginForm['sandi'], $pengguna->sandi)) {
-                // return redirect()->to('/dasbor');
-
-                if (Auth::attempt(['surel' => $validatedLoginForm['surel'], 'sandi' => $validatedLoginForm['sandi']])) {
-                    // Login berhasil
-                    return redirect()->intended('dasbor');
-                } else {
-                    // Login gagal
-                    Log::warning('Login failed for:', ['surel' => $validatedLoginForm['surel']]);
-                    throw ValidationException::withMessages([
-                        'sandi' => ['Surel atau sandi yang Anda masukkan salah.'],
-                    ]);
-                }
+        if (Auth::attempt(['email' => $this->email, 'password' => $this->password])) {
+            return redirect()->to('/dasbor');
+        } else {
+            throw ValidationException::withMessages([
+                'email' => ['Email or password is incorrect.'],
+            ]);
         }
+    }
 
-
-    #[Title('Halaman Login')]
     public function render()
     {
-
         return view('livewire.auth.login')
         ->layout('components.layouts.app_auth');
     }
 }
+

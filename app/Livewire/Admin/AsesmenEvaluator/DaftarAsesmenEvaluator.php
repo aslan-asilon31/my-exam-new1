@@ -8,12 +8,13 @@ use Livewire\Attributes\Title;
 class DaftarAsesmenEvaluator extends Component
 {
     public string $url = '/asesmen-evaluator';
+    public $title = 'Asesmen Evaluator';
 
 
-    #[Title('asesmens-evaluator')]
+
     public function render()
     {
         return view('livewire.admin.asesmen-evaluator.daftar-asesmen-evaluator');
     }
-    
+
 }
