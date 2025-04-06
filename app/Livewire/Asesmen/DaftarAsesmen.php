@@ -10,25 +10,30 @@ use Livewire\Attributes\On;
 use Mary\Traits\Toast;
 use App\Models\Asesmen;
 use App\Models\Pengguna;
+use App\Models\User;
+
 
 class DaftarAsesmen extends Component
 {
     use Toast;
 
     public $asesmens = [];
+    public $title = 'Daftar Asesmen ' ;
+    public $url = '/daftar-asesmen';
+
     public $asesmen_id;
     public $asesmenDurasi = 0;
 
     public $questionTimer;
     public $questionTimers = [];
 
-    public $user = [];
-    public $userId;
-    public $userName;
-    public $userEmail;
 
     #[\Livewire\Attributes\Locked]
     public string $id = '';
+
+    public $userId;
+    public $userName;
+    public $userEmail;
 
 
     public function startTest()
@@ -39,35 +44,35 @@ class DaftarAsesmen extends Component
 
     public function mount()
     {
+        $this->userId = session()->get('soal-sesi.userId');
+        $this->user = User::where('id', session()->get('soal-sesi.user_id'))->firstOrFail()->toArray();
+        $this->userName = session()->get('soal-sesi.user_name');
+        $this->userEmail = session()->get('soal-sesi.user_email');
+
+
         $this->initialize();
     }
 
     public function initialize()
     {
-        $this->userId = auth()->id() ?? 'eafe4ec3-2e7d-4147-9dbe-754a79ff7740';
-        $this->user = Pengguna::where('id', $this->userId)->firstOrFail()->toArray();
-        $this->userName = $this->user['nama'];
-        $this->userEmail = $this->user['surel'];
+
 
         $this->asesmens = Asesmen::where('apa_aktif', true)->get();
 
-        // Iterate over each assessment to calculate the duration
         foreach ($this->asesmens as $asesmen) {
             $tglMulai = \Carbon\Carbon::parse($asesmen['tgl_mulai']);
             $tglSelesai = \Carbon\Carbon::parse($asesmen['tgl_selesai']);
-            
-            // Calculate the duration
+
             $durasi = $tglMulai->diff($tglSelesai);
-            
-            // Store the duration in a new property of the asesmen object
+
             $asesmen->durasi = $durasi->format('%h jam %i menit %s detik');
         }
 
-        
+
 
     }
 
-    #[Title('Daftar Assesment ')]
+
     public function render()
     {
         return view('livewire.asesmen.daftar-asesmen')

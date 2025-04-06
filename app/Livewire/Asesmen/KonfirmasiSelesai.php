@@ -6,6 +6,7 @@ use Livewire\Component;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Session;
 use App\Models\Pertanyaan;
+use App\Models\User;
 use App\Models\PenggunaAsesmen;
 use App\Models\DetailPenggunaAsesmen;
 use Mary\Traits\Toast;
@@ -15,11 +16,12 @@ class KonfirmasiSelesai extends Component
 {
     use Toast;
 
-    public string $title = 'Konfirmasi Selesai '; 
+    public $title = 'Konfirmasi Selesai ';
+    public $url = '/konfirmasi-selesai';
     public $jawaban = [];
     public $detailPenggunaAsesmen = [];
 
-    
+
     public $questions = [];
     public $asesmen =[];
     public $answers = [];
@@ -62,9 +64,13 @@ class KonfirmasiSelesai extends Component
 
     public function mount()
     {
-        // dd(Session());
+        $this->userId = session()->get('soal-sesi.userId');
+        $this->user = User::where('id', session()->get('soal-sesi.user_id'))->firstOrFail()->toArray();
+        $this->userName = session()->get('soal-sesi.user_name');
+        $this->userEmail = session()->get('soal-sesi.user_email');
+
         $this->initialize();
-     
+
     }
 
     public function initialize()
@@ -75,32 +81,27 @@ class KonfirmasiSelesai extends Component
         $this->userName = session('soal-sesi.user_name');
         $this->userEmail = session('soal-sesi.user_email');
 
-        // Menghitung total detik
         $totalDetik = intval(abs($this->waktuAsesmenYangDihabiskan));
         $jam = floor($totalDetik / 3600);
         $menit = floor(($totalDetik % 3600) / 60);
         $detik = $totalDetik % 60;
 
-        // Menyimpan hasil perhitungan ke dalam variabel untuk digunakan di view
         $this->waktuAsesmenYangDihabiskan = sprintf('%02d:%02d:%02d', $jam, $menit, $detik);
-        
-     
+
+
     }
 
     public function simpanJawaban()
     {
 
-
-        // Ambil jawaban dari session
         $jawabanData = Session::get('soal-session');
-        // $jawabanData = Session::get();
-            //  dd(Session());
+
         $penggunaAsesmen = PenggunaAsesmen::create([
             'pengguna_id' => 'eafe4ec3-2e7d-4147-9dbe-754a79ff7740', // Ambil user ID dari auth
             'asesmen_id' => $jawabanData[0]['asesmen_id'], // Pastikan Anda memiliki asesmen_id yang sesuai
             'pertanyaan_id' => $jawabanData[0]['pertanyaan_id'], // Ambil pertanyaan_id dari jawaban
-            'tgl_mulai' => now(), // Atur tanggal mulai
-            'tgl_selesai' => now(), // Atur tanggal selesai
+            'tgl_mulai' => now(),
+            'tgl_selesai' => now(),
         ]);
 
         $detailPenggunaAsesmen = [];
@@ -110,16 +111,14 @@ class KonfirmasiSelesai extends Component
                 'pengguna_asesmen_id' =>  $penggunaAsesmen->id, // Pastikan Anda memiliki asesmen_id yang sesuai
                 'pertanyaan_id' => (string) $jawaban['pertanyaan_id'], // Ambil pertanyaan_id dari jawaban
                 'jawaban' => $jawaban['jawaban'], // Ambil jawaban dari jawaban
-                'poin' => 0, // Ambil jawaban dari jawaban
+                'poin' => 0,
             ];
         }
 
-        DetailPenggunaAsesmen::insert($detailPenggunaAsesmen);      
+        DetailPenggunaAsesmen::insert($detailPenggunaAsesmen);
 
-        // Hapus jawaban dari session setelah disimpan
         Session::forget('soal-session');
-    
-        // Tambahkan notifikasi atau redirect sesuai kebutuhan
+
         $this->toast(
             type: 'success',
             title: 'Success',
@@ -134,11 +133,10 @@ class KonfirmasiSelesai extends Component
         $this->redirect('/daftar-asesmen', navigate: true);
 
     }
-    
+
     public function clearSession()
     {
-        $userId = auth()->id(); 
-        Session::forget('soal-sesi.' . $userId); 
+        Session::forget('soal-sesi.' . $this->userId);
     }
 
     public function render()

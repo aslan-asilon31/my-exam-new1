@@ -17,12 +17,31 @@
             <x-menu-separator />
 
 
-            <x-menu-item title="Dashboard" icon="o-home" link="/"  :class="request()->is('dasbor') ? 'active' : ''" />
+            @can('dashboard-lihat');
+            <x-menu-item title="Dashboard" icon="o-home" link="/dasbor"  :class="request()->is('dasbor') ? 'active' : ''" />
+            @endcan
+
+            @can('dashboard-user-lihat');
+            <x-menu-item title="Dashboard" icon="o-home" link="/dasbor-user"  :class="request()->is('dasbor') ? 'active' : ''" />
+            @endcan
+
             <x-menu-separator title="Management" icon="o-sparkles" />
+
+            @can('asesmen_evaluator-lihat');
             <x-menu-item title="Asesmen Evaluator" icon="o-squares-2x2" link="/asesmen-evaluator" :class="request()->is('asesmen-evaluator') ? 'active' : ''" />
+            @endcan
+
+            @can('penilaian_asesmen-lihat');
             <x-menu-item title="Penilaian Asesmen" icon="o-squares-2x2" link="/penilaian-asesmen" :class="request()->is('daftar-penilaian-asesmen-detail') || request()->is('daftar-penilaian-asesmen-crud-ubah') ? 'active' : ''" />
+            @endcan
+
+            @can('hasil_asesmen-lihat');
             <x-menu-item title="Hasil Asesmen" icon="o-squares-2x2" link="/hasil-asesmen" :class="request()->is('hasil-asesmen') ? 'active' : ''" />
+            @endcan
+
+            @can('pengguna-lihat');
             <x-menu-item title="Pengguna" icon="o-squares-2x2" link="/pengguna" :class="request()->is('pengguna') ? 'active' : ''" />
+            @endcan
 
             <x-menu-separator title="Role & Permission" icon="o-sparkles" />
 

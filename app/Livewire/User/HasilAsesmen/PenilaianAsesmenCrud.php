@@ -35,11 +35,9 @@ class PenilaianAsesmenCrud extends Component
   #[\Livewire\Attributes\Locked]
   private string $basePageName = 'asesmen';
 
-  #[\Livewire\Attributes\Locked]
-  public string $title = 'Asesmen';
 
-  #[\Livewire\Attributes\Locked]
-  public string $url = '/asesmen';
+  public $title = 'Penilaian Asesmen' ;
+  public $url = '/penilaian-asesmen';
 
   #[\Livewire\Attributes\Locked]
   public string $id = '';
@@ -94,22 +92,22 @@ class PenilaianAsesmenCrud extends Component
     $this->userEmail = $this->user['surel'];
 
 
-    
+
     $this->ActivePenggunaAsesmens = PenggunaAsesmen::with([
       'pengguna',
       'asesmen',
       'detail_pengguna_asesmens',
-      'asesmen.pertanyaans', 
+      'asesmen.pertanyaans',
 
     ])
-    ->where('pengguna_asesmens.pengguna_id', $this->userId) 
+    ->where('pengguna_asesmens.pengguna_id', $this->userId)
     ->orderBy('tgl_dibuat', 'desc')
     ->firstOrFail()
     ->toArray();
     $this->masterForm->fill($this->ActivePenggunaAsesmens);
-    
+
     $this->asesmenId = $this->ActivePenggunaAsesmens['asesmen']['id'] ?? null;
-    
+
 
     $this->asesmen = Asesmen::where('id', $this->asesmenId)->firstOrFail()->toArray();
     $this->asesmenDurasi = $this->ActivePenggunaAsesmens['asesmen']['durasi'];
@@ -119,7 +117,7 @@ class PenilaianAsesmenCrud extends Component
 
     // Menyimpan hasil perhitungan ke dalam variabel untuk digunakan di view
     $durasi = $tglMulai->diff($tglSelesai);
-    $this->asesmenDurasi =  $durasi->format('%h jam %i menit %s detik'); 
+    $this->asesmenDurasi =  $durasi->format('%h jam %i menit %s detik');
 
 
 
@@ -170,7 +168,7 @@ class PenilaianAsesmenCrud extends Component
     $this->isDisabled = true;
     $masterData = $this->masterModel::findOrFail($this->id);
     $this->masterForm->fill($masterData);
-    
+
   }
 
   public function edit()
@@ -181,17 +179,17 @@ class PenilaianAsesmenCrud extends Component
       'pengguna',
       'asesmen',
       'detail_pengguna_asesmens',
-      'asesmen.pertanyaans', 
+      'asesmen.pertanyaans',
 
     ])
-    ->where('pengguna_asesmens.pengguna_id', $this->userId) 
+    ->where('pengguna_asesmens.pengguna_id', $this->userId)
     ->orderBy('tgl_dibuat', 'desc')
     ->firstOrFail()
     ->toArray();
     $this->masterForm->fill($this->ActivePenggunaAsesmens);
- 
+
     // dd($this->ActivePenggunaAsesmens);
-    
+
   }
 
   public function update()
@@ -201,7 +199,7 @@ class PenilaianAsesmenCrud extends Component
           'ActivePenggunaAsesmens.detail_pengguna_asesmens.*.jawaban' => 'nullable|string|max:1000', // Adjust validation rules as needed
           'ActivePenggunaAsesmens.asesmen_id' => 'required|exists:asesmens,id', // Ensure asesmen_id is valid
       ]);
-  
+
       // Begin a database transaction
       DB::beginTransaction();
       try {
@@ -209,9 +207,9 @@ class PenilaianAsesmenCrud extends Component
           $penggunaAsesmen = PenggunaAsesmen::findOrFail($this->ActivePenggunaAsesmens['id']);
           $penggunaAsesmen->update([
               // Update any necessary fields here
-              // Example: 'status' => 'updated', 
+              // Example: 'status' => 'updated',
           ]);
-  
+
           // Update each detail_pengguna_asesmen record
             foreach ($this->ActivePenggunaAsesmens['detail_pengguna_asesmens'] as $detail) {
               $detailPenggunaAsesmen = DetailPenggunaAsesmen::findOrFail($detail['id']);
@@ -219,14 +217,14 @@ class PenilaianAsesmenCrud extends Component
                       'poin' => $detail['poin'],
                   ]);
             }
-  
+
           // Commit the transaction
           DB::commit();
-  
+
           // Provide feedback to the user
           $this->success('Berhasil perbaharui data.');
           session()->flash('message', 'Berhasil perbaharui data.');
-  
+
           // Optionally redirect or refresh the view
           // return redirect()->route('your.route.name'); // Adjust the route as necessary
       } catch (\Exception $e) {
@@ -238,7 +236,7 @@ class PenilaianAsesmenCrud extends Component
           session()->flash('error', 'Failed to update data: ' . $e->getMessage());
       }
   }
-  
+
 
   public function delete()
   {

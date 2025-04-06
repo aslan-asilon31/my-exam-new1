@@ -49,6 +49,11 @@ class PermissionSeeder extends Seeder
             'pertanyaan-buat',
             'pertanyaan-edit',
             'pertanyaan-hapus',
+
+            'daftar_asesmen-lihat',
+            'daftar_asesmen-buat',
+            'daftar_asesmen-edit',
+            'daftar_asesmen-hapus',
         ];
 
         foreach ($permissions as $permission) {

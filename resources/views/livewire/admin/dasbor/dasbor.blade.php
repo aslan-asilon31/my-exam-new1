@@ -7,12 +7,12 @@
 
         <div>
             <h1 class="text-xl font-semibold text-gray-800">Selamat Datang, {{ Auth::user()->name }}</h1>
-            <p class="text-sm text-gray-600">Role: {{ $user_role }}</p> <!-- Mengambil role pertama dari user -->
+            <p class="text-sm text-gray-600">Role: {{ $user_role }}</p>
         </div>
     </div>
 
     <div class="mt-6">
-        <h2 class="text-lg font-medium text-gray-700">Dashboard Content</h2>
+    <button wire:click="logout" class="bg-red p-1 m-1" title="Logout" icon="o-x-circle" >logout</button>
 
     </div>
 

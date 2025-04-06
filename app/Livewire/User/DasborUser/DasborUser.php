@@ -11,21 +11,15 @@ class DasborUser extends Component
 {
     use Toast;
 
-    public string $search = '';
     public $user_role ;
+    public $title = 'Dashboard' ;
+    public $url = '/dasbor-user';
 
-    protected $url = '/dasbor-user';
-
-
-    public bool $drawer = false;
-
-    public array $sortBy = ['column' => 'name', 'direction' => 'asc'];
 
     public function mount()
     {
         $user = Auth::user();
-
-        $this->user_role = $user->getRoleNames(); // Ini akan menjadi koleksi dari role names.
+        $this->user_role = $user->getRoleNames()->first();
     }
 
 
