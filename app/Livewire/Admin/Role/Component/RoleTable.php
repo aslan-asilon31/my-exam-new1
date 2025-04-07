@@ -79,24 +79,25 @@ final class RoleTable extends PowerGridComponent
             Column::make('Action', 'action')
                 ->visibleInExport(false)
                 ->bodyAttribute('text-center')
-                ->headerAttribute('text-center', 'background-color:indigo; color:white;text-align:center;'),
+                ->headerAttribute('text-center', 'background-color:#851902; color:white;text-align:center;'),
 
 
             Column::make('ID', 'id')
                 ->visibleInExport(false) // Hide ID column in export
                 ->sortable()
-                ->headerAttribute('text-center', 'background-color:indigo; color:white;text-align:center;'),
+                ->headerAttribute('text-center', 'background-color:#851902; color:white;text-align:center;'),
 
 
             Column::make('Name', 'name')
                 ->sortable()
                 ->searchable()
-                ->headerAttribute('text-center', 'background-color:indigo; color:white;text-align:center;'),
+                ->headerAttribute('text-center', 'background-color:#851902; color:white;text-align:center;'),
 
             Column::make('guard name', 'guard_name')
                 ->sortable()
                 ->searchable()
-                ->headerAttribute('text-center', 'background-color:indigo; color:white;text-align:center;'),
+                ->headerAttribute('text-center', 'background-color:#851902; color:white;text-align:center;'),
+
         ];
     }
 

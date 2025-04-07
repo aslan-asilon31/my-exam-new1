@@ -18,7 +18,7 @@ use PowerComponents\LivewirePowerGrid\Facades\PowerGrid;
 use PowerComponents\LivewirePowerGrid\PowerGridFields;
 use PowerComponents\LivewirePowerGrid\PowerGridComponent;
 use PowerComponents\LivewirePowerGrid\Traits\WithExport;
-use PowerComponents\LivewirePowerGrid\Components\SetUp\Exportable; 
+use PowerComponents\LivewirePowerGrid\Components\SetUp\Exportable;
 
 final class TabelPengguna extends PowerGridComponent
 {
@@ -38,8 +38,8 @@ final class TabelPengguna extends PowerGridComponent
             PowerGrid::footer()
                 ->showPerPage()
                 ->showRecordCount(),
-            PowerGrid::exportable(fileName: 'my-export-file') 
-                ->type(Exportable::TYPE_XLS, Exportable::TYPE_CSV), 
+            PowerGrid::exportable(fileName: 'my-export-file')
+                ->type(Exportable::TYPE_XLS, Exportable::TYPE_CSV),
         ];
     }
 
@@ -60,7 +60,7 @@ final class TabelPengguna extends PowerGridComponent
     public function relationSearch(): array
     {
         return [
-       
+
         ];
     }
 
@@ -85,34 +85,51 @@ final class TabelPengguna extends PowerGridComponent
         return [
             Column::make('Action', 'action')
                 ->visibleInExport(false)
-                ->bodyAttribute('text-center'),
+                ->bodyAttribute('text-center')
+                ->headerAttribute('text-center', 'background-color:#851902; color:white;text-align:center;'),
+
+
 
             Column::make('ID', 'id')
                 ->visibleInExport(false) // Hide ID column in export
-                ->sortable(),
+                ->sortable()
+                ->headerAttribute('text-center', 'background-color:#851902; color:white;text-align:center;'),
+
 
             Column::make('Nama', 'nama')
                 ->sortable()
-                ->searchable(),
+                ->searchable()
+                ->headerAttribute('text-center', 'background-color:#851902; color:white;text-align:center;'),
+
 
 
             Column::make('Surel', 'surel')
                 ->sortable()
-                ->searchable(),
+                ->searchable()
+                ->headerAttribute('text-center', 'background-color:#851902; color:white;text-align:center;'),
+
 
             Column::make('Dibuat oleh', 'dibuat_oleh')
-                ->sortable(),
+                ->sortable()
+                ->headerAttribute('text-center', 'background-color:#851902; color:white;text-align:center;'),
+
 
             Column::make('update oleh', 'diupdate_oleh')
-                ->sortable(),
+                ->sortable()
+                ->headerAttribute('text-center', 'background-color:#851902; color:white;text-align:center;'),
+
 
             Column::make('tgl dibuat', 'tgl_dibuat')
-                ->sortable(),
+                ->sortable()
+                ->headerAttribute('text-center', 'background-color:#851902; color:white;text-align:center;'),
+
 
             Column::make('tgl dibuat', 'tgl_diupdate')
-                ->sortable(),
+                ->sortable()
+                ->headerAttribute('text-center', 'background-color:#851902; color:white;text-align:center;'),
 
-           
+
+
         ];
     }
 
@@ -128,10 +145,10 @@ final class TabelPengguna extends PowerGridComponent
                 ->params(['timezone' => 'Asia/Jakarta']),
             Filter::datetimepicker('tgl_diupdate', 'tgl_diupdate')
                 ->params(['timezone' => 'Asia/Jakarta']),
-         
-        
 
-    
+
+
+
         ];
     }
 

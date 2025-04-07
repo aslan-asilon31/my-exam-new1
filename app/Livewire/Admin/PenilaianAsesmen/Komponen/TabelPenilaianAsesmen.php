@@ -20,7 +20,7 @@ use PowerComponents\LivewirePowerGrid\Facades\PowerGrid;
 use PowerComponents\LivewirePowerGrid\PowerGridFields;
 use PowerComponents\LivewirePowerGrid\PowerGridComponent;
 use PowerComponents\LivewirePowerGrid\Traits\WithExport;
-use PowerComponents\LivewirePowerGrid\Components\SetUp\Exportable; 
+use PowerComponents\LivewirePowerGrid\Components\SetUp\Exportable;
 
 final class TabelPenilaianAsesmen extends PowerGridComponent
 {
@@ -40,8 +40,8 @@ final class TabelPenilaianAsesmen extends PowerGridComponent
             PowerGrid::footer()
                 ->showPerPage()
                 ->showRecordCount(),
-            PowerGrid::exportable(fileName: 'my-export-file') 
-                ->type(Exportable::TYPE_XLS, Exportable::TYPE_CSV), 
+            PowerGrid::exportable(fileName: 'my-export-file')
+                ->type(Exportable::TYPE_XLS, Exportable::TYPE_CSV),
         ];
     }
 
@@ -56,12 +56,12 @@ final class TabelPenilaianAsesmen extends PowerGridComponent
                     'pengguna_asesmens.tgl_mulai',
                     'pengguna_asesmens.tgl_selesai',
                     'pengguna_asesmens.tgl_dibuat' ,
-                    'pengguna_asesmens.tgl_diupdate' 
+                    'pengguna_asesmens.tgl_diupdate'
                 ])
-                ->orderBy('pengguna_asesmens.tgl_dibuat', 'desc') 
+                ->orderBy('pengguna_asesmens.tgl_dibuat', 'desc')
                 ->limit(10)
                 ->offset(0);
-    
+
     }
 
     public function relationSearch(): array
@@ -94,17 +94,29 @@ final class TabelPenilaianAsesmen extends PowerGridComponent
         return [
             Column::make('', 'action')
                 ->visibleInExport(false)
-                ->bodyAttribute('text-center'),
+                ->bodyAttribute('text-center')
+                ->headerAttribute('text-center', 'background-color:#851902; color:white;text-align:center;'),
+
             Column::make('Nama', 'nama')
-                ->sortable(),
+                ->sortable()
+                ->headerAttribute('text-center', 'background-color:#851902; color:white;text-align:center;'),
+
             Column::make('Tanggal Asesmen Mulai', 'tgl_mulai')
-                ->sortable(),
+                ->sortable()
+                ->headerAttribute('text-center', 'background-color:#851902; color:white;text-align:center;'),
+
             Column::make('Tanggal Asesmen Selesai', 'tgl_selesai')
-                ->sortable(),
+                ->sortable()
+                ->headerAttribute('text-center', 'background-color:#851902; color:white;text-align:center;'),
+
             Column::make('Tanggal Dibuat', 'tgl_dibuat')
-                ->sortable(),
+                ->sortable()
+                ->headerAttribute('text-center', 'background-color:#851902; color:white;text-align:center;'),
+
             Column::make('Tanggal Diupdate', 'tgl_diupdate')
-                ->sortable(),
+                ->sortable()
+                ->headerAttribute('text-center', 'background-color:#851902; color:white;text-align:center;'),
+
 
         ];
     }
@@ -118,7 +130,7 @@ final class TabelPenilaianAsesmen extends PowerGridComponent
             Filter::inputText('Tanggal Selesai', 'tgl_selesai')->placeholder('tgl_selesai'),
             Filter::inputText('Tanggal Dibuat', 'tgl_dibuat')->placeholder('tgl_dibuat'),
             Filter::inputText('Tanggal Diupdate', 'tgl_diupdate')->placeholder('tgl_diupdate'),
-    
+
         ];
     }
 

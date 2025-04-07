@@ -10,38 +10,41 @@
                     <div class="flex flex-col py-2">
                         <p class="text-gray-100 text-xs md:text-md">Hari :</p>
                         <p class="text-gray-100 text-[12px]">
+                            Senin
                             {{-- {{ \Carbon\Carbon::parse($asesmen['tgl_mulai'])->translatedFormat('l') }}  --}}
                         </p>
                     </div>
                     <div class="flex flex-col py-2">
                         <p class="text-gray-100 text-xs md:text-md">Tanggal :</p>
                         <p class="text-gray-100 text-[12px]">
+                            17 mei 2025
                             {{-- {{ \Carbon\Carbon::parse($asesmen['tgl_mulai'])->translatedFormat('d F Y') }}   --}}
                         </p>
                     </div>
 
                 </div>
-            
+
                 <!-- Kolom Kanan -->
                 <div class="flex-1 pl-2">
                     <div class="flex flex-col py-2">
-                        <p class="text-gray-100 text-xs md:text-md">Waktu :</p>
+                        <p class="text-gray-100 text-xs md:text-md">Waktu</p>
                         <p class="text-gray-100 text-[12px]">
+                            12:00 wib - 13:00 wib
                             {{-- {{ \Carbon\Carbon::parse($asesmen['tgl_mulai'])->translatedFormat('H:i') }} WIB - {{ \Carbon\Carbon::parse($asesmen['tgl_selesai'])->translatedFormat('H:i') }} WIB --}}
                         </p>
                     </div>
-                    <div class="flex flex-col py-2">
+                    <div class="text-gray-100flex flex-col py-2">
                         <p class="text-gray-100 text-xs md:text-md">Durasi :</p>
+                        60 menit
                         {{-- <p class="text-gray-100 text-[12px]">{{ $asesmen->durasi }}</p> --}}
                     </div>
                 </div>
             </div>
-            
-            <div class="mt-4 flex justify-center">
-                Hasil :  
+
+            <div class="mt-4 flex justify-center text-white text-xl md:2xl">
+                Hasil : 80
             </div>
         </div>
     </div>
 
 </x-card>
-  

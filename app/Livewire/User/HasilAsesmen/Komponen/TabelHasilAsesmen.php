@@ -20,7 +20,7 @@ use PowerComponents\LivewirePowerGrid\Facades\PowerGrid;
 use PowerComponents\LivewirePowerGrid\PowerGridFields;
 use PowerComponents\LivewirePowerGrid\PowerGridComponent;
 use PowerComponents\LivewirePowerGrid\Traits\WithExport;
-use PowerComponents\LivewirePowerGrid\Components\SetUp\Exportable; 
+use PowerComponents\LivewirePowerGrid\Components\SetUp\Exportable;
 
 final class TabelHasilAsesmen extends PowerGridComponent
 {
@@ -40,8 +40,8 @@ final class TabelHasilAsesmen extends PowerGridComponent
             PowerGrid::footer()
                 ->showPerPage()
                 ->showRecordCount(),
-            PowerGrid::exportable(fileName: 'my-export-file') 
-                ->type(Exportable::TYPE_XLS, Exportable::TYPE_CSV), 
+            PowerGrid::exportable(fileName: 'my-export-file')
+                ->type(Exportable::TYPE_XLS, Exportable::TYPE_CSV),
         ];
     }
 
@@ -52,12 +52,12 @@ final class TabelHasilAsesmen extends PowerGridComponent
                 ->select([
                     'penggunas.id',
                     'penggunas.nama',
-                    'pengguna_asesmens.tgl_dibuat' 
+                    'pengguna_asesmens.tgl_dibuat'
                 ])
-                ->orderBy('pengguna_asesmens.tgl_dibuat', 'desc') 
+                ->orderBy('pengguna_asesmens.tgl_dibuat', 'desc')
                 ->limit(10)
                 ->offset(0);
-    
+
     }
 
     public function relationSearch(): array
@@ -101,7 +101,7 @@ final class TabelHasilAsesmen extends PowerGridComponent
         return [
             Filter::inputText('id', 'id')->placeholder('ID'),
             Filter::inputText('Nama', 'nama')->placeholder('nama'),
-    
+
         ];
     }
 

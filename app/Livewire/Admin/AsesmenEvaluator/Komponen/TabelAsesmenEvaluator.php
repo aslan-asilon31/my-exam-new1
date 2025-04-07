@@ -18,7 +18,7 @@ use PowerComponents\LivewirePowerGrid\Facades\PowerGrid;
 use PowerComponents\LivewirePowerGrid\PowerGridFields;
 use PowerComponents\LivewirePowerGrid\PowerGridComponent;
 use PowerComponents\LivewirePowerGrid\Traits\WithExport;
-use PowerComponents\LivewirePowerGrid\Components\SetUp\Exportable; 
+use PowerComponents\LivewirePowerGrid\Components\SetUp\Exportable;
 
 final class TabelAsesmenEvaluator extends PowerGridComponent
 {
@@ -38,8 +38,8 @@ final class TabelAsesmenEvaluator extends PowerGridComponent
             PowerGrid::footer()
                 ->showPerPage()
                 ->showRecordCount(),
-            PowerGrid::exportable(fileName: 'my-export-file') 
-                ->type(Exportable::TYPE_XLS, Exportable::TYPE_CSV), 
+            PowerGrid::exportable(fileName: 'my-export-file')
+                ->type(Exportable::TYPE_XLS, Exportable::TYPE_CSV),
         ];
     }
 
@@ -90,38 +90,59 @@ final class TabelAsesmenEvaluator extends PowerGridComponent
         return [
             Column::make('Action', 'action')
                 ->visibleInExport(false)
-                ->bodyAttribute('text-center'),
+                ->bodyAttribute('text-center')
+                ->headerAttribute('text-center', 'background-color:#851902; color:white;text-align:center;'),
+
 
             Column::make('ID', 'id')
                 ->visibleInExport(false) // Hide ID column in export
-                ->sortable(),
+                ->sortable()
+                ->headerAttribute('text-center', 'background-color:#851902; color:white;text-align:center;'),
+
 
             Column::make('Judul', 'judul')
-                ->sortable(),
+                ->sortable()
+                ->headerAttribute('text-center', 'background-color:#851902; color:white;text-align:center;'),
+
 
             Column::make('Deskripsi', 'deskripsi')
                 ->sortable()
-                ->searchable(),
+                ->searchable()
+                ->headerAttribute('text-center', 'background-color:#851902; color:white;text-align:center;'),
+
 
             Column::make('Durasi', 'durasi')
-                ->sortable(),
+                ->sortable()
+                ->headerAttribute('text-center', 'background-color:#851902; color:white;text-align:center;'),
+
 
             Column::make('Tanggal mulai', 'tgl_mulai')
-                ->sortable(),
+                ->sortable()
+                ->headerAttribute('text-center', 'background-color:#851902; color:white;text-align:center;'),
+
             Column::make('Tanggal selesai', 'tgl_selesai')
-                ->sortable(),
+                ->sortable()
+                ->headerAttribute('text-center', 'background-color:#851902; color:white;text-align:center;'),
+
             Column::make('Dibuat oleh', 'dibuat_oleh')
-                ->sortable(),
+                ->sortable()
+                ->headerAttribute('text-center', 'background-color:#851902; color:white;text-align:center;'),
+
             Column::make('Dibuat oleh', 'diupdate_oleh')
-                ->sortable(),
+                ->sortable()
+                ->headerAttribute('text-center', 'background-color:#851902; color:white;text-align:center;'),
+
 
             Column::make('diupdate oleh', 'diupdate_oleh')
-                ->sortable(),
+                ->sortable()
+                ->headerAttribute('text-center', 'background-color:#851902; color:white;text-align:center;'),
 
             Column::make('tgl_dibuat', 'diupdate_oleh')
-                ->sortable(),
+                ->sortable()
+                ->headerAttribute('text-center', 'background-color:#851902; color:white;text-align:center;'),
 
-           
+
+
         ];
     }
 
@@ -135,12 +156,12 @@ final class TabelAsesmenEvaluator extends PowerGridComponent
             Filter::inputText('email', 'email')->placeholder('Email'),
             Filter::datetimepicker('tgl_mulai', 'tgl_dibuat')
                 ->params(['timezone' => 'Asia/Jakarta']),
-         
+
             Filter::inputText('dibuat_oleh', 'dibuat_oleh')->placeholder('dibuat_oleh'),
             Filter::inputText('diupdate_oleh', 'diupdate_oleh')->placeholder('diupdate_oleh'),
-        
 
-    
+
+
         ];
     }
 
