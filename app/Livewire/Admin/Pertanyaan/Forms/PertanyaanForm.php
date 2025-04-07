@@ -7,7 +7,8 @@ use Livewire\Form;
 
 class PertanyaanForm extends Form
 {
-    public string|null $id = null;
+    public string|null $asesmen_id = null;
+    public string|null $image_url = null;
     public string|null $pertanyaan = null;
     public string|null $durasi = null;
     public string|null $bobot = null;
@@ -17,9 +18,12 @@ class PertanyaanForm extends Form
     public function rules()
     {
         return [
+            'masterSoalForm.id' => 'nullable|string',
+            'masterSoalForm.asesmen_id' => 'required|string',
+            'masterSoalForm.image_url' => 'required|string',
             'masterSoalForm.pertanyaan' => 'required|string',
-            'masterSoalForm.durasi' => 'nullable|integer|min:1',
-            'masterSoalForm.bobot' => 'required|numeric|min:0',
+            'masterSoalForm.durasi' => 'nullable|integer|min:0',
+            'masterSoalForm.bobot' => 'required|integer|min:0',
             'masterSoalForm.no_urut' => 'required|integer',
             'masterSoalForm.apa_aktif' => 'boolean',
         ];
@@ -28,7 +32,8 @@ class PertanyaanForm extends Form
     public function attributes()
     {
         return [
-            'masterSoalForm.id' => 'id',
+            'masterSoalForm.asesmen_id' => 'asesmen id',
+            'masterSoalForm.image_url' => 'Image URL',
             'masterSoalForm.pertanyaan' => 'pertanyaan',
             'masterSoalForm.durasi' => 'durasi',
             'masterSoalForm.bobot' => 'bobot',

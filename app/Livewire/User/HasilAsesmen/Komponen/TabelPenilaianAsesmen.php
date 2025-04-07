@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\Admin\PenilaianAsesmen\Komponen;
+namespace App\Livewire\Admin\HasilAsesmen\Komponen;
 
 use App\Helpers\Table\Traits\WithTable;
 use App\Models\Asesmen;
@@ -22,12 +22,12 @@ use PowerComponents\LivewirePowerGrid\PowerGridComponent;
 use PowerComponents\LivewirePowerGrid\Traits\WithExport;
 use PowerComponents\LivewirePowerGrid\Components\SetUp\Exportable; 
 
-final class TabelPenilaianAsesmen extends PowerGridComponent
+final class TabelHasilAsesmen extends PowerGridComponent
 {
     public string $tableName = 'asesmens';
     public string $sortField = 'tgl_dibuat';
     public string $sortDirection = 'desc';
-    public string $url = '/penilaian-asesmen';
+    public string $url = '/hasil-asesmen';
 
     use WithExport;
     use WithTable;
@@ -52,11 +52,7 @@ final class TabelPenilaianAsesmen extends PowerGridComponent
                 ->select([
                     'penggunas.id',
                     'penggunas.nama',
-                    'penggunas.surel',
-                    'pengguna_asesmens.tgl_mulai',
-                    'pengguna_asesmens.tgl_selesai',
-                    'pengguna_asesmens.tgl_dibuat' ,
-                    'pengguna_asesmens.tgl_diupdate' 
+                    'pengguna_asesmens.tgl_dibuat' 
                 ])
                 ->orderBy('pengguna_asesmens.tgl_dibuat', 'desc') 
                 ->limit(10)
@@ -78,46 +74,33 @@ final class TabelPenilaianAsesmen extends PowerGridComponent
         return PowerGrid::fields()
             ->add('action', fn($record) => Blade::render('
                 <x-dropdown no-x-anchor class="btn-sm">
-                    <x-menu-item title="Lihat Detail" Link="/penilaian-asesmen/' . e($record->id) . '/readonly" />
-                    <x-menu-item title="Ubah/Beri nilai" Link="/penilaian-asesmen/' . e($record->id) . '"/>
+                    <x-menu-item title="Edit" Link="/ubah-asesmen/' . e($record->id) . '"/>
                 </x-dropdown>'))
-            ->add('nama', fn($record) => $record->nama)
-            ->add('surel', fn($record) => $record->surel)
-            ->add('tgl_mulai', fn($record) => $record->tgl_mulai)
-            ->add('tgl_selesai', fn($record) => $record->tgl_selesai)
-            ->add('tgl_dibuat', fn($record) => $record->tgl_dibuat)
-            ->add('tgl_diupdate', fn($record) => $record->tgl_diupdate);
+            ->add('id', fn($record) => $record->id)
+            ->add('nama', fn($record) => $record->nama);
     }
 
     public function columns(): array
     {
         return [
-            Column::make('', 'action')
+            Column::make('Action', 'action')
                 ->visibleInExport(false)
                 ->bodyAttribute('text-center'),
-            Column::make('Nama', 'nama')
-                ->sortable(),
-            Column::make('Tanggal Asesmen Mulai', 'tgl_mulai')
-                ->sortable(),
-            Column::make('Tanggal Asesmen Selesai', 'tgl_selesai')
-                ->sortable(),
-            Column::make('Tanggal Dibuat', 'tgl_dibuat')
-                ->sortable(),
-            Column::make('Tanggal Diupdate', 'tgl_diupdate')
+
+            Column::make('ID', 'id')
+                ->visibleInExport(false) // Hide ID column in export
                 ->sortable(),
 
+            Column::make('Nama', 'nama')
+                ->sortable(),
         ];
     }
 
     public function filters(): array
     {
         return [
+            Filter::inputText('id', 'id')->placeholder('ID'),
             Filter::inputText('Nama', 'nama')->placeholder('nama'),
-            Filter::inputText('Surel', 'surel')->placeholder('surel'),
-            Filter::inputText('Tanggal Mulai', 'tgl_mulai')->placeholder('tgl_mulai'),
-            Filter::inputText('Tanggal Selesai', 'tgl_selesai')->placeholder('tgl_selesai'),
-            Filter::inputText('Tanggal Dibuat', 'tgl_dibuat')->placeholder('tgl_dibuat'),
-            Filter::inputText('Tanggal Diupdate', 'tgl_diupdate')->placeholder('tgl_diupdate'),
     
         ];
     }

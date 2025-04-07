@@ -118,7 +118,6 @@ class PerbaharuiAsesmenEvaluator extends Component
   
   public function simpanSoal()
   {
-    dd($this->masterSoalForm);
 
     $validatedSoalForm = $this->validate(
       $this->masterSoalForm->rules(),
@@ -135,9 +134,6 @@ class PerbaharuiAsesmenEvaluator extends Component
         $validatedSoalForm['tgl_diupdate'] = now();
         $validatedSoalForm['jenis'] = 'essay';
     
-      dd($validatedSoalForm);
-
-
         $pertanyaan = Pertanyaan::create($validatedSoalForm);
         
         return $this->redirect('/asesmen-evaluator', navigate: true);

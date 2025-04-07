@@ -21,14 +21,16 @@ class PermissionSeeder extends Seeder
             'role-buat',
             'role-edit',
             'role-hapus',
+
             'permission-lihat',
             'permission-buat',
             'permission-edit',
             'permission-hapus',
-            'pengguna-lihat',
-            'pengguna-buat',
-            'pengguna-edit',
-            'pengguna-hapus',
+
+            'user-lihat',
+            'user-buat',
+            'user-edit',
+            'user-hapus',
 
             'hasil_asesmen-lihat',
             'hasil_asesmen-buat',

@@ -1,10 +1,11 @@
 
 <div>
-
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+  <link href="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote-lite.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote-lite.min.js"></script>
 
 
   <x-card :title="$title"  :url="$url" shadow separator class="border shadow">
-    <div id="summernote"></div>
 
     <div class="grid grid-cols-2 mb-4">
       <div>
@@ -44,6 +45,7 @@
           <div class="mb-3">
             <x-textarea
               label="Deskripsi"
+              id="summerNoteEditor"
               wire:model="masterForm.deskripsi"
               placeholder="Deskripsi"
               hint="Max 1000 chars"
@@ -134,4 +136,52 @@
 
 
   </x-card>
+
+
+  <script>
+    // Initialize SummerNote after Livewire loads
+    document.addEventListener('livewire:load', function () {
+        try {
+            $('#summerNoteEditor').summernote({
+                height: 300,
+                minHeight: null,
+                maxHeight: null,
+                focus:true,
+                
+                 callbacks:{
+                     onImageUpload:function(files){
+                         for(let i=0;i<files.length;i++){
+                             sendFile(files[i],this);
+                         }
+                     }
+                 }
+            });
+        } catch (error) {
+            console.error('Failed to initialize SummerNote:', error);
+        }
+    });
+    
+    // Function to handle image upload via AJAX
+    function sendFile(file, editor) {
+        let data = new FormData();
+        data.append("file", file);
+        
+        $.ajax({
+            data:data,
+            type:"POST",
+            url:"/upload-image", // Your endpoint here 
+            cache:false,
+            contentType:false,
+            processData:false,
+    
+           success:function(url){
+               $('#summerNoteEditor').summernote('insertImage', url); // Insert uploaded image URL into editor 
+           },
+           error:function(data){
+               console.error('Failed to upload image:',data); // Handle errors appropriately 
+           }
+       });
+    }
+    </script>
+
 </div>

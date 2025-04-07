@@ -224,8 +224,8 @@ class UbahAsesmenEvaluator extends Component
     try {
 
       $validatedSoalForm['asesmen_id'] = $this->id;
-      $validatedSoalForm['dibuat_oleh'] = auth()->user()->username ?? 'admin';
-      $validatedSoalForm['diupdate_oleh'] = auth()->user()->username ?? 'admin';
+      $validatedSoalForm['dibuat_oleh'] = auth()->user()->name ?? 'admin';
+      $validatedSoalForm['diupdate_oleh'] = auth()->user()->name ?? 'admin';
       $validatedSoalForm['tgl_dibuat'] = now();
       $validatedSoalForm['tgl_diupdate'] = now();
       $validatedSoalForm['jenis'] = 'essay';
@@ -234,10 +234,10 @@ class UbahAsesmenEvaluator extends Component
 
       \Illuminate\Support\Facades\DB::commit();
 
-      $this->success('Data has been updated');
+      $this->success('Data Asesmen berhasil di Update');
     } catch (\Throwable $th) {
       \Illuminate\Support\Facades\DB::rollBack();
-      $this->error('Data failed to update');
+      $this->error('Data Asesmen Gagal di Update');
     }
   }
 

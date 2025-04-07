@@ -7,6 +7,7 @@
                 <tr>
                     <th class="px-6 py-3 text-sm md:text-md text-left">Action</th>
                     <th class="px-6 py-3 text-sm md:text-md text-left">ID</th>
+                    <th class="px-6 py-3 text-sm md:text-md text-left">Image</th>
                     <th class="px-6 py-3 text-sm md:text-md text-left">Asesmen ID</th>
                     <th class="px-6 py-3 text-sm md:text-md text-left">Pertanyaan</th>
                     <th class="px-6 py-3 text-sm md:text-md text-left">Jenis</th>
@@ -35,6 +36,7 @@
                             </button>
                         </td>
                         <td class="px-6 py-4 text-xs md:text-sm">{{ $item->id }}</td>
+                        <td class="px-6 py-4 text-xs md:text-sm"> <img src="{{ $item->image_url }}" alt="" srcset=""> </td>
                         <td class="px-6 py-4 text-xs md:text-sm">{{ $item->asesmen_id }}</td>
                         <td class="px-6 py-4 text-xs md:text-sm">{!! $item->pertanyaan !!}</td>
                         <td class="px-6 py-4 text-xs md:text-sm">{{ $item->jenis }}</td>
@@ -61,30 +63,31 @@
         
                   <div id="pertanyaan">
 
-                    {{-- 
-                    <div class="mb-3">
-                      <x-textarea
-                          label="Pertanyaan"
-                          wire:model="masterSoalForm.pertanyaan"
-                          placeholder="Pertanyaan"
-                          hint="Max 1000 chars"
-                          rows="5"
-                      />
-                    </div>
 
                     
-                     --}}
+                    <div class="mb-3">
+                        <x-input  label="soal " wire:model="masterSoalForm.asesmen_id" id="masterSoalForm.asesmen_id" name="masterSoalForm.asesmen_id" placeholder="asesmen_id" />
+                    </div>
 
-                    {{-- <div id="summernote" wire:model="masterSoalForm.pertanyaan"></div> --}}
-
-
-                    <div class="form-group" wire:ignore>
-                        <label for="desciption">Deskripsi</label>
-                        <textarea type="text" input="masterSoalForm.pertanyaan" id="summernote" class="form-control summernote" wire:model="masterSoalForm.pertanyaan"></textarea>
+                    <div class="mb-3 ">
+                        <x-file wire:model="masterSoalForm.image_url" label="Image" accept="image/*" crop-after-change :disabled="$isDisabled">
+                          <img
+                            src="{{ $masterForm->image_url ?? 'https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg?20200913095930' }}"
+                            class="h-48 rounded-lg" />
+                        </x-file>
                     </div>
 
                     <div class="mb-3">
-                        <x-input label="Bobot" wire:model.blur="masterSoalForm.bobot" id="masterSoalForm.bobot" name="masterSoalForm.bobot" placeholder="Bobot" />
+                        <x-input  label="Durasi" wire:model="masterSoalForm.durasi" id="masterSoalForm.durasi" name="masterSoalForm.durasi" placeholder="Durasi" />
+                    </div>
+
+                    <div class="form-group" wire:ignore>
+                        <label for="desciption">Pertanyaan</label>
+                        <x-markdown type="text" input="masterSoalForm.pertanyaan"  class="form-control " wire:model="masterSoalForm.pertanyaan"></x-markdown>
+                    </div>
+
+                    <div class="mb-3">
+                        <x-input  label="Bobot" wire:model.blur="masterSoalForm.bobot" id="masterSoalForm.bobot" name="masterSoalForm.bobot" placeholder="Bobot" />
                     </div>
         
                     <div class="mb-3">
@@ -92,7 +95,7 @@
                     </div>
                     
                     <div class="mb-3">
-                        <x-input type="number" label="Durasi" wire:model.blur="masterSoalForm.durasi" id="masterSoalForm.durasi" name="masterSoalForm.durasi" placeholder="Durasi" />
+                        <x-input  label="Durasi" wire:model.blur="masterSoalForm.durasi" id="masterSoalForm.durasi" name="masterSoalForm.durasi" placeholder="Durasi" />
                     </div>
                     
                     @if (!$isReadonly)
@@ -114,77 +117,6 @@
         </x-modal>
         
     </div>
-
-
-
-    
-
-
-    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
-    <link href="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote-lite.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote-lite.min.js"></script>
-  
-  
-    
-    <script>
-    $('.summernote').summernote({
-      tabsize: 2,
-      height: 200,
-      toolbar: [
-          ['style', ['style']],
-          ['font', ['bold', 'underline', 'clear']],
-          ['color', ['color']],
-          ['para', ['ul', 'ol', 'paragraph']],
-          ['table', ['table']],
-          ['insert', ['link', 'picture', 'video']],
-          ['view', ['fullscreen', 'codeview', 'help']]
-      ],
-      callbacks: {
-
-            onImageUpload: function(files) {
-                alert('cek onImageUpload');
-                on
-              
-            },
-            onShow: function() {
-
-                alert('cek onShow');
-
-
-                $('.note-modal-backdrop').css({
-                    'display': 'relative',
-                    'z-index': '999'
-                });
-            }
-            
-           
-
-        }
-
-
-
-
-    });
-
-
-        // summernote.image.upload
-    $('#summernote').on('summernote.image.upload', function(we, files) {
-    // upload image to server and create imgNode...
-    $summernote.summernote('insertNode', imgNode);
-
-        alert('cek onShow');
-
-        setTimeout(function() {
-            $('.note-modal-backdrop').css({
-                'display': 'relative',
-                'z-index': '999'
-            });
-            }, 100);
-
-        });
-    onImage
-
-    </script>
 
 </x-card>
   

@@ -19,13 +19,15 @@ Route::get('/register', \App\Livewire\Auth\Register::class)->name('register');
 
 
 
+Route::post('/logout', [App\Http\Controllers\Auth\AuthenticatedSessionController::class, 'destroy'])
+    ->name('logout');
 
 
 Route::get('/', \App\Livewire\Auth\Login::class)->name('login');
 
 
 Route::middleware('auth:sanctum')->group(function () {
-    Route::post('/logout', [\App\Http\Controllers\Api\AuthController::class, 'logout']);
+    // Route::post('/logout', [\App\Http\Controllers\Api\AuthController::class, 'logout']);
 
 
     # admin
@@ -53,7 +55,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/permission/edit/{id}', App\Livewire\Admin\Permission\PermissionCrud::class)->name('permission-crud');
 
     # halaman pengguna admin
-    Route::get('/hasil-asesmen', \App\Livewire\Pengguna\HasilAsesmen\DaftarHasilAsesmen::class)->name('daftar-hasil-asesmen');
+    Route::get('/hasil-asesmen', \App\Livewire\User\HasilAsesmen\DaftarHasilAsesmen::class)->name('daftar-hasil-asesmen');
 
     # customer
     Route::get('/daftar-asesmen', \App\Livewire\Asesmen\DaftarAsesmen::class)->name('daftar-asesmen');

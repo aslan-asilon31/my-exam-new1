@@ -19,7 +19,7 @@ class Pengguna extends Authenticatable
      * @var list<string>
      */
 
-    protected $table = 'penggunas';
+    protected $table = 'users';
     public $timestamps = false;
     public $incrementing = false; 
     protected $keyType = 'string'; 

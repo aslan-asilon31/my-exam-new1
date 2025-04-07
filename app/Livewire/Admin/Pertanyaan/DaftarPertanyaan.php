@@ -42,11 +42,17 @@ class DaftarPertanyaan extends Component
   #[\Livewire\Attributes\Locked]
   public array $options = [];
 
+  #[\Livewire\Attributes\Locked]
+  private string $baseFolderName = '/files/images/pertanyaan';
+  private string $baseImageName = 'pertanyaan-image';
+
 
     public string $url = '/pertanyaan';
 
     use \Livewire\WithFileUploads;
     use \Mary\Traits\Toast;
+  use \App\Helpers\ImageUpload\Traits\WithImageUpload;
+
 
     public function initialize()
     {
@@ -73,9 +79,9 @@ class DaftarPertanyaan extends Component
       $this->idSoal = null;
     }
 
-
     public function simpan()
     {
+      $this->masterSoalForm->asesmen_id = $this->id;
 
       $validatedSoalForm = $this->validate(
         $this->masterSoalForm->rules(),
@@ -83,12 +89,30 @@ class DaftarPertanyaan extends Component
         $this->masterSoalForm->attributes()
       )['masterSoalForm'];
 
-          $validatedSoalForm['asesmen_id'] = "95e36db6-dfa4-4b5e-955e-c9d3e56ae72a";
+        $masterData = Pertanyaan::findOrFail($this->id);
+
+        $validatedSoalForm['durasi'] = (int) $validatedSoalForm['durasi'];
+        $validatedSoalForm['bobot'] = (int) $validatedSoalForm['bobot'];
+
           $validatedSoalForm['dibuat_oleh'] = auth()->user()->username ?? 'admin';
           $validatedSoalForm['diupdate_oleh'] = auth()->user()->username ?? 'admin';
           $validatedSoalForm['tgl_dibuat'] = now();
           $validatedSoalForm['tgl_diupdate'] = now();
           $validatedSoalForm['jenis'] = 'essay';
+
+          // image_url
+            $folderName = $this->baseFolderName;
+            $now = now()->format('Ymd_His_u');
+            $imageName = $this->baseImageName . $now;
+            $newImageUrl = $validatedSoalForm['image_url'];
+
+            $validatedForm['image_url'] = $this->saveImage(
+              $folderName,
+              $imageName,
+              $newImageUrl,
+            );
+          // ./image_url
+
       
           $pertanyaan = Pertanyaan::create($validatedSoalForm);
           
@@ -102,37 +126,55 @@ class DaftarPertanyaan extends Component
       $masterData = Pertanyaan::findOrFail($this->idSoal);
         $this->masterSoalForm->fill($masterData);
         $this->modalPertanyaan = true;
-
     }
 
     public function update()
     {
-      
-      // $this->permission($this->basePageName.'-update');
+
       $validatedForm = $this->validate(
         $this->masterSoalForm->rules(),
         [],
         $this->masterSoalForm->attributes()
       )['masterSoalForm'];
   
+      $validatedSoalForm['asesmen_id'] = $validatedForm['asesmen_id'];
+      $validatedSoalForm['durasi'] = (int) $validatedForm['durasi'];
+      $validatedSoalForm['bobot'] = (int) $validatedForm['bobot'];
+      $validatedSoalForm['pertanyaan'] = $validatedForm['pertanyaan'];
+      $validatedSoalForm['jenis'] = "essay";
+
+      $validatedSoalForm['dibuat_oleh'] = auth()->user()->username ?? 'admin';
+      $validatedSoalForm['diupdate_oleh'] = auth()->user()->username ?? 'admin';
+      $validatedSoalForm['tgl_diupdate'] = now();
+
       $masterData = Pertanyaan::findOrFail($this->idSoal);
 
-  
-      \Illuminate\Support\Facades\DB::beginTransaction();
-      try {
-  
+      // image_url
+        $folderName = $this->baseFolderName;
+        $now = now()->format('Ymd_His_u');
+        $imageName = $this->baseImageName . '_' . $now;
+        $newImageUrl = $validatedForm['image_url'];
+        $oldImageUrl = $masterData['image_url'];
 
-  
-        $pertanyaan = Pertanyaan::update($validatedForm);
-  
-        \Illuminate\Support\Facades\DB::commit();
-  
-        $this->success('Soal Asesmen sudah dibuat');
+        $validatedSoalForm['image_url'] = $this->saveImage(
+          $folderName,
+          $imageName,
+          $newImageUrl,
+          $oldImageUrl,
+        );
+      // ./image_url
 
-      } catch (\Throwable $th) {
-        \Illuminate\Support\Facades\DB::rollBack();
-        $this->error('Soal Asesmen gagal dibuat');
+      if($masterData){
+        $masterData->update($validatedSoalForm);
+        $this->success('Soal Asesmen berhasil dibuat');
+        $this->modalPertanyaan = false;
+
+      }else{
+        $this->error('Soal Asesmen Gagal dibuat');
       }
+
+
+     
     }
 
     
