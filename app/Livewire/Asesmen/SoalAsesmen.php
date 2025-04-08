@@ -38,6 +38,8 @@ class SoalAsesmen extends Component
     public $indexJawaban = 0;
     public $pertanyaans  = [];
     public $userId;
+    public $userName;
+    public $userEmail;
     public $asesmenDurasi = 0 ;
     public $pertanyaanId;
     public $hitungPertanyaan = [];
@@ -77,7 +79,6 @@ class SoalAsesmen extends Component
     {
 
         $this->userId = session()->get('soal-sesi.userId');
-        $this->user = User::where('id', session()->get('soal-sesi.user_id'))->firstOrFail()->toArray();
         $this->userName = session()->get('soal-sesi.user_name');
         $this->userEmail = session()->get('soal-sesi.user_email');
 
@@ -119,7 +120,7 @@ class SoalAsesmen extends Component
     public function initialize()
     {
 
-        $this->asesmen = Asesmen::where('id', $this->id)->firstOrFail()->toArray();
+        $this->asesmen = Asesmen::where('id', $this->id)->first()->toArray();
         $this->waktuAsesmen = $this->asesmen['durasi'];
 
         $jam = floor($this->waktuAsesmen / 3600); // Menghitung jam
@@ -146,7 +147,7 @@ class SoalAsesmen extends Component
 
         $this->waktuSoalSelesai = $this->waktuSoalSekarang->copy()->addSeconds($this->waktuSoal); // Waktu selesai soal
 
-        $this->asesmen = Asesmen::where('id', $this->id)->firstOrFail()->toArray();
+        $this->asesmen = Asesmen::where('id', $this->id)->first()->toArray();
         $this->asesmenDurasi = $this->asesmen['durasi'];
 
     }

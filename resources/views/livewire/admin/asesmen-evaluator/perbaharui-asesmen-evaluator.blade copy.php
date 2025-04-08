@@ -61,7 +61,7 @@
           </div>
 
           <div class="mb-3">
-            <x-input label="Durasi" wire:model.blur="masterForm.durasi" id="masterForm.durasi" name="masterForm.durasi" placeholder="Durasi" />
+            <x-input label="Durasi (Detik)" wire:model.blur="masterForm.durasi" id="masterForm.durasi" name="masterForm.durasi" placeholder="Durasi" />
           </div>
 
         </div>

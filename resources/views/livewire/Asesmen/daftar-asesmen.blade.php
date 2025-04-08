@@ -59,7 +59,7 @@
                         </div>
                         
                         <div class="mt-4 flex justify-center">
-                            <a href="/konfirmasi-mulai/{{ $asesmen->id }}" class="text-xs w-full bg-orange-800 hover:bg-orange-900 text-white py-2 px-4 rounded text-center">
+                            <a href="/konfirmasi-mulai/{{ $asesmen->id }}" class="text-xs w-full bg-[#954832] hover:bg-[#954832] text-white py-2 px-4 rounded text-center">
                                 Mulai Assesment
                             </a>
                         </div>

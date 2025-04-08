@@ -51,17 +51,18 @@ class DaftarPertanyaan extends Component
 
     use \Livewire\WithFileUploads;
     use \Mary\Traits\Toast;
-  use \App\Helpers\ImageUpload\Traits\WithImageUpload;
+    use \App\Helpers\ImageUpload\Traits\WithImageUpload;
 
 
     public function initialize()
     {
-        $this->soals = Pertanyaan::all();
+        $this->soals = Pertanyaan::where('asesmen_id',$this->idAsesmen)->orderBy('no_urut', 'asc')->get();
     }
 
 
     public function mount()
     {
+      $this->idAsesmen = session()->get('asesmen_id_for_pertanyaan');
 
       if ($this->idSoal) {
         $this->title .= ' (Ubah)';
@@ -77,11 +78,20 @@ class DaftarPertanyaan extends Component
     {
       $this->masterSoalForm->reset();
       $this->idSoal = null;
+
+      $lastNoUrut = Pertanyaan::where('asesmen_id', $this->idAsesmen)->max('no_urut');
+      $this->masterSoalForm->no_urut = ($lastNoUrut !== null ? (int)$lastNoUrut + 1 : 1);
+
+    }
+
+    public function closeModal()
+    {
+      $this->modalPertanyaan = false;
     }
 
     public function simpan()
     {
-      $this->masterSoalForm->asesmen_id = $this->id;
+      $this->masterSoalForm->asesmen_id =  $this->idAsesmen;
 
       $validatedSoalForm = $this->validate(
         $this->masterSoalForm->rules(),
@@ -89,7 +99,6 @@ class DaftarPertanyaan extends Component
         $this->masterSoalForm->attributes()
       )['masterSoalForm'];
 
-        $masterData = Pertanyaan::findOrFail($this->id);
 
         $validatedSoalForm['durasi'] = (int) $validatedSoalForm['durasi'];
         $validatedSoalForm['bobot'] = (int) $validatedSoalForm['bobot'];
@@ -113,8 +122,8 @@ class DaftarPertanyaan extends Component
             );
           // ./image_url
 
-      
           $pertanyaan = Pertanyaan::create($validatedSoalForm);
+          $this->modalPertanyaan = false;
           
           $this->success('Soal Asesmen sudah dibuat');
   
@@ -126,6 +135,9 @@ class DaftarPertanyaan extends Component
       $masterData = Pertanyaan::findOrFail($this->idSoal);
         $this->masterSoalForm->fill($masterData);
         $this->modalPertanyaan = true;
+
+        // $this->masterSoalForm->no_urut = (int) Pertanyaan::findOrFail($this->id)
+        // ?->max('no_urut') + 1;
     }
 
     public function update()
@@ -171,10 +183,31 @@ class DaftarPertanyaan extends Component
 
       }else{
         $this->error('Soal Asesmen Gagal dibuat');
+        $this->modalPertanyaan = false;
+
       }
 
 
      
+    }
+
+    public function hapus()
+    {
+  
+      $masterData = $this->masterSoalForm::findOrFail($this->id);
+  
+      \Illuminate\Support\Facades\DB::beginTransaction();
+      try {
+  
+        $masterData->delete();
+        \Illuminate\Support\Facades\DB::commit();
+  
+        $this->success('Data has been hapus');
+        $this->redirect($this->url, true);
+      } catch (\Throwable $th) {
+        \Illuminate\Support\Facades\DB::rollBack();
+        $this->error('Data failed to hapus');
+      }
     }
 
     

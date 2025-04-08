@@ -81,7 +81,7 @@ class KonfirmasiMulai extends Component
         // dd(Session());
 
         $this->userId = session()->get('soal-sesi.userId');
-        $this->user = User::where('id', session()->get('soal-sesi.user_id'))->firstOrFail()->toArray();
+        $this->user = User::where('id', session()->get('soal-sesi.user_id'))->first()->toArray();
         $this->userName = session()->get('soal-sesi.user_name');
         $this->userEmail = session()->get('soal-sesi.user_email');
 
@@ -93,7 +93,7 @@ class KonfirmasiMulai extends Component
     public function initialize()
     {
 
-        $this->asesmen = Asesmen::where('id', $this->id)->firstOrFail()->toArray();
+        $this->asesmen = Asesmen::where('id', $this->id)->first()->toArray();
         $this->asesmenDurasi = $this->asesmen['durasi'];
 
         $tglMulai = \Carbon\Carbon::parse($this->asesmen['tgl_mulai']);
@@ -110,7 +110,6 @@ class KonfirmasiMulai extends Component
 
     }
 
-    // #[Layout('components.layouts.app_visitor')]
     public function render()
     {
 

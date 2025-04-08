@@ -10,7 +10,7 @@ use App\Models\User;
 use App\Models\PenggunaAsesmen;
 use App\Models\DetailPenggunaAsesmen;
 use Mary\Traits\Toast;
-
+use Illuminate\Support\Facades\DB;
 
 class KonfirmasiSelesai extends Component
 {
@@ -24,6 +24,8 @@ class KonfirmasiSelesai extends Component
 
     public $questions = [];
     public $asesmen =[];
+    public $asesmen_id;
+    public $pertanyaan_id;
     public $answers = [];
     public $examList = false;
     public $examQuestion = false;
@@ -64,8 +66,7 @@ class KonfirmasiSelesai extends Component
 
     public function mount()
     {
-        $this->userId = session()->get('soal-sesi.userId');
-        $this->user = User::where('id', session()->get('soal-sesi.user_id'))->firstOrFail()->toArray();
+        $this->userId = session()->get('soal-sesi.user_id');
         $this->userName = session()->get('soal-sesi.user_name');
         $this->userEmail = session()->get('soal-sesi.user_email');
 
@@ -75,11 +76,12 @@ class KonfirmasiSelesai extends Component
 
     public function initialize()
     {
-
         $this->waktuAsesmenYangDihabiskan = session('soal-sesi.waktuAsesmenYangDihabiskan');
 
-        $this->userName = session('soal-sesi.user_name');
-        $this->userEmail = session('soal-sesi.user_email');
+        $this->asesmen_id = session()->get('soal-sesi.asesmen_id');
+        $this->userId = session()->get('soal-sesi.user_id');
+        $this->userName = session()->get('soal-sesi.user_name');
+        $this->userEmail = session()->get('soal-sesi.user_email');
 
         $totalDetik = intval(abs($this->waktuAsesmenYangDihabiskan));
         $jam = floor($totalDetik / 3600);
@@ -94,30 +96,52 @@ class KonfirmasiSelesai extends Component
     public function simpanJawaban()
     {
 
-        $jawabanData = Session::get('soal-session');
+        $jawabanData = Session::get('soal-sesi');
+        if ($jawabanData && isset($jawabanData['soal']) && is_array($jawabanData['soal'])) {
+            $dataPenggunaAsesmen = [];
 
-        $penggunaAsesmen = PenggunaAsesmen::create([
-            'pengguna_id' => 'eafe4ec3-2e7d-4147-9dbe-754a79ff7740', // Ambil user ID dari auth
-            'asesmen_id' => $jawabanData[0]['asesmen_id'], // Pastikan Anda memiliki asesmen_id yang sesuai
-            'pertanyaan_id' => $jawabanData[0]['pertanyaan_id'], // Ambil pertanyaan_id dari jawaban
-            'tgl_mulai' => now(),
-            'tgl_selesai' => now(),
-        ]);
+            foreach ($jawabanData['soal'] as $soal) {
+                $pertanyaanId = $soal['pertanyaan_id'];
+                $jawabanSoal = $soal['jawaban'];
+                if (isset($soal['pertanyaan_id'])) {
+                    $dataPenggunaAsesmen[] = [
+                        'id' => (string) Str::uuid(),
+                        'pengguna_id' => $this->userId ?? auth()->id(),
+                        'asesmen_id' => $this->asesmen_id,
+                        'tgl_selesai' => now(),
+                    ];
+                }
+            }
+
+            if (!empty($dataPenggunaAsesmen)) {
+
+                DB::table('pengguna_asesmens')->insert($dataPenggunaAsesmen);
+
+                // Retrieve all newly created ids (assuming 'created_at' is set correctly)
+                $newIds = DB::table('pengguna_asesmens')
+                    ->whereIn('id', array_column($dataPenggunaAsesmen, 'id')) // Use UUIDs from your data
+                    ->pluck('id'); 
+
+                // $penggunaNewAsesmenId[] = PenggunaAsesmen::insertGetId($dataPenggunaAsesmen);
+            } else {
+            }
+        } else {
+        }
 
         $detailPenggunaAsesmen = [];
         foreach ($jawabanData as $jawaban) {
             $detailPenggunaAsesmen[] = [
                 'id' => (string) Str::uuid(),
-                'pengguna_asesmen_id' =>  $penggunaAsesmen->id, // Pastikan Anda memiliki asesmen_id yang sesuai
-                'pertanyaan_id' => (string) $jawaban['pertanyaan_id'], // Ambil pertanyaan_id dari jawaban
-                'jawaban' => $jawaban['jawaban'], // Ambil jawaban dari jawaban
+                'pengguna_asesmen_id' =>  $newIds[0], 
+                'pertanyaan_id' => $pertanyaanId,
+                'jawaban' => $jawabanSoal, 
                 'poin' => 0,
             ];
         }
 
         DetailPenggunaAsesmen::insert($detailPenggunaAsesmen);
 
-        Session::forget('soal-session');
+        Session::forget('soal-sesi');
 
         $this->toast(
             type: 'success',
@@ -133,6 +157,50 @@ class KonfirmasiSelesai extends Component
         $this->redirect('/daftar-asesmen', navigate: true);
 
     }
+
+//     public function simpanJawaban()
+// {
+//     $jawabanData = Session::get('soal-sesi');
+
+//     // Validasi waktu
+//     if ($jawabanData['waktuSoalBerjalan'] < 0) {
+//         $jawabanData['waktuSoalBerjalan'] = 0;
+//     }
+//     if ($jawabanData['waktuAsesmenYangDihabiskan'] < 0) {
+//         $jawabanData['waktuAsesmenYangDihabiskan'] = 0;
+//     }
+
+//     // Simpan data asesmen utama
+//     $penggunaAsesmen = PenggunaAsesmen::create([
+//         'pengguna_id' => $this->userId, 
+//         'asesmen_id' => $this->asesmen_id, 
+//         'tgl_mulai' => now(),
+//         'tgl_selesai' => now(),
+//         'waktu_asesmen' => $jawabanData['waktuAsesmenYangDihabiskan'],
+//     ]);
+
+//     // Iterasi melalui setiap jawaban soal
+//     foreach ($jawabanData['soal'] as $soal) {
+//         // Validasi waktu soal
+//         if ($soal['waktuSoalYangDihabiskan'] < 0) {
+//             $soal['waktuSoalYangDihabiskan'] = 0;
+//         }
+
+//         // Simpan setiap jawaban ke dalam tabel jawaban_asesmen atau tabel terkait
+//         Pertanyaan::create([
+//             'pengguna_asesmen_id' => $penggunaAsesmen->id,
+//             'pertanyaan_id' => $soal['pertanyaan_id'],
+//             'jawaban' => $soal['jawaban'],
+//             'durasi_soal' => $soal['durasiSoal'],
+//             'waktu_soal_sekarang' => $soal['waktuSoalSekarang'],
+//             'waktu_soal_selesai' => $soal['waktuSoalSelesai'],
+//             'waktu_soal_yang_dihabiskan' => $soal['waktuSoalYangDihabiskan'],
+//             'nomor_soal' => $soal['nomorSoal'],
+//         ]);
+//     }
+// }
+
+
 
     public function clearSession()
     {

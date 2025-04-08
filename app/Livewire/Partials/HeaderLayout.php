@@ -42,7 +42,7 @@ class HeaderLayout extends Component
     public function initialize($asesmenId)
     {
         $this->id = $asesmenId;
-        $this->asesmen = Asesmen::where('id', $asesmenId)->firstOrFail()->toArray();
+        $this->asesmen = Asesmen::where('id', $asesmenId)->first()->toArray();
         $this->asesmenDurasi = $this->id;
     }
 

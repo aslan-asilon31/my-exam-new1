@@ -11,9 +11,11 @@
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.9",
         "livewire/livewire": "^3.6",
+        "owenvoke/blade-fontawesome": "^2.9",
         "power-components/livewire-powergrid": "^6.2",
         "robsontenorio/mary": "^1.41",
-        "spatie/laravel-permission": "^6.16"
+        "spatie/laravel-permission": "^6.16",
+        "troccoli/blade-health-icons": "^5.0"
     },
     "require-dev": {
         "composer/composer": "^2.8",

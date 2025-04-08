@@ -1,11 +1,12 @@
 <x-card  shadow separator class="border shadow">
     <div class="overflow-x-auto">
         <button label="Buat" @click="$wire.modalPertanyaan = true"  class="border text-xs md:text-sm border-gray-800 text-gray-800 bg-transparent hover:bg-gray-800 hover:text-white font-semibold py-2 px-4 rounded transition duration-200"> Buat </button>
-
+        @if ($soals)
         <table class="w-full bg-white shadow-md rounded-lg">
             <thead class="bg-gray-800 text-white">
                 <tr>
                     <th class="px-6 py-3 text-sm md:text-md text-left">Action</th>
+                    <th class="px-6 py-3 text-sm md:text-md text-left">No Urut</th>
                     <th class="px-6 py-3 text-sm md:text-md text-left">ID</th>
                     <th class="px-6 py-3 text-sm md:text-md text-left">Image</th>
                     <th class="px-6 py-3 text-sm md:text-md text-left">Asesmen ID</th>
@@ -17,24 +18,19 @@
                     <th class="px-6 py-3 text-sm md:text-md text-left">Diupdate Oleh</th>
                     <th class="px-6 py-3 text-sm md:text-md text-left">Tanggal Dibuat</th>
                     <th class="px-6 py-3 text-sm md:text-md text-left">Tanggal Diupdate</th>
-                    <th class="px-6 py-3 text-sm md:text-md text-left">No Urut</th>
                     <th class="px-6 py-3 text-sm md:text-md text-left">Apa Aktif</th>
                 </tr>
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
-                @foreach ($soals as $item)
+                @forelse ($soals as $item)
                     <tr>
-                        <td class="flex ">
-                            <button label="Ubah" @click="$wire.ubah('{{ $item['id'] }}')"  class=" text-gray-800 bg-transparent hover:bg-green-800 hover:text-white font-semibold py-1 px-2 rounded transition duration-200 text-xs md:text-md"> 
-                                <x-icon name="o-pencil" class="w-9 h-9 bg-green-500 text-white p-2 rounded-full" />
-                            </button>
-                            <button label="Hapus" @click="$wire.modalPertanyaanHapus = true" class=" text-gray-800 bg-transparent hover:bg-red-800 hover:text-white font-semibold py-1 px-2 rounded transition duration-200 text-xs md:text-md">
-                                <x-icon name="o-trash" class="w-9 h-9 bg-red-500 text-white p-2 rounded-full" />
-                            </button>
-                            <button label="Hapus" @click="$wire.modalPertanyaanHapus = true" class=" text-gray-800 bg-transparent hover:bg-violet-800 hover:text-white font-semibold py-1 px-2 rounded transition duration-200 text-xs md:text-md">
-                                <x-icon name="o-eye" class="w-9 h-9 bg-violet-500 text-white p-2 rounded-full" />
-                            </button>
+                        <td class="">
+                            <x-dropdown label="">
+                                <x-menu-item title="Ubah" @click="$wire.ubah('{{ $item['id'] }}')" />
+                                <x-menu-item title="Hapus" @click="$wire.hapus('{{ $item['id'] }}')" />
+                            </x-dropdown>
                         </td>
+                        <td class="px-6 py-4 text-xs md:text-sm">{{ $item->no_urut }}</td>
                         <td class="px-6 py-4 text-xs md:text-sm">{{ $item->id }}</td>
                         <td class="px-6 py-4 text-xs md:text-sm"> <img src="{{ $item->image_url }}" alt="" srcset=""> </td>
                         <td class="px-6 py-4 text-xs md:text-sm">{{ $item->asesmen_id }}</td>
@@ -46,12 +42,15 @@
                         <td class="px-6 py-4 text-xs md:text-sm">{{ $item->diupdate_oleh }}</td>
                         <td class="px-6 py-4 text-xs md:text-sm">{{ $item->tgl_dibuat }}</td>
                         <td class="px-6 py-4 text-xs md:text-sm">{{ $item->tgl_diupdate }}</td>
-                        <td class="px-6 py-4 text-xs md:text-sm">{{ $item->no_urut }}</td>
                         <td class="px-6 py-4 text-xs md:text-sm">{{ $item->apa_aktif ? 'Ya' : 'Tidak' }}</td>
                     </tr>
-                @endforeach
+                @empty 
+                @endforelse
             </tbody>
         </table>
+        @else
+        <img src="{{ asset('flat-image/flat404.png') }}"  class="w-32 md:w-64" alt="" srcset="">
+        @endif
 
         <x-modal wire:model="modalPertanyaan" class=" backdrop-blur">
 
@@ -66,7 +65,7 @@
 
                     
                     <div class="mb-3">
-                        <x-input  label="soal " wire:model="masterSoalForm.asesmen_id" id="masterSoalForm.asesmen_id" name="masterSoalForm.asesmen_id" placeholder="asesmen_id" />
+                        <x-input  label="" wire:model="masterSoalForm.asesmen_id" id="masterSoalForm.asesmen_id" name="masterSoalForm.asesmen_id" placeholder="asesmen id" hidden/>
                     </div>
 
                     <div class="mb-3 ">
@@ -77,13 +76,10 @@
                         </x-file>
                     </div>
 
-                    <div class="mb-3">
-                        <x-input  label="Durasi" wire:model="masterSoalForm.durasi" id="masterSoalForm.durasi" name="masterSoalForm.durasi" placeholder="Durasi" />
-                    </div>
-
                     <div class="form-group" wire:ignore>
-                        <label for="desciption">Pertanyaan</label>
-                        <x-markdown type="text" input="masterSoalForm.pertanyaan"  class="form-control " wire:model="masterSoalForm.pertanyaan"></x-markdown>
+                        <label for="pertanyaan">Pertanyaan</label>
+                        {{-- <x-markdown type="text" input="masterSoalForm.pertanyaan"  class="form-control " wire:model="masterSoalForm.pertanyaan"></x-markdown> --}}
+                        <x-markdown type="text"   class="form-control " wire:model="masterSoalForm.pertanyaan"/>
                     </div>
 
                     <div class="mb-3">
@@ -95,7 +91,7 @@
                     </div>
                     
                     <div class="mb-3">
-                        <x-input  label="Durasi" wire:model.blur="masterSoalForm.durasi" id="masterSoalForm.durasi" name="masterSoalForm.durasi" placeholder="Durasi" />
+                        <x-input  label="Durasi (Detik)" wire:model.blur="masterSoalForm.durasi" id="masterSoalForm.durasi" name="masterSoalForm.durasi" placeholder="Durasi" />
                     </div>
                     
                     @if (!$isReadonly)
@@ -108,12 +104,12 @@
                   </div>
               </x-form>
 
-            <x-button label="Cancel" class="text-xs md:text-sm" @click="$wire.modalPertanyaanUbah = false" />
+            <x-button label="Cancel" class="text-xs md:text-sm" wire.click="closeModal" />
         
         </x-modal>
 
         <x-modal wire:model="modalPertanyaanHapus" class="backdrop-blur text-xs md:text-sm">
-            <x-button label="Cancel" @click="$wire.modalPertanyaanHapus = false" />
+            <x-button label="Cancel" wire.click="closeModal" />
         </x-modal>
         
     </div>

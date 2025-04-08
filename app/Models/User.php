@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
+use Spatie\Permission\Traits;
+
 
 
 class User extends Authenticatable
@@ -42,7 +44,7 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $hidden = [
-        'sandi',
+        'password',
         'ingat_token',
     ];
 
@@ -58,4 +60,10 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function pengguna_asesmens()
+    {
+        return $this->hasMany(PenggunaAsesmen::class, 'pengguna_id', 'id');
+    }
+    
 }

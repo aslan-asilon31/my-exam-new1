@@ -10,19 +10,11 @@
           <div>
     
             <x-button label="List" link="{{ $url }}" class="btn-ghost btn-outline" />
-    
-            @if ($id)
-              <x-button label="Create" link="{{ $url . '/create' }}" class="btn-ghost btn-outline" />
-            @endif
-      
-            @if ($id && $isReadonly)
-              <x-button label="Edit" link="{{ $url . '/edit/' . $id }}" class="btn-ghost btn-outline" />
-            @endif
       
           </div>
           <div class="text-right">
             @if ($id && !$isReadonly)
-              <x-button label="Delete" wire:click="delete" wire:confirm="Do you want to delete this data?"
+              <x-button label="Delete" wire:click="delete" wire:confirm="Apakah kamu yakin ingin menghapus data ini?"
                 class="btn-ghost btn-outline text-red-500" />
             @endif
           </div>
@@ -62,17 +54,25 @@
                     <div class="mb-3">
                       <x-datetime label="Tanggal Selesai" wire:model="masterForm.tgl_selesai" icon="o-calendar" type="datetime-local" />
                     </div>
-                    
+
+                    @php 
+                        $tglMulai = \Carbon\Carbon::parse( $masterForm->tgl_mulai );
+                        $tglSelesai = \Carbon\Carbon::parse($masterForm->tgl_selesai );
+                        $durasi1 = $tglMulai->diff($tglSelesai);
+                        $asesmenDurasi1 = $durasi1->format('%h jam %i menit %s detik');
+                    @endphp
+
+                    <div class="mb-3">
+                      <x-input label="Durasi (detik)" wire:model.blur="masterForm.durasi" id="masterForm.durasi" name="masterForm.durasi" placeholder="Durasi" />
+                      <p class="text-xs md:text-sm">{{ $asesmenDurasi1 }}</p>
+                    </div>
+          
                     
                     <div class="mb-3">
                       <x-choices-offline wire:model="masterForm.apa_aktif" label="Apakah Aktif ?" :options="[['id' => 0, 'name' => 'Tidak Aktif'], ['id' => 1, 'name' => 'Aktif']]" single searchable
                         :readonly="$isReadonly" />
                     </div>
-                              
-                    <div class="mb-3">
-                      <x-input label="Durasi (detik)" wire:model.blur="masterForm.durasi" id="masterForm.durasi" name="masterForm.durasi" placeholder="Durasi" />
-                    </div>
-          
+
                   </div>
           
                 @if (!$isReadonly)

@@ -178,16 +178,24 @@ class RoleCrud extends Component
         ->get();
 
 
+        // $this->groupedPermissions = [];
+        // foreach ($this->permissions as $permission) {
+        //     $parts = explode('-', $permission->name);
+        //     if (count($parts) > 2) {
+        //         $groupKey = $parts[1]; 
+        //         $this->groupedPermissions[$groupKey][] = $permission;
+        //     }
+        // }
+
         $this->groupedPermissions = [];
         foreach ($this->permissions as $permission) {
-            // Split the permission name by dash
             $parts = explode('-', $permission->name);
-            if (count($parts) > 2) {
-                // Use the second part as the key for grouping
-                $groupKey = $parts[1]; // e.g., 'post' from 'developer-post-create'
+            if (count($parts) > 1) { // Ensure there is at least one dash
+                $groupKey = $parts[0]; // Get the part before the dash
                 $this->groupedPermissions[$groupKey][] = $permission;
             }
         }
+
 
 
 

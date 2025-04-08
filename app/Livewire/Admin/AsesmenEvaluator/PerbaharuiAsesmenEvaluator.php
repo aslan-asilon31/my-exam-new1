@@ -88,7 +88,6 @@ class PerbaharuiAsesmenEvaluator extends Component
   public function buat()
   {
 
-
     $this->masterForm->reset();
 
   }
@@ -139,25 +138,10 @@ class PerbaharuiAsesmenEvaluator extends Component
         return $this->redirect('/asesmen-evaluator', navigate: true);
         $this->success('Soal Asesmen sudah dibuat');
 
-    // \Illuminate\Support\Facades\DB::beginTransaction();
-    // try {
-
-     
-
-    //   \Illuminate\Support\Facades\DB::commit();
-      
-     
-    // } catch (\Throwable $th) {
-    //   \Illuminate\Support\Facades\DB::rollBack();
-    //   \Log::error('Data failed to store: ' . $th->getMessage());
-    //   $this->error('Data failed to store');
-    // }
   }
   
   public function simpan()
   {
-    // $this->permission($this->basePageName.'-buat');
-
     $validatedForm = $this->validate(
       $this->masterForm->rules(),
       [],
@@ -188,8 +172,8 @@ class PerbaharuiAsesmenEvaluator extends Component
       // $this->create();
       $this->success('Judul Asesmen sudah dibuat');
       $this->dispatch("asesmen-judul-sudah-dibuat"); 
-      $this->redirect("/asesmen-evaluator/ubah/". $asesmendibuat->id, navigate: true);
-      $this->bukaFormSoal();
+      $this->redirect('/asesmen-evaluator');
+      // $this->bukaFormSoal();
 
     } catch (\Throwable $th) {
       \Illuminate\Support\Facades\DB::rollBack();

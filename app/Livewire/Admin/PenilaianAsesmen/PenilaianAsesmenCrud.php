@@ -89,7 +89,7 @@ class PenilaianAsesmenCrud extends Component
     \Carbon\Carbon::setLocale('id');
 
     $this->userId = auth()->id() ?? 'eafe4ec3-2e7d-4147-9dbe-754a79ff7740';
-    $this->user = Pengguna::where('id', $this->userId)->firstOrFail()->toArray();
+    $this->user = Pengguna::where('id', $this->userId)->first()->toArray();
     $this->userName = $this->user['nama'];
     $this->userEmail = $this->user['surel'];
 
@@ -104,14 +104,14 @@ class PenilaianAsesmenCrud extends Component
     ])
     ->where('pengguna_asesmens.pengguna_id', $this->userId) 
     ->orderBy('tgl_dibuat', 'desc')
-    ->firstOrFail()
+    ->first()
     ->toArray();
     $this->masterForm->fill($this->ActivePenggunaAsesmens);
     
     $this->asesmenId = $this->ActivePenggunaAsesmens['asesmen']['id'] ?? null;
     
 
-    $this->asesmen = Asesmen::where('id', $this->asesmenId)->firstOrFail()->toArray();
+    $this->asesmen = Asesmen::where('id', $this->asesmenId)->first()->toArray();
     $this->asesmenDurasi = $this->ActivePenggunaAsesmens['asesmen']['durasi'];
 
     $tglMulai = \Carbon\Carbon::parse($this->asesmen['tgl_mulai']);
@@ -186,7 +186,7 @@ class PenilaianAsesmenCrud extends Component
     ])
     ->where('pengguna_asesmens.pengguna_id', $this->userId) 
     ->orderBy('tgl_dibuat', 'desc')
-    ->firstOrFail()
+    ->first()
     ->toArray();
     $this->masterForm->fill($this->ActivePenggunaAsesmens);
  

@@ -5,6 +5,7 @@ namespace App\Livewire\Admin\PenilaianAsesmen\Komponen;
 use App\Helpers\Table\Traits\WithTable;
 use App\Models\Asesmen;
 use App\Models\PenggunaAsesmen;
+use App\Models\User;
 use App\Models\Pengguna;
 use App\Models\Position;
 use Illuminate\Support\Carbon;
@@ -47,12 +48,12 @@ final class TabelPenilaianAsesmen extends PowerGridComponent
 
     public function datasource(): Builder
     {
-        return Pengguna::query()
-                ->join('pengguna_asesmens', 'pengguna_asesmens.pengguna_id', '=', 'penggunas.id')
+        return User::query()
+                ->join('pengguna_asesmens', 'pengguna_asesmens.pengguna_id', '=', 'users.id')
                 ->select([
-                    'penggunas.id',
-                    'penggunas.nama',
-                    'penggunas.surel',
+                    'users.id',
+                    'users.name',
+                    'users.email',
                     'pengguna_asesmens.tgl_mulai',
                     'pengguna_asesmens.tgl_selesai',
                     'pengguna_asesmens.tgl_dibuat' ,
@@ -79,10 +80,10 @@ final class TabelPenilaianAsesmen extends PowerGridComponent
             ->add('action', fn($record) => Blade::render('
                 <x-dropdown no-x-anchor class="btn-sm">
                     <x-menu-item title="Lihat Detail" Link="/penilaian-asesmen/' . e($record->id) . '/readonly" />
-                    <x-menu-item title="Ubah/Beri nilai" Link="/penilaian-asesmen/' . e($record->id) . '"/>
+                    <x-menu-item title="Beri nilai" Link="/penilaian-asesmen/' . e($record->id) . '"/>
                 </x-dropdown>'))
-            ->add('nama', fn($record) => $record->nama)
-            ->add('surel', fn($record) => $record->surel)
+            ->add('name', fn($record) => $record->name)
+            ->add('email', fn($record) => $record->email)
             ->add('tgl_mulai', fn($record) => $record->tgl_mulai)
             ->add('tgl_selesai', fn($record) => $record->tgl_selesai)
             ->add('tgl_dibuat', fn($record) => $record->tgl_dibuat)
@@ -97,7 +98,7 @@ final class TabelPenilaianAsesmen extends PowerGridComponent
                 ->bodyAttribute('text-center')
                 ->headerAttribute('text-center', 'background-color:#851902; color:white;text-align:center;'),
 
-            Column::make('Nama', 'nama')
+            Column::make('Name', 'name')
                 ->sortable()
                 ->headerAttribute('text-center', 'background-color:#851902; color:white;text-align:center;'),
 
@@ -124,8 +125,8 @@ final class TabelPenilaianAsesmen extends PowerGridComponent
     public function filters(): array
     {
         return [
-            Filter::inputText('Nama', 'nama')->placeholder('nama'),
-            Filter::inputText('Surel', 'surel')->placeholder('surel'),
+            Filter::inputText('Name', 'name')->placeholder('name'),
+            Filter::inputText('email', 'email')->placeholder('email'),
             Filter::inputText('Tanggal Mulai', 'tgl_mulai')->placeholder('tgl_mulai'),
             Filter::inputText('Tanggal Selesai', 'tgl_selesai')->placeholder('tgl_selesai'),
             Filter::inputText('Tanggal Dibuat', 'tgl_dibuat')->placeholder('tgl_dibuat'),

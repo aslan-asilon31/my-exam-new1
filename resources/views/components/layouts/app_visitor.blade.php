@@ -14,7 +14,7 @@
     @livewireStyles
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="bg-gradient-to-r from-orange-700 to-orange-900 p-10 h-screen">
+<body class=" ">
     <x-toast />
 
     {{-- <header class="bg-white shadow-md p-4 mb-10 rounded-md">
@@ -28,7 +28,7 @@
     </header> --}}
 
 
-    <div class="flex items-center justify-center ">
+    <div class="w-full flex items-center justify-center  ">
         {{ $slot }}
     </div>
 

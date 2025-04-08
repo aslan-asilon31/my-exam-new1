@@ -3,6 +3,7 @@
 namespace App\Livewire\Admin\Pengguna\Komponen;
 
 use App\Helpers\Table\Traits\WithTable;
+use App\Models\User;
 use App\Models\Pengguna;
 use App\Models\Position;
 use Illuminate\Support\Carbon;
@@ -23,7 +24,7 @@ use PowerComponents\LivewirePowerGrid\Components\SetUp\Exportable;
 final class TabelPengguna extends PowerGridComponent
 {
     public string $tableName = 'penggunas';
-    public string $sortField = 'tgl_dibuat';
+    public string $sortField = 'created_at';
     public string $sortDirection = 'desc';
     public string $url = '/pengguna';
 
@@ -45,15 +46,15 @@ final class TabelPengguna extends PowerGridComponent
 
     public function datasource(): Builder
     {
-        return Pengguna::query()
+        return User::query()
             ->select([
                 'id',
-                'nama',
-                'surel',
-                'dibuat_oleh',
-                'diupdate_oleh',
-                'tgl_dibuat',
-                'tgl_diupdate',
+                'name',
+                'email',
+                'created_by',
+                'updated_by',
+                'created_at',
+                'updated_at',
             ]);
     }
 
@@ -72,12 +73,12 @@ final class TabelPengguna extends PowerGridComponent
                     <x-menu-item title="Show" Link="/daftar-pertanyaan/show/' . e($record->id) . '/readonly" />
                     <x-menu-item title="Edit" Link="/daftar-pertanyaan/edit/' . e($record->id) . '"/>
                 </x-dropdown>'))
-            ->add('nama', fn($record) => $record->nama)
-            ->add('surel')
-            ->add('dibuat_oleh')
-            ->add('diupdate_oleh')
-            ->add('tgl_dibuat')
-            ->add('tgl_diupdate');
+            ->add('name', fn($record) => $record->name)
+            ->add('email')
+            ->add('created_by')
+            ->add('updated_by')
+            ->add('created_at')
+            ->add('updated_at');
     }
 
     public function columns(): array
@@ -96,35 +97,35 @@ final class TabelPengguna extends PowerGridComponent
                 ->headerAttribute('text-center', 'background-color:#851902; color:white;text-align:center;'),
 
 
-            Column::make('Nama', 'nama')
+            Column::make('Name', 'name')
                 ->sortable()
                 ->searchable()
                 ->headerAttribute('text-center', 'background-color:#851902; color:white;text-align:center;'),
 
 
 
-            Column::make('Surel', 'surel')
+            Column::make('email', 'email')
                 ->sortable()
                 ->searchable()
                 ->headerAttribute('text-center', 'background-color:#851902; color:white;text-align:center;'),
 
 
-            Column::make('Dibuat oleh', 'dibuat_oleh')
+            Column::make('Dibuat oleh', 'created_by')
                 ->sortable()
                 ->headerAttribute('text-center', 'background-color:#851902; color:white;text-align:center;'),
 
 
-            Column::make('update oleh', 'diupdate_oleh')
+            Column::make('update oleh', 'updated_by')
                 ->sortable()
                 ->headerAttribute('text-center', 'background-color:#851902; color:white;text-align:center;'),
 
 
-            Column::make('tgl dibuat', 'tgl_dibuat')
+            Column::make('tgl dibuat', 'created_at')
                 ->sortable()
                 ->headerAttribute('text-center', 'background-color:#851902; color:white;text-align:center;'),
 
 
-            Column::make('tgl dibuat', 'tgl_diupdate')
+            Column::make('tgl dibuat', 'updated_at')
                 ->sortable()
                 ->headerAttribute('text-center', 'background-color:#851902; color:white;text-align:center;'),
 
@@ -137,13 +138,13 @@ final class TabelPengguna extends PowerGridComponent
     {
         return [
             Filter::inputText('id', 'id')->placeholder('ID'),
-            Filter::inputText('nama', 'nama')->placeholder('Nama'),
-            Filter::inputText('surel', 'surel')->placeholder('Surel'),
-            Filter::inputText('dibuat_oleh', 'dibuat_oleh')->placeholder('Dibuat oleh'),
-            Filter::inputText('diupdate_oleh', 'diupdate_oleh')->placeholder('Diupdate oleh'),
-            Filter::datetimepicker('tgl_dibuat', 'tgl_dibuat')
+            Filter::inputText('name', 'name')->placeholder('Name'),
+            Filter::inputText('email', 'email')->placeholder('email'),
+            Filter::inputText('created_by', 'created_by')->placeholder('Dibuat oleh'),
+            Filter::inputText('updated_by', 'updated_by')->placeholder('Diupdate oleh'),
+            Filter::datetimepicker('created_at', 'created_at')
                 ->params(['timezone' => 'Asia/Jakarta']),
-            Filter::datetimepicker('tgl_diupdate', 'tgl_diupdate')
+            Filter::datetimepicker('updated_at', 'updated_at')
                 ->params(['timezone' => 'Asia/Jakarta']),
 
 

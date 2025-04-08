@@ -43,9 +43,8 @@
           </div>
 
           <div class="mb-3">
-            <x-textarea
+            <x-markdown
               label="Deskripsi"
-              id="summerNoteEditor"
               wire:model="masterForm.deskripsi"
               placeholder="Deskripsi"
               hint="Max 1000 chars"
@@ -65,6 +64,9 @@
             <x-datetime label="Tanggal Selesai" wire:model="masterForm.tgl_selesai" icon="o-calendar" type="datetime-local"/>
           </div>
 
+          <div class="mb-3">
+            <x-input type="number" label="Durasi (Detik)" wire:model.blur="masterForm.durasi" id="masterForm.durasi" name="masterForm.judul" placeholder="0" />
+          </div>
 
           <div class="mb-3">
             <x-choices-offline wire:model="masterForm.apa_aktif" label="Apakah Aktif ?" :options="[['id' => 0, 'name' => 'Tidak Aktif'], ['id' => 1, 'name' => 'Aktif']]" single searchable
@@ -114,13 +116,15 @@
                 <x-input label="Bobot" wire:model.blur="masterSoalForm.bobot" id="masterSoalForm.bobot" name="masterSoalForm.bobot" placeholder="Bobot" />
             </div>
 
+            
+            <div class="mb-3">
+              <x-input type="number" label="Durasi" wire:model.blur="masterSoalForm.durasi" id="masterSoalForm.durasi" name="masterSoalForm.durasi" placeholder="Durasi" />
+            </div>
+
             <div class="mb-3">
                 <x-input label="Nomor Urut" wire:model.blur="masterSoalForm.no_urut" id="masterSoalForm.no_urut" name="masterSoalForm.no_urut" placeholder="Nomor Urut" />
             </div>
 
-            <div class="mb-3">
-                <x-input type="number" label="Durasi" wire:model.blur="masterSoalForm.durasi" id="masterSoalForm.durasi" name="masterSoalForm.durasi" placeholder="Durasi" />
-            </div>
 
             @if (!$isReadonly)
               <div class="text-center mt-3">

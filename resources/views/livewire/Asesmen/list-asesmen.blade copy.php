@@ -28,7 +28,7 @@
                                 </div>
                             </div>
                             
-                            <a href="/konfirmasi-mulai/{{ $asesmen->id }}" class="mt-4 text-xs w-full  bg-orange-800 hover:bg-orange-900 text-white py-2 px-4 rounded">
+                            <a href="/konfirmasi-mulai/{{ $asesmen->id }}" class="mt-4 text-xs w-full  bg-[#954832] hover:bg-[#954832] text-white py-2 px-4 rounded">
                                 Mulai Assesment
                             </a>
                         </div>

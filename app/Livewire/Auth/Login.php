@@ -6,12 +6,14 @@ use Livewire\Component;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 use App\Models\User;
+use Spatie\Permission\Traits;
 
 
 class Login extends Component
 {
     public $user = [];
     public $userId;
+    public $userAuth;
     public $userName;
     public $userEmail;
 
@@ -31,8 +33,8 @@ class Login extends Component
     {
         if (Auth::check()) {
 
-            $this->userId = auth()->id() ?? 'eafe4ec3-2e7d-4147-9dbe-754a79ff7740';
-            $this->user = User::where('id', $this->userId)->firstOrFail()->toArray();
+            $this->userId = auth()->id();
+            $this->user = User::where('id', $this->userId)->first()->toArray();
             $this->userName = $this->user['name'];
             $this->userEmail = $this->user['email'];
 
@@ -42,8 +44,7 @@ class Login extends Component
                 'user_email' => $this->userEmail,
             ]);
 
-            $user = Auth::user();
-            if ($user->hasRole('developer')|| $user->hasRole('admin')) {
+            if(Auth::user()->hasRole('developer') || Auth::user()->hasRole('admin')) {
                 return redirect()->to('/dasbor');
             } else {
                 return redirect()->to('/dasbor-user');
@@ -59,7 +60,14 @@ class Login extends Component
         $this->validate();
 
         if (Auth::attempt(['email' => $this->email, 'password' => $this->password])) {
-            return redirect()->to('/dasbor');
+            // return redirect()->to('/dasbor');
+
+            if (Auth::user()->hasRole('developer') || Auth::user()->hasRole('admin')) {
+                return redirect()->to('/dasbor');
+            } else {
+                return redirect()->to('/dasbor-user');
+            }
+
         } else {
             throw ValidationException::withMessages([
                 'email' => ['Email or password is incorrect.'],

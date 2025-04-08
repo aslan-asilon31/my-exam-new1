@@ -8,21 +8,21 @@ use Livewire\Form;
 class PertanyaanForm extends Form
 {
     public string|null $asesmen_id = null;
+    public string|null $durasi = null;
     public string|null $image_url = null;
     public string|null $pertanyaan = null;
-    public string|null $durasi = null;
     public string|null $bobot = null;
-    public int|null $no_urut = 0;
+    public int|null $no_urut;
     public int|null $apa_aktif = 1;
 
     public function rules()
     {
         return [
             'masterSoalForm.id' => 'nullable|string',
-            'masterSoalForm.asesmen_id' => 'required|string',
-            'masterSoalForm.image_url' => 'required|string',
-            'masterSoalForm.pertanyaan' => 'required|string',
-            'masterSoalForm.durasi' => 'nullable|integer|min:0',
+            'masterSoalForm.asesmen_id' => 'nullable|string',
+            'masterSoalForm.image_url' => 'nullable|string',
+            'masterSoalForm.durasi' => 'nullable|string',
+            'masterSoalForm.pertanyaan' => 'nullable|string',
             'masterSoalForm.bobot' => 'required|integer|min:0',
             'masterSoalForm.no_urut' => 'required|integer',
             'masterSoalForm.apa_aktif' => 'boolean',

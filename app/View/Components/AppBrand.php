@@ -25,14 +25,16 @@ class AppBrand extends Component
                 <a href="/" wire:navigate>
                     <!-- Hidden when collapsed -->
                     <div {{ $attributes->class(["hidden-when-collapsed"]) }}>
-                        <div class="flex items-center gap-2 text-center  ">
+                        <div class="flex items-center justify-center ">
                             <img src="{{asset('umeda-logo.png')}}" class="w-24 md:w-32  -mb-1" alt="" srcset="">
                         </div>
                     </div>
 
                     <!-- Display when collapsed -->
                     <div class="display-when-collapsed hidden mx-5 mt-4 lg:mb-6 h-[28px]">
-                        <x-icon name="s-square-3-stack-3d" class="w-6 -mb-1 text-purple-500" />
+                        <div class="flex items-center gap-2 text-center ">
+                            <img src="{{asset('umeda-logo.png')}}" class="w-16 md:w-24  -mb-1" alt="" srcset="">
+                        </div>
                     </div>
                 </a>
             HTML;

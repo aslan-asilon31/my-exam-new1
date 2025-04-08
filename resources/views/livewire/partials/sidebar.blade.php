@@ -7,10 +7,20 @@
 
             <x-menu-sub title="Setting" icon="o-cog-6-tooth">
             <x-menu-item title="Profile" icon="o-user-circle" link="#" />
-            <x-menu-item wire:click="logout" title="Logout" icon="o-x-circle" />
-            {{-- <x-menu-item title="sample" icon="o-arrow-right-circle" link="#" /> --}}
+
+            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                @csrf
+            </form>
+
+            <x-menu-item title="Logout" icon="o-cog-6-tooth" link="{{ route('logout') }}"
+                onclick="event.preventDefault();
+                            document.getElementById('logout-form').submit();" >
+                    {{ __('Logout') }}
+            </x-menu-item>
+            
             </x-menu-sub>
             <x-menu-separator />
+
 
 
             @can('dashboard-lihat')
@@ -54,15 +64,9 @@
             <x-menu-item title="Permission" icon="o-squares-2x2" link="/permission" :class="request()->is('permission') ? 'active' : ''" />
             @endcan
 
-            <form method="POST" action="{{ route('logout') }}" id="logout-form" style="display: none;">
-                @csrf
-            </form>
-            
-            <button onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                Logout
-            </button>
 
-            
+
+
         </x-menu>
     </x-slot:sidebar>
 </div>
