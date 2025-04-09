@@ -134,7 +134,6 @@ class PerbaharuiAsesmenEvaluator extends Component
         $validatedSoalForm['jenis'] = 'essay';
     
         $pertanyaan = Pertanyaan::create($validatedSoalForm);
-        
         return $this->redirect('/asesmen-evaluator', navigate: true);
         $this->success('Soal Asesmen sudah dibuat');
 

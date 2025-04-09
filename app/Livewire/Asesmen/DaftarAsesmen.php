@@ -46,7 +46,10 @@ class DaftarAsesmen extends Component
     public function mount()
     {
         $this->userId = auth()->id();
-        $this->user = User::where('id', auth()->id())->first()->toArray();
+
+        $user = User::where('id', session()->get('soal-sesi.user_id') ?? auth()->id())->first();
+        $this->user = $user ? $user->toArray() : null;
+
         session()->put('soal-sesi.user_id', $this->user['id']);
         session()->put('soal-sesi.user_name' , $this->user['name']);
         session()->put('soal-sesi.user_email', $this->user['email']);

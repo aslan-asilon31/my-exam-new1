@@ -5,6 +5,7 @@ namespace App\Livewire\Admin\PenilaianAsesmen;
 use App\Livewire\Admin\PenilaianAsesmen\Forms\PenilaianAsesmenForm;
 use Livewire\Component;
 use App\Models\Pengguna;
+use App\Models\User;
 use App\Models\Asesmen;
 use App\Models\PenggunaAsesmen;
 use App\Models\DetailPenggunaAsesmen;
@@ -89,13 +90,14 @@ class PenilaianAsesmenCrud extends Component
     \Carbon\Carbon::setLocale('id');
 
     $this->userId = auth()->id() ?? 'eafe4ec3-2e7d-4147-9dbe-754a79ff7740';
-    $this->user = Pengguna::where('id', $this->userId)->first()->toArray();
+    $user = User::where('id', session()->get('soal-sesi.user_id')  ?? auth()->id())->first();
+    $this->user = $user ? $user->toArray() : null;
     $this->userName = $this->user['nama'];
     $this->userEmail = $this->user['surel'];
 
 
     
-    $this->ActivePenggunaAsesmens = PenggunaAsesmen::with([
+    $ActivePenggunaAsesmens = PenggunaAsesmen::with([
       'pengguna',
       'asesmen',
       'detail_pengguna_asesmens',
@@ -104,20 +106,29 @@ class PenilaianAsesmenCrud extends Component
     ])
     ->where('pengguna_asesmens.pengguna_id', $this->userId) 
     ->orderBy('tgl_dibuat', 'desc')
-    ->first()
-    ->toArray();
+    ->first();
+
+    if ($this->ActivePenggunaAsesmens) {
+        $this->ActivePenggunaAsesmens = $ActivePenggunaAsesmens->toArray();
+    } else {
+        $this->ActivePenggunaAsesmens = []; 
+        
+    }
+
+
+
     $this->masterForm->fill($this->ActivePenggunaAsesmens);
     
     $this->asesmenId = $this->ActivePenggunaAsesmens['asesmen']['id'] ?? null;
     
+    $asesmen = Asesmen::where('id', $this->asesmenId)->first();
+    $this->asesmen = $asesmen ? $asesmen->toArray() : null;
 
-    $this->asesmen = Asesmen::where('id', $this->asesmenId)->first()->toArray();
     $this->asesmenDurasi = $this->ActivePenggunaAsesmens['asesmen']['durasi'];
 
     $tglMulai = \Carbon\Carbon::parse($this->asesmen['tgl_mulai']);
     $tglSelesai = \Carbon\Carbon::parse($this->asesmen['tgl_selesai']);
 
-    // Menyimpan hasil perhitungan ke dalam variabel untuk digunakan di view
     $durasi = $tglMulai->diff($tglSelesai);
     $this->asesmenDurasi =  $durasi->format('%h jam %i menit %s detik'); 
 

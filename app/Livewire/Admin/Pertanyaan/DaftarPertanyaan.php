@@ -21,9 +21,6 @@ class DaftarPertanyaan extends Component
     public $modalPertanyaan = false;
     public $modalPertanyaanHapus = false;
     public $description = "";
-
-    
-
     public PertanyaanForm $masterSoalForm;
 
     #[\Livewire\Attributes\Locked]
@@ -54,6 +51,7 @@ class DaftarPertanyaan extends Component
     use \App\Helpers\ImageUpload\Traits\WithImageUpload;
 
 
+    #[On('soal-dibuat')]
     public function initialize()
     {
         $this->soals = Pertanyaan::where('asesmen_id',$this->idAsesmen)->orderBy('no_urut', 'asc')->get();
@@ -124,6 +122,7 @@ class DaftarPertanyaan extends Component
 
           $pertanyaan = Pertanyaan::create($validatedSoalForm);
           $this->modalPertanyaan = false;
+          $this->dispatch('soal-dibuat');
           
           $this->success('Soal Asesmen sudah dibuat');
   

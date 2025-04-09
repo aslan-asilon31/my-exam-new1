@@ -34,7 +34,10 @@ class Login extends Component
         if (Auth::check()) {
 
             $this->userId = auth()->id();
-            $this->user = User::where('id', $this->userId)->first()->toArray();
+
+            $user = User::where('id', $this->userId)->first();
+            $this->user = $user ? $user->toArray() : null;
+
             $this->userName = $this->user['name'];
             $this->userEmail = $this->user['email'];
 

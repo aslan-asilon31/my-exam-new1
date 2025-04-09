@@ -63,4 +63,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/soal-asesmen/{id}', \App\Livewire\Asesmen\SoalAsesmen::class)->name('soal-asesmen');
     Route::get('/konfirmasi-selesai', \App\Livewire\Asesmen\KonfirmasiSelesai::class)->name('konfirmasi-selesai');
 
+
+    Route::get('/try-asesmen', \App\Livewire\TryAsesmen::class)->name('try-asesmen');
+
+
 });

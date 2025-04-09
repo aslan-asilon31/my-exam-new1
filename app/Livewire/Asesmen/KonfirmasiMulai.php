@@ -81,7 +81,7 @@ class KonfirmasiMulai extends Component
         // dd(Session());
 
         $this->userId = session()->get('soal-sesi.userId');
-        $this->user = User::where('id', session()->get('soal-sesi.user_id'))->first()->toArray();
+        $this->user = User::where('id', session()->get('soal-sesi.user_id')  ?? auth()->id())->first()->toArray();
         $this->userName = session()->get('soal-sesi.user_name');
         $this->userEmail = session()->get('soal-sesi.user_email');
 
