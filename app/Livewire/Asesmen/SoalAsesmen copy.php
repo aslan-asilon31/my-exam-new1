@@ -75,6 +75,9 @@ class SoalAsesmen extends Component
 
     }
 
+    #[\Livewire\Attributes\Session(key: 'penggunaAsesmen')] 
+    public $penggunaAsesmen;
+
 
     public function mount()
     {
@@ -85,9 +88,9 @@ class SoalAsesmen extends Component
         \Carbon\Carbon::setLocale('id');
 
         $this->waktuSoalSekarang = now();
-        $this->userId = session()->get('soal-sesi.userId') ?? auth()->id();
-        $this->userName = session()->get('soal-sesi.user_name');
-        $this->userEmail = session()->get('soal-sesi.user_email');
+        $this->userId = $this->PenggunaAsesmen['pengguna_asesmen.user_id'] ?? auth()->id();
+        $this->userName = $this->PenggunaAsesmen['pengguna_asesmen.user_name'];
+        $this->userEmail = $this->PenggunaAsesmen['pengguna_asesmen.user_email'];
 
         $this->pertanyaans = Pertanyaan::where('asesmen_id', $this->id)->get();
 

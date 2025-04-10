@@ -27,6 +27,7 @@ class Login extends Component
         'password' => 'required|min:5',
     ];
 
+    
 
 
     public function mount()

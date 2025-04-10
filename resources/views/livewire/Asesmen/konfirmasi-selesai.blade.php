@@ -22,8 +22,20 @@
            
             <div class="mb-4">
                 <h3 class="text-sm md:text-md font-bold text-left">Nama:</h3>
-                <span class="text-xs md:text-sm text-right">{{ $userName }}</span>
+                <span class="text-xs md:text-sm text-right">{{ auth()->user()->name }}</span>
             </div>
+           
+            <div class="mb-4">
+                <h3 class="text-sm md:text-md font-bold text-left">Email:</h3>
+                <span class="text-xs md:text-sm text-right">{{ auth()->user()->email }}</span>
+            </div>
+           
+            <div class="mb-4">
+                <h3 class="text-sm md:text-md font-bold text-left">Durasi:</h3>
+                <span class="text-xs md:text-sm text-right">{{ $this->penggunaAsesmen['pengguna_asesmen.asesmen_durasi'] }}</span>
+            </div>
+
+           
             
         </div>
         

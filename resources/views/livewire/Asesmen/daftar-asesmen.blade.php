@@ -15,7 +15,6 @@
 
     <div class="flex justify-center">
 
-
         <div class=" h-screen max-w-4xl mx-auto bg-white p-8 rounded-md shadow-lg ">
             <h1 class="text-md sm:text-lg font-bold mb-6 text-orange-900 text-center">Daftar Asesmen</h1>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-5">

@@ -90,7 +90,7 @@ class PenilaianAsesmenCrud extends Component
     \Carbon\Carbon::setLocale('id');
 
     $this->userId = auth()->id() ?? 'eafe4ec3-2e7d-4147-9dbe-754a79ff7740';
-    $user = User::where('id', session()->get('soal-sesi.user_id')  ?? auth()->id())->first();
+    $user = User::where('id', $this->PenggunaAsesmen['pengguna_asesmen.user_id']  ?? auth()->id())->first();
     $this->user = $user ? $user->toArray() : null;
     $this->userName = $this->user['nama'];
     $this->userEmail = $this->user['surel'];

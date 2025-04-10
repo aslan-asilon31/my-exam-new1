@@ -15,6 +15,7 @@ class PenggunaAsesmen extends Model
     protected $table = 'pengguna_asesmens';
     public $timestamps = false;
     protected $fillable = [
+        'id',
         'pengguna_id',
         'asesmen_id',
         'tgl_mulai',

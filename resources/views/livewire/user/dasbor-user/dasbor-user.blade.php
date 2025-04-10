@@ -7,6 +7,7 @@
     
 
 <div>
+
     <x-card :title="$title"  :url="$url" >
 
         <div class="flex items-center space-x-4">

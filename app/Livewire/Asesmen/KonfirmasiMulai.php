@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\Session;
 use Livewire\Attributes\Title;
 use Livewire\Attributes\Layout;
 
+
+
 class KonfirmasiMulai extends Component
 {
 
@@ -50,18 +52,17 @@ class KonfirmasiMulai extends Component
     public $userEmail;
 
     public $pertanyaanId;
-    public $hitungPertanyaan = [];
 
 
     public $waktuSoalSekarang ;
-    public $waktuSoalMulai ;
     public $waktuSoal ;
     public $waktuSoalSelesai ;
     public $waktuSoalBerjalan = 0;
     public $nomorSoal ;
     public $nomorSoalTerakhir ;
-    public $nomorSoalTerakhirHasil ;
 
+    #[\Livewire\Attributes\Session(key: 'penggunaAsesmen')] 
+    public $penggunaAsesmen;
 
     public function mount()
     {
@@ -80,10 +81,10 @@ class KonfirmasiMulai extends Component
         // Session::forget('waktuSoalBerjalan');
         // dd(Session());
 
-        $this->userId = session()->get('soal-sesi.userId');
-        $this->user = User::where('id', session()->get('soal-sesi.user_id')  ?? auth()->id())->first()->toArray();
-        $this->userName = session()->get('soal-sesi.user_name');
-        $this->userEmail = session()->get('soal-sesi.user_email');
+        $this->userId = auth()->id();
+        $this->user = User::where('id', auth()->id())->first()->toArray();
+        $this->userName = auth()->user()->name;
+        $this->userEmail = auth()->user()->email;
 
 
         \Carbon\Carbon::setLocale('id');
@@ -92,21 +93,20 @@ class KonfirmasiMulai extends Component
 
     public function initialize()
     {
-
         $this->asesmen = Asesmen::where('id', $this->id)->first()->toArray();
         $this->asesmenDurasi = $this->asesmen['durasi'];
 
         $tglMulai = \Carbon\Carbon::parse($this->asesmen['tgl_mulai']);
         $tglSelesai = \Carbon\Carbon::parse($this->asesmen['tgl_selesai']);
 
-        // Menyimpan hasil perhitungan ke dalam variabel untuk digunakan di view
-        $durasi = $tglMulai->diff($tglSelesai);
-        $this->asesmenDurasi =  $durasi->format('%h jam %i menit %s detik');
+        // // Menyimpan hasil perhitungan ke dalam variabel untuk digunakan di view
+        // $durasi = $tglMulai->diff($tglSelesai);
+        // $this->asesmenDurasi =  $durasi->format('%h jam %i menit %s detik');
 
-        session()->put('soal-sesi',[
-            'asesmen_id' => $this->asesmen['id'],
-            'waktuAsesmen' => $this->asesmenDurasi,
-        ]);
+
+        // $this->PenggunaAsesmen['pengguna_asesmen.asesmen_id'] = $this->asesmen['id'];
+        // $this->PenggunaAsesmen['pengguna_asesmen.waktu_asesmen'] = $this->asesmenDurasi;
+
 
     }
 

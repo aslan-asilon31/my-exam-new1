@@ -15,27 +15,19 @@ class SoalAsesmen extends Component
     use Toast;
     public $title = 'Soal Asesmen';
     public $url = '/soal-asesmen';
-    public $jawaban;
-    public $durasiSoal ;
-
     
     #[\Livewire\Attributes\Locked]
     public string $id = '';
 
-    #[\Livewire\Attributes\Session(key: 'detailPenggunaAsesmen')] 
-    public $detailPenggunaAsesmen;
+    #[\Livewire\Attributes\Session] 
+    public $detailPenggunaAsesmen = [];
 
-    #[\Livewire\Attributes\Session(key: 'indexDetailPenggunaAsesmen')] 
-    public $indexDetailPenggunaAsesmen;
-
-    #[\Livewire\Attributes\Session(key: 'penggunaAsesmen')] 
-    public $penggunaAsesmen;
+    #[\Livewire\Attributes\Session] 
+    public $indexDetailPenggunaAsesmen = 0;
 
     public function mount(){
-
-        // $this->indexDetailPenggunaAsesmen = 0;
-        // $this->detailPenggunaAsesmen = [];
-
+        $this->indexDetailPenggunaAsesmen = 0;
+        $this->detailPenggunaAsesmen = [];
 
         if (count($this->detailPenggunaAsesmen)<=0) {
             $this->detailPenggunaAsesmen = Pertanyaan::query()
@@ -44,7 +36,6 @@ class SoalAsesmen extends Component
             ->get()
             ->map(function($pertanyaan ,$index){
                 return [  
-                    'index' => $index,
                     'pertanyaan_id' => $pertanyaan->id,
                     'no_urut' => $pertanyaan->no_urut,
                     'image_url' => $pertanyaan->image_url,
@@ -60,8 +51,6 @@ class SoalAsesmen extends Component
             ->toArray();
         }
 
-
-
         if($this->detailPenggunaAsesmen[$this->indexDetailPenggunaAsesmen]['waktu_mulai_soal'] == null){
             $waktuMulaiSoal = now();
             $durasi = $this->detailPenggunaAsesmen[$this->indexDetailPenggunaAsesmen]['durasi'];
@@ -73,55 +62,22 @@ class SoalAsesmen extends Component
         if ($this->detailPenggunaAsesmen[$this->indexDetailPenggunaAsesmen]['sisa_waktu'] <= 0) {
             $this->indexDetailPenggunaAsesmen =  $this->indexDetailPenggunaAsesmen + 1;
         }
-
-        $this->durasiSoal = intval($this->detailPenggunaAsesmen[$this->indexDetailPenggunaAsesmen]['sisa_waktu']);
-
-
     }
 
     public function soalSelanjutnya(){
-        $this->detailPenggunaAsesmen[$this->indexDetailPenggunaAsesmen]['jawaban'] = $this->jawaban;
-      
-        if($this->indexDetailPenggunaAsesmen >= (count($this->detailPenggunaAsesmen)-1)){
-            return redirect()->to('konfirmasi-selesai');
-        }
-
         $this->detailPenggunaAsesmen[$this->indexDetailPenggunaAsesmen]['sisa_waktu'] = 0;
         $this->indexDetailPenggunaAsesmen = $this->indexDetailPenggunaAsesmen + 1;
+
+        if($this->indexDetailPenggunaAsesmen > (count($this->detailPenggunaAsesmen)-1)){
+            return redirect()->to('konfirmasi-selesai');
+        }
 
         $waktuMulaiSoal = now();
         $durasi = $this->detailPenggunaAsesmen[$this->indexDetailPenggunaAsesmen]['durasi'];
         $this->detailPenggunaAsesmen[$this->indexDetailPenggunaAsesmen]['waktu_mulai_soal'] = now()->format('Y-m-d H:i:s');
         $this->detailPenggunaAsesmen[$this->indexDetailPenggunaAsesmen]['waktu_selesai_soal'] = $waktuMulaiSoal->addSeconds($durasi)->format('Y-m-d H:i:s'); 
         $this->detailPenggunaAsesmen[$this->indexDetailPenggunaAsesmen]['sisa_waktu'] = now()->diffInSeconds($this->detailPenggunaAsesmen[$this->indexDetailPenggunaAsesmen]['waktu_selesai_soal']);
-
-        $this->durasiSoal = intval($this->detailPenggunaAsesmen[$this->indexDetailPenggunaAsesmen]['sisa_waktu']);
-        $this->jawaban = '';
-        $this->dispatch('resetCountdown');
     }
-
-    public function soalSebelumnya()
-    {
-        $this->detailPenggunaAsesmen[$this->indexDetailPenggunaAsesmen]['sisa_waktu'] = 0;
-        $this->indexDetailPenggunaAsesmen -= 1;
-
-        if ($this->indexDetailPenggunaAsesmen < 0) {
-            $this->indexDetailPenggunaAsesmen = 0;
-            $this->toast('Anda sudah berada di soal pertama.', 'warning');
-            return;
-        }
-
-        if ($this->detailPenggunaAsesmen[$this->indexDetailPenggunaAsesmen]['waktu_mulai_soal'] == null) {
-            $waktuMulaiSoal = now();
-            $durasi = $this->detailPenggunaAsesmen[$this->indexDetailPenggunaAsesmen]['durasi'];
-            $this->detailPenggunaAsesmen[$this->indexDetailPenggunaAsesmen]['waktu_mulai_soal'] = $waktuMulaiSoal->format('Y-m-d H:i:s');
-            $this->detailPenggunaAsesmen[$this->indexDetailPenggunaAsesmen]['waktu_selesai_soal'] = $waktuMulaiSoal->addSeconds($durasi)->format('Y-m-d H:i:s');
-        }
-
-        $this->detailPenggunaAsesmen[$this->indexDetailPenggunaAsesmen]['sisa_waktu'] = now()->diffInSeconds($this->detailPenggunaAsesmen[$this->indexDetailPenggunaAsesmen]['waktu_selesai_soal']);
-    }
-
-    
     
     public function render()
     {

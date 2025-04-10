@@ -21,98 +21,65 @@ class DaftarHasilAsesmen extends Component
     public $durasi;
     public $asesmenYangPernahDiikuti;
 
-    // public function mount()
-    // {
-    //   \Carbon\Carbon::setLocale('id');
-
-    //     $this->userId = session()->get('soal-sesi.userId') ??  auth()->id() ;
-
-    //     $this->ActivePenggunaAsesmens = PenggunaAsesmen::with([
-    //         'user',
-    //         'asesmen',
-    //         'detail_pengguna_asesmens',
-    //         'asesmen.pertanyaans',
-
-    //       ])
-    //       ->where('pengguna_asesmens.pengguna_id', $this->userId)
-    //       ->orderBy('tgl_dibuat', 'desc')
-    //       ->first()toArray();
-
-    //       $totalBobots = array_sum(array_column($this->ActivePenggunaAsesmens['asesmen']['pertanyaans'], 'bobot'));
-    //       $totalPoints = array_sum(array_column($this->ActivePenggunaAsesmens['detail_pengguna_asesmens'], 'poin'));
-
-    //       $this->countHasilAsesmen =  ceil(($totalPoints/$totalBobots)*100);
-
-
-    //       $this->initialize();
-    //   }
+    #[\Livewire\Attributes\Session(key: 'penggunaAsesmen')] 
+    public $penggunaAsesmen;
 
     public function mount()
-{
-    \Carbon\Carbon::setLocale('id');
+    {
+        \Carbon\Carbon::setLocale('id');
 
-    // Retrieve user ID from session or authentication
-    $this->userId = session()->get('soal-sesi.userId') ?? auth()->id();
+        $this->userId =$this->PenggunaAsesmen['pengguna_asesmen.user_id'] ?? auth()->id();
 
-    // Fetch the active PenggunaAsesmen record
-    $activePenggunaAsesmen = PenggunaAsesmen::with([
-        'user',
-        'asesmen',
-        'detail_pengguna_asesmens',
-        'asesmen.pertanyaans',
-    ])
-    ->where('pengguna_asesmens.pengguna_id', $this->userId)
-    ->orderBy('tgl_dibuat', 'desc')
-    ->first();
+        $activePenggunaAsesmen = PenggunaAsesmen::with([
+            'user',
+            'asesmen',
+            'detail_pengguna_asesmens',
+            'asesmen.pertanyaans',
+        ])
+        ->where('pengguna_asesmens.pengguna_id', $this->userId)
+        ->orderBy('tgl_dibuat', 'desc')
+        ->first();
 
-    // Check if the result is not null and convert to array
-    if ($activePenggunaAsesmen) {
-        $this->ActivePenggunaAsesmens = $activePenggunaAsesmen->toArray();
-    } else {
-        // Handle the case where no results were found
-        $this->ActivePenggunaAsesmens = []; // Set to an empty array or a default value
-        // Optionally log or debug information here
-        \Log::warning("No Pengguna Asesmen found for user ID: {$this->userId}");
+        if ($activePenggunaAsesmen) {
+            $this->ActivePenggunaAsesmens = $activePenggunaAsesmen->toArray();
+        } else {
+            $this->ActivePenggunaAsesmens = []; 
+            \Log::warning("No Pengguna Asesmen found for user ID: {$this->userId}");
+        }
+
+        $totalBobots = 0;
+        $totalPoints = 0;
+
+        if (isset($this->ActivePenggunaAsesmens['asesmen']['pertanyaans']) && isset($this->ActivePenggunaAsesmens['detail_pengguna_asesmens'])) {
+            $totalBobots = array_sum(array_column($this->ActivePenggunaAsesmens['asesmen']['pertanyaans'], 'bobot'));
+
+            $totalPoints = array_sum(array_column($this->ActivePenggunaAsesmens['detail_pengguna_asesmens'], 'poin'));
+        }
+
+        if ($totalBobots > 0) {
+            $this->countHasilAsesmen = ceil(($totalPoints / $totalBobots) * 100);
+        } else {
+            $this->countHasilAsesmen = 0; 
+        }
+
+        $this->initialize();
+
     }
-
-    // Initialize totals to zero
-    $totalBobots = 0;
-    $totalPoints = 0;
-
-    // Check if the necessary keys exist in the array
-    if (isset($this->ActivePenggunaAsesmens['asesmen']['pertanyaans']) && isset($this->ActivePenggunaAsesmens['detail_pengguna_asesmens'])) {
-        // Calculate total bobots
-        $totalBobots = array_sum(array_column($this->ActivePenggunaAsesmens['asesmen']['pertanyaans'], 'bobot'));
-
-        // Calculate total points
-        $totalPoints = array_sum(array_column($this->ActivePenggunaAsesmens['detail_pengguna_asesmens'], 'poin'));
-    }
-
-    // Calculate countHasilAsesmen safely
-    if ($totalBobots > 0) {
-        $this->countHasilAsesmen = ceil(($totalPoints / $totalBobots) * 100);
-    } else {
-        $this->countHasilAsesmen = 0; // Handle division by zero
-    }
-
-    // Debugging
-    // dd($this->userId, $this->ActivePenggunaAsesmens, $totalBobots, $totalPoints, $this->countHasilAsesmen);
-}
 
     
         public function initialize()
         {
 
-          $this->asesmenYangPernahDiikuti = PenggunaAsesmen::with([
-              'user',
-              'asesmen',
-              'detail_pengguna_asesmens',
-              'asesmen.pertanyaans',
-          ])
-          ->where('pengguna_asesmens.pengguna_id', $this->userId)
-          ->orderBy('tgl_dibuat', 'asc')
-          ->get()
-          ->toArray();
+            $this->asesmenYangPernahDiikuti = PenggunaAsesmen::with([
+                'user',
+                'asesmen',
+                'detail_pengguna_asesmens',
+                'asesmen.pertanyaans',
+            ])
+            ->where('pengguna_asesmens.pengguna_id', auth()->id())
+            ->orderBy('tgl_dibuat', 'asc')
+            ->get()
+            ->toArray();
 
          
         }

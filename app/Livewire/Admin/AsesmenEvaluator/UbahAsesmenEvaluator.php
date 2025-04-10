@@ -116,7 +116,6 @@ class UbahAsesmenEvaluator extends Component
 
   public function ubah()
   {
-    session()->put(['asesmen_id_for_pertanyaan' => $this->id]);
 
     $masterData = $this->masterModelAsesmen::findOrFail($this->id);
     if ($masterData->tgl_mulai) {

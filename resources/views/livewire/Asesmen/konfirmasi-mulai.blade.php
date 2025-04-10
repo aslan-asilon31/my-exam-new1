@@ -3,7 +3,7 @@
     <header class="bg-white shadow-md p-4 mb-10 rounded-md">
         <div class="container mx-auto flex justify-between items-center">
             <h1 class="text-sm md:text-md font-bold text-orange-900">Umedalife</h1>
-            <span id="asesmen-durasi" class="text-sm md:text-md font-bold text-orange-900">{{ $this->asesmenDurasi }}</span>
+            <span id="asesmen-durasi" class="text-sm md:text-md font-bold text-orange-900">{{ $this->penggunaAsesmen['pengguna_asesmen.asesmen_durasi'] }}</span>
             <x-logout-button />
         </div>
     </header>
@@ -49,12 +49,12 @@
                                     </div>
                                     <div class="flex flex-col py-2">
                                         <p class="text-gray-100 text-xs">Durasi :</p>
-                                        <p class="text-gray-100 text-[9px]  " id="">  {{ $this->asesmenDurasi }} </p>
+                                        <p class="text-gray-100 text-[9px]  " id="">  {{ $this->penggunaAsesmen['pengguna_asesmen.asesmen_durasi'] }} </p>
                                     </div>
                                     <div class="flex flex-col py-2">
                                         <p class="text-gray-100 text-xs">Email :</p>
                                         <p class="text-gray-100 text-[9px]">
-                                            {{ $userEmail }}  
+                                            {{ auth()->user()->email }}  
                                         </p>
                                     </div>
                                 </div>
@@ -76,27 +76,13 @@
                 <a href="{{ route('daftar-asesmen') }}" class="text-xs md:text-sm bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
                     Kembali
                 </a>
-                <a href="/soal-asesmen/{{ $asesmen['id'] }}" class="text-xs md:text-sm bg-orange-900 hover:bg-orange-800 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mr-4">
+                <a href="/soal-asesmen/{{ $this->penggunaAsesmen['pengguna_asesmen.asesmen_id'] }}" class="text-xs md:text-sm bg-orange-900 hover:bg-orange-800 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mr-4">
                     Mulai Ujian
                 </a>
             </div>
         </div>
     </div>
 
-    <script>
-        // Nilai durasi dalam detik
-        const durasiDetik = {{ $asesmen['durasi'] }}; // Ganti dengan {{ $asesmen['durasi'] }} jika menggunakan PHP
-    
-        // Menghitung menit dan detik
-        const menit = Math.floor(durasiDetik / 60);
-        const detik = durasiDetik % 60;
-    
-        // Format output
-        const formattedDurasi = `${menit} menit ${detik} detik`;
-    
-        // Menampilkan durasi di elemen dengan id "durasi"
-        document.getElementById('durasi').textContent = formattedDurasi;
-    </script>
 
 
 </div>

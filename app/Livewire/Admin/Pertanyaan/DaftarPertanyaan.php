@@ -43,6 +43,10 @@ class DaftarPertanyaan extends Component
   private string $baseFolderName = '/files/images/pertanyaan';
   private string $baseImageName = 'pertanyaan-image';
 
+  #[\Livewire\Attributes\Session(key: 'penggunaAsesmen')] 
+  public $penggunaAsesmen;
+
+
 
     public string $url = '/pertanyaan';
 
@@ -60,7 +64,7 @@ class DaftarPertanyaan extends Component
 
     public function mount()
     {
-      $this->idAsesmen = session()->get('asesmen_id_for_pertanyaan');
+      $this->idAsesmen = $this->PenggunaAsesmen['pengguna_asesmen.asesmen_id_for_pertanyaan'];
 
       if ($this->idSoal) {
         $this->title .= ' (Ubah)';

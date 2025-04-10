@@ -18,13 +18,11 @@ class DasborUser extends Component
     public $jumlahAsesmenYangPernahDiikuti;
     public $userId;
 
-
     public function mount()
     {
         $user = Auth::user();
         $this->user_role = $user->getRoleNames()->first();
 
-        $this->userId = session()->get('soal-sesi.userId') ??  auth()->id() ;
 
         $this->jumlahAsesmenYangPernahDiikuti = PenggunaAsesmen::with([
             'user',
@@ -32,7 +30,7 @@ class DasborUser extends Component
             'detail_pengguna_asesmens',
             'asesmen.pertanyaans',
           ])
-          ->where('pengguna_asesmens.pengguna_id', $this->userId)
+          ->where('pengguna_asesmens.pengguna_id', auth()->id())
           ->orderBy('tgl_dibuat', 'desc')
           ->get()
           ->toArray();

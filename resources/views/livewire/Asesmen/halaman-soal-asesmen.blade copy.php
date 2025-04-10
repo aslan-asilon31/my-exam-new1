@@ -9,7 +9,6 @@
         </div>
     </header>
 
-
 <div class="mx-auto max-w-full h-screen bg-white p-8 rounded-md shadow-md transform transition-transform duration-300 hover:shadow-2xl hover:scale-105">
     @if ($pertanyaans->isEmpty())
         <p class="text-gray-700 text-center">Tidak ada pertanyaan tersedia.</p>

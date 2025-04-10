@@ -13,6 +13,8 @@ use App\Models\Pengguna;
 use App\Models\User;
 
 
+
+
 class DaftarAsesmen extends Component
 {
     use Toast;
@@ -27,6 +29,8 @@ class DaftarAsesmen extends Component
     public $questionTimer;
     public $questionTimers = [];
 
+    #[\Livewire\Attributes\Session(key: 'penggunaAsesmen')] 
+    public $penggunaAsesmen;
 
     #[\Livewire\Attributes\Locked]
     public string $id = '';
@@ -45,21 +49,18 @@ class DaftarAsesmen extends Component
 
     public function mount()
     {
+        $this->penggunaAsesmen = [];
+
         $this->userId = auth()->id();
 
-        $user = User::where('id', session()->get('soal-sesi.user_id') ?? auth()->id())->first();
+        $user = User::where('id', auth()->id())->first();
         $this->user = $user ? $user->toArray() : null;
-
-        session()->put('soal-sesi.user_id', $this->user['id']);
-        session()->put('soal-sesi.user_name' , $this->user['name']);
-        session()->put('soal-sesi.user_email', $this->user['email']);
 
         $this->initialize();
     }
 
     public function initialize()
     {
-
 
         $this->asesmens = Asesmen::where('apa_aktif', true)->get();
 
@@ -72,11 +73,17 @@ class DaftarAsesmen extends Component
             $asesmen->durasi = $durasi->format('%h jam %i menit %s detik');
         }
 
+        $this->penggunaAsesmen['pengguna_asesmen.asesmen_id'] = $asesmen->id;
+        $this->penggunaAsesmen['pengguna_asesmen.tgl_mulai'] = $asesmen->tgl_mulai;
+        $this->penggunaAsesmen['pengguna_asesmen.tgl_selesai'] = $asesmen->tgl_selesai;
+        $this->penggunaAsesmen['pengguna_asesmen.asesmen_durasi'] = $asesmen->durasi;
+
     }
 
 
     public function render()
     {
+
         return view('livewire.asesmen.daftar-asesmen')
         ->layout('components.layouts.app_visitor');
     }
