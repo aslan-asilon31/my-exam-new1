@@ -9,6 +9,9 @@ use App\Models\User;
 use Livewire\Attributes\On;
 use Mary\Traits\Toast;
 use App\Models\Pertanyaan;
+use App\Models\PenggunaAsesmen;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
 
 class SoalAsesmen extends Component
 {
@@ -84,46 +87,41 @@ class SoalAsesmen extends Component
       
         if($this->indexDetailPenggunaAsesmen >= (count($this->detailPenggunaAsesmen)-1)){
 
-            // $penggunaAsesmen = PenggunaAsesmen::create([
-            //     'id' => (string) Str::uuid(),
-            //     'pengguna_id' => auth()->id(), 
-            //     'asesmen_id' => session()->get('pengguna_asesmen.asesmen_id'),
-            //     'tgl_mulai' => now(),
-            //     'tgl_selesai' => now(),
-            //     'status' => 1,
-            // ]);
+            $penggunaAsesmen = PenggunaAsesmen::create([
+                'id' => (string) Str::uuid(),
+                'pengguna_id' => auth()->id(), 
+                'asesmen_id' => session()->get('pengguna_asesmen.asesmen_id'),
+                'tgl_mulai' => now(),
+                'tgl_selesai' => now(),
+                'status' => 1,
+            ]);
 
-            // $data = [];
+            $data = [];
 
-            // if (!empty($this->detailPenggunaAsesmen)) {
-            //     foreach ($this->detailPenggunaAsesmen as $item) {
-            //         $data[] = [
-            //             'pengguna_asesmen_id' => $penggunaAsesmen->id, 
-            //             'pertanyaan_id' => $item['pertanyaan_id'], 
-            //             'jawaban' => $item['jawaban'], 
-            //             'poin' => 0,
-            //             'apa_aktif' => 1,
-            //         ];
-            //     }
+            if (!empty($this->detailPenggunaAsesmen)) {
+                foreach ($this->detailPenggunaAsesmen as $item) {
+                    $data[] = [
+                        'pengguna_asesmen_id' => $penggunaAsesmen->id, 
+                        'pertanyaan_id' => $item['pertanyaan_id'], 
+                        'jawaban' => $item['jawaban'], 
+                        'poin' => 0,
+                        'apa_aktif' => 1,
+                    ];
+                }
 
-            //     DB::table('detail_pengguna_asesmen')->insert($data);
-            //     $this->detailPenggunaAsesmen = [];
-            //     $this->indexDetailPenggunaAsesmen = [];
-            //     return redirect()->to('konfirmasi-selesai');
-
-            //     echo "Data inserted successfully!";
-
-            // } else {
-            //     echo "No data available to insert.";
-            // }
-
+                DB::table('detail_pengguna_asesmen')->insert($data);
                 $this->detailPenggunaAsesmen = [];
-                $this->indexDetailPenggunaAsesmen = 0;
-            return redirect()->to('konfirmasi-selesai');
+                $this->indexDetailPenggunaAsesmen = [];
+                return redirect()->to('konfirmasi-selesai');
+
+                echo "Data inserted successfully!";
+
+            } else {
+                echo "No data available to insert.";
+            }
 
 
         }
-
 
         $this->detailPenggunaAsesmen[$this->indexDetailPenggunaAsesmen]['sisa_waktu'] = 0;
         $this->indexDetailPenggunaAsesmen = $this->indexDetailPenggunaAsesmen + 1;
@@ -139,28 +137,6 @@ class SoalAsesmen extends Component
         $this->dispatch('resetCountdown');
     }
 
-    public function soalSebelumnya()
-    {
-        $this->detailPenggunaAsesmen[$this->indexDetailPenggunaAsesmen]['sisa_waktu'] = 0;
-        $this->indexDetailPenggunaAsesmen -= 1;
-
-        if ($this->indexDetailPenggunaAsesmen < 0) {
-            $this->indexDetailPenggunaAsesmen = 0;
-            $this->toast('Anda sudah berada di soal pertama.', 'warning');
-            return;
-        }
-
-        if ($this->detailPenggunaAsesmen[$this->indexDetailPenggunaAsesmen]['waktu_mulai_soal'] == null) {
-            $waktuMulaiSoal = now();
-            $durasi = $this->detailPenggunaAsesmen[$this->indexDetailPenggunaAsesmen]['durasi'];
-            $this->detailPenggunaAsesmen[$this->indexDetailPenggunaAsesmen]['waktu_mulai_soal'] = $waktuMulaiSoal->format('Y-m-d H:i:s');
-            $this->detailPenggunaAsesmen[$this->indexDetailPenggunaAsesmen]['waktu_selesai_soal'] = $waktuMulaiSoal->addSeconds($durasi)->format('Y-m-d H:i:s');
-        }
-
-        $this->detailPenggunaAsesmen[$this->indexDetailPenggunaAsesmen]['sisa_waktu'] = now()->diffInSeconds($this->detailPenggunaAsesmen[$this->indexDetailPenggunaAsesmen]['waktu_selesai_soal']);
-    }
-
-    
     
     public function render()
     {

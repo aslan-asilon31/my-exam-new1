@@ -11,6 +11,7 @@ use Mary\Traits\Toast;
 use App\Models\Asesmen;
 use App\Models\Pengguna;
 use App\Models\User;
+use App\Models\PenggunaAsesmen;
 
 
 
@@ -24,6 +25,7 @@ class DaftarAsesmen extends Component
     public $url = '/daftar-asesmen';
 
     public $asesmen_id;
+    public $apakahSudahIkutAsesmen;
     public $asesmenDurasi = 0;
 
     public $questionTimer;
@@ -50,9 +52,7 @@ class DaftarAsesmen extends Component
     public function mount()
     {
         $this->penggunaAsesmen = [];
-
         $this->userId = auth()->id();
-
         $user = User::where('id', auth()->id())->first();
         $this->user = $user ? $user->toArray() : null;
 
@@ -67,9 +67,7 @@ class DaftarAsesmen extends Component
         foreach ($this->asesmens as $asesmen) {
             $tglMulai = \Carbon\Carbon::parse($asesmen['tgl_mulai']);
             $tglSelesai = \Carbon\Carbon::parse($asesmen['tgl_selesai']);
-
             $durasi = $tglMulai->diff($tglSelesai);
-
             $asesmen->durasi = $durasi->format('%h jam %i menit %s detik');
         }
 
@@ -78,6 +76,15 @@ class DaftarAsesmen extends Component
         $this->penggunaAsesmen['pengguna_asesmen.tgl_selesai'] = $asesmen->tgl_selesai;
         $this->penggunaAsesmen['pengguna_asesmen.asesmen_durasi'] = $asesmen->durasi;
 
+        $this->apakahSudahIkutAsesmen = PenggunaAsesmen::where('pengguna_id', auth()->id())->get(); 
+
+
+
+    }
+
+    public function apakahSudahIkutAsesmen()
+    {
+        return PenggunaAsesmen::where('pengguna_id', auth()->id())->first()->toArray();
     }
 
 

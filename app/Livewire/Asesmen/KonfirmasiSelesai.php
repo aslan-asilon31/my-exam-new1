@@ -78,10 +78,7 @@ class KonfirmasiSelesai extends Component
 
     public function mount()
     {
-        
-
         $this->initialize();
-
     }
 
     public function initialize()
@@ -100,41 +97,7 @@ class KonfirmasiSelesai extends Component
     public function simpanJawaban()
     {
 
-            return $this->redirect('/daftar-asesmen', navigate: true);
-
-
-        // $penggunaAsesmen = PenggunaAsesmen::create([
-        //     'id' => (string) Str::uuid(),
-        //     'pengguna_id' => auth()->id(), 
-        //     'asesmen_id' => $this->penggunaAsesmen['pengguna_asesmen.asesmen_id'],
-        //     'tgl_mulai' => now(),
-        //     'tgl_selesai' => now(),
-        //     'status' => 1,
-        // ]);
-
-        // $data = [];
-
-        // if (!empty($this->detailPenggunaAsesmen)) {
-        //     foreach ($this->detailPenggunaAsesmen as $item) {
-        //         $data[] = [
-        //             'pengguna_asesmen_id' => $penggunaAsesmen->id, 
-        //             'pertanyaan_id' => $item['pertanyaan_id'], 
-        //             'jawaban' => $item['jawaban'], 
-        //             'poin' => 0,
-        //             'apa_aktif' => 1,
-        //         ];
-        //     }
-
-        //     DB::table('detail_pengguna_asesmen')->insert($data);
-
-        //     return $this->redirect('/dasbor-user', navigate: true);
-
-        //     echo "Data inserted successfully!";
-
-        // } else {
-        //     echo "No data available to insert.";
-        // }
-
+        return $this->redirect('/daftar-asesmen', navigate: true);
              
     }
 

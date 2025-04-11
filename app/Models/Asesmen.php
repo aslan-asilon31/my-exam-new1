@@ -39,8 +39,9 @@ class Asesmen extends Model
     // Relasi dengan tabel pertanyaans
     public function pertanyaans()
     {
-        return $this->hasMany(Pertanyaan::class, 'asesmen_id', 'id');
+        return $this->hasMany(Pertanyaan::class, 'asesmen_id');
     }
+
     
     public function asesmen()
     {

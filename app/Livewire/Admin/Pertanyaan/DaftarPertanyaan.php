@@ -39,6 +39,7 @@ class DaftarPertanyaan extends Component
   #[\Livewire\Attributes\Locked]
   public array $options = [];
 
+
   #[\Livewire\Attributes\Locked]
   private string $baseFolderName = '/files/images/pertanyaan';
   private string $baseImageName = 'pertanyaan-image';
@@ -76,15 +77,31 @@ class DaftarPertanyaan extends Component
       $this->initialize();
     }
 
+    #[On('soal-dibuat')]
+    public function bersihkan_form()
+    {
+      $this->masterSoalForm->reset();
+      $this->idSoal = null;
+      $this->masterForm->pertanyaan = null;
+      $this->masterForm->bobot = null;
+      $this->masterForm->durasi = null;
+    }
+
+
     public function buat()
     {
       $this->masterSoalForm->reset();
       $this->idSoal = null;
+      $this->masterForm->pertanyaan = null;
+      $this->masterForm->bobot = null;
+      $this->masterForm->durasi = null;
 
       $lastNoUrut = Pertanyaan::where('asesmen_id', $this->idAsesmen)->max('no_urut');
       $this->masterSoalForm->no_urut = ($lastNoUrut !== null ? (int)$lastNoUrut + 1 : 1);
 
+
     }
+
 
     public function closeModal()
     {

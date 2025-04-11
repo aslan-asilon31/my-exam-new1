@@ -37,6 +37,6 @@ class Pertanyaan extends Model
 
     public function asesmen(): BelongsTo
     {
-        return $this->belongsTo(Asesmen::class, 'asesmen_id');
+        return $this->belongsTo(Asesmen::class, 'id');
     }
 }

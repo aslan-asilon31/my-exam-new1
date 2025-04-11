@@ -1,16 +1,7 @@
 <div>
 
-    <header class="bg-white shadow-md p-4 mb-10 rounded-md">
-        <div class="container mx-auto flex justify-between items-center">
-            <h1 class="text-sm md:text-md font-bold text-orange-900">Umedalife</h1>
-            <span id="asesmen-durasi" class="text-sm md:text-md font-bold text-orange-900">{{ $this->penggunaAsesmen['pengguna_asesmen.asesmen_durasi'] }}</span>
-            <x-logout-button />
-        </div>
-    </header>
-
-    <div class=" ">
-        <div class="w-96 h-screen bg-white p-8 rounded-md shadow-lg ">
-            <div class="">
+    <div class="flex-grow"> 
+        <div class="max-w-4xl mx-auto bg-white p-8 rounded-md shadow-md transform transition-transform duration-300 hover:shadow-xl hover:scale-105">
                 @if ($asesmen)
                     <div class=" transform transition-transform duration-300 hover:shadow-2xl hover:scale-105 bg-gray-100 p-4 rounded-md shadow-md transform transition-transform duration-300 hover:shadow-lg hover:scale-105 " style="background-image: url({{ asset('bg-brown.png') }}); background-size: cover; background-position: center;">
                         <div class="absolute inset-0 bg-black opacity-50 rounded-md z-1"></div>
@@ -76,14 +67,12 @@
                 <a href="{{ route('daftar-asesmen') }}" class="text-xs md:text-sm bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
                     Kembali
                 </a>
-                <a href="/soal-asesmen/{{ $this->penggunaAsesmen['pengguna_asesmen.asesmen_id'] }}" class="text-xs md:text-sm bg-orange-900 hover:bg-orange-800 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mr-4">
+                <a href="/soal-asesmen/{{ $this->id }}" class="text-xs md:text-sm bg-orange-900 hover:bg-orange-800 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mr-4">
                     Mulai Ujian
                 </a>
             </div>
         </div>
-    </div>
-
-
+    </main>
 
 </div>
 

@@ -28,7 +28,7 @@ final class TabelAsesmenEvaluator extends PowerGridComponent
     public string $url = '/asesmen-evaluator';
 
     use WithExport;
-    use WithTable;
+    use WithTable; 
 
     public function setUp(): array
     {
@@ -61,11 +61,7 @@ final class TabelAsesmenEvaluator extends PowerGridComponent
 
     public function relationSearch(): array
     {
-        return [
-            'pertanyaan' => [
-                'pertanyaan',
-            ],
-        ];
+        return [];
     }
 
     public function fields(): PowerGridFields
@@ -95,13 +91,15 @@ final class TabelAsesmenEvaluator extends PowerGridComponent
 
 
             Column::make('ID', 'id')
-                ->visibleInExport(false) // Hide ID column in export
+                ->visibleInExport(false) 
                 ->sortable()
+                ->searchable()
                 ->headerAttribute('text-center', 'background-color:#851902; color:white;text-align:center;'),
 
 
             Column::make('Judul', 'judul')
                 ->sortable()
+                ->searchable()
                 ->headerAttribute('text-center', 'background-color:#851902; color:white;text-align:center;'),
 
 
@@ -113,32 +111,39 @@ final class TabelAsesmenEvaluator extends PowerGridComponent
 
             Column::make('Durasi', 'durasi')
                 ->sortable()
+                ->searchable()
                 ->headerAttribute('text-center', 'background-color:#851902; color:white;text-align:center;'),
 
 
             Column::make('Tanggal mulai', 'tgl_mulai')
                 ->sortable()
+                ->searchable()
                 ->headerAttribute('text-center', 'background-color:#851902; color:white;text-align:center;'),
 
             Column::make('Tanggal selesai', 'tgl_selesai')
                 ->sortable()
+                ->searchable()
                 ->headerAttribute('text-center', 'background-color:#851902; color:white;text-align:center;'),
 
             Column::make('Dibuat oleh', 'dibuat_oleh')
                 ->sortable()
+                ->searchable()
                 ->headerAttribute('text-center', 'background-color:#851902; color:white;text-align:center;'),
 
             Column::make('Dibuat oleh', 'diupdate_oleh')
                 ->sortable()
+                ->searchable()
                 ->headerAttribute('text-center', 'background-color:#851902; color:white;text-align:center;'),
 
 
             Column::make('diupdate oleh', 'diupdate_oleh')
                 ->sortable()
+                ->searchable()
                 ->headerAttribute('text-center', 'background-color:#851902; color:white;text-align:center;'),
 
             Column::make('tgl_dibuat', 'diupdate_oleh')
                 ->sortable()
+                ->searchable()
                 ->headerAttribute('text-center', 'background-color:#851902; color:white;text-align:center;'),
 
 
@@ -159,8 +164,6 @@ final class TabelAsesmenEvaluator extends PowerGridComponent
 
             Filter::inputText('dibuat_oleh', 'dibuat_oleh')->placeholder('dibuat_oleh'),
             Filter::inputText('diupdate_oleh', 'diupdate_oleh')->placeholder('diupdate_oleh'),
-
-
 
         ];
     }

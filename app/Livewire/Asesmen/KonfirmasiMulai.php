@@ -66,20 +66,6 @@ class KonfirmasiMulai extends Component
 
     public function mount()
     {
-        // session()->flush();
-        // session()->forget('soal-sesi.userId');
-        // session()->forget('soal-sesi.asesmenId');
-        // session()->forget('soal-sesi.pertanyaanId');
-        // session()->forget('soal-sesi.waktuAsesmenMulai');
-
-
-        // Session::forget('soal-sesi');
-        // Session::forget('soal-sesi');
-        // Session::forget('waktuSoalSekarang');
-        // Session::forget('waktuSoal');
-        // Session::forget('waktuSoalSelesai');
-        // Session::forget('waktuSoalBerjalan');
-        // dd(Session());
 
         $this->userId = auth()->id();
         $this->user = User::where('id', auth()->id())->first()->toArray();
@@ -95,18 +81,6 @@ class KonfirmasiMulai extends Component
     {
         $this->asesmen = Asesmen::where('id', $this->id)->first()->toArray();
         $this->asesmenDurasi = $this->asesmen['durasi'];
-
-        $tglMulai = \Carbon\Carbon::parse($this->asesmen['tgl_mulai']);
-        $tglSelesai = \Carbon\Carbon::parse($this->asesmen['tgl_selesai']);
-
-        // // Menyimpan hasil perhitungan ke dalam variabel untuk digunakan di view
-        // $durasi = $tglMulai->diff($tglSelesai);
-        // $this->asesmenDurasi =  $durasi->format('%h jam %i menit %s detik');
-
-
-        // $this->PenggunaAsesmen['pengguna_asesmen.asesmen_id'] = $this->asesmen['id'];
-        // $this->PenggunaAsesmen['pengguna_asesmen.waktu_asesmen'] = $this->asesmenDurasi;
-
 
     }
 
