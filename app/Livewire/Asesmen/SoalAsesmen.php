@@ -33,8 +33,8 @@ class SoalAsesmen extends Component
 
     public function mount(){
 
-        // $this->indexDetailPenggunaAsesmen = 0;
-        // $this->detailPenggunaAsesmen = [];
+        $this->indexDetailPenggunaAsesmen = 0;
+        $this->detailPenggunaAsesmen = [];
 
 
         if (count($this->detailPenggunaAsesmen)<=0) {
@@ -83,8 +83,47 @@ class SoalAsesmen extends Component
         $this->detailPenggunaAsesmen[$this->indexDetailPenggunaAsesmen]['jawaban'] = $this->jawaban;
       
         if($this->indexDetailPenggunaAsesmen >= (count($this->detailPenggunaAsesmen)-1)){
+
+            // $penggunaAsesmen = PenggunaAsesmen::create([
+            //     'id' => (string) Str::uuid(),
+            //     'pengguna_id' => auth()->id(), 
+            //     'asesmen_id' => session()->get('pengguna_asesmen.asesmen_id'),
+            //     'tgl_mulai' => now(),
+            //     'tgl_selesai' => now(),
+            //     'status' => 1,
+            // ]);
+
+            // $data = [];
+
+            // if (!empty($this->detailPenggunaAsesmen)) {
+            //     foreach ($this->detailPenggunaAsesmen as $item) {
+            //         $data[] = [
+            //             'pengguna_asesmen_id' => $penggunaAsesmen->id, 
+            //             'pertanyaan_id' => $item['pertanyaan_id'], 
+            //             'jawaban' => $item['jawaban'], 
+            //             'poin' => 0,
+            //             'apa_aktif' => 1,
+            //         ];
+            //     }
+
+            //     DB::table('detail_pengguna_asesmen')->insert($data);
+            //     $this->detailPenggunaAsesmen = [];
+            //     $this->indexDetailPenggunaAsesmen = [];
+            //     return redirect()->to('konfirmasi-selesai');
+
+            //     echo "Data inserted successfully!";
+
+            // } else {
+            //     echo "No data available to insert.";
+            // }
+
+                $this->detailPenggunaAsesmen = [];
+                $this->indexDetailPenggunaAsesmen = 0;
             return redirect()->to('konfirmasi-selesai');
+
+
         }
+
 
         $this->detailPenggunaAsesmen[$this->indexDetailPenggunaAsesmen]['sisa_waktu'] = 0;
         $this->indexDetailPenggunaAsesmen = $this->indexDetailPenggunaAsesmen + 1;

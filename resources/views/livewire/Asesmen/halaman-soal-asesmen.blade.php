@@ -60,9 +60,7 @@
                  --}}
             </div>
             <div class="flex justify-center items-center w-full md:w-full ">
-                {{-- <span id="" >{{ intval($detailPenggunaAsesmen[$indexDetailPenggunaAsesmen]['sisa_waktu']) }}</span> --}}
-                <span id="durasiSoal" >0</span>
-
+                <span id="durasiSoal" >Durasi Soal {{ $indexDetailPenggunaAsesmen + 1 }}</span>
             </div>
 
 
@@ -97,12 +95,13 @@
 
     document.addEventListener('livewire:initialized', () => {
         var durasiSoal = $wire.durasiSoal ;
-        
+        var interval;
+
         function startCountdown(duration) {
-            let timer = duration, minutes, seconds;
+            let timer = (duration+1), minutes, seconds;
             const display = document.getElementById('durasiSoal');
 
-            const interval = setInterval(() => {
+           interval = setInterval(() => {
                 minutes = parseInt(timer / 60, 10);
                 seconds = parseInt(timer % 60, 10);
 
@@ -123,7 +122,8 @@
         startCountdown(durasiSoal);
 
         $wire.on('resetCountdown',() => {
-            let durasiSoal = $wire.durasiSoal;
+            clearInterval(interval);
+            durasiSoal = $wire.durasiSoal;
             startCountdown(durasiSoal);
         });
     })

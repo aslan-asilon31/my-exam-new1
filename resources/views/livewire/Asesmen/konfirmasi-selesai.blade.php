@@ -39,15 +39,11 @@
             
         </div>
         
-        <p class="text-center text-gray-700 text-xs">Klik tombol selesai untuk menyelesaikan asesmen ini</p> <!-- Centered text -->
+        <p class="text-center text-gray-700 text-xs">Kembali ke daftar asesmen</p> 
 
         <div class="flex items-center justify-center mt-1 text-center gap-2">
-            <a href="javascript:void(0);" onclick="window.history.back();" class="text-xs md:text-sm bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-                Kembali ke soal
-            </a>
-
-            <button type="button"  wire:click="simpanJawaban" wire:confirm="Apakah kamu yakin akan menyelesaikan asesmen ini ?" class="text-xs md:text-sm bg-orange-900 hover:bg-orange-800 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-                Selesai
+            <button type="button"  wire:click="simpanJawaban"  class="text-xs md:text-sm bg-orange-900 hover:bg-orange-800 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                Daftar Asesmen
             </button>
         </div>
 
