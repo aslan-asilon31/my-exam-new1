@@ -44,7 +44,13 @@
                         <td class="px-6 py-4 text-xs md:text-sm">{{ $item->tgl_diupdate }}</td>
                         <td class="px-6 py-4 text-xs md:text-sm">{{ $item->apa_aktif ? 'Ya' : 'Tidak' }}</td>
                     </tr>
-                @empty 
+                @empty
+                    <tr class="text-center">
+                        <td class="">
+                            no data
+                        </td>
+                    </tr>
+
                 @endforelse
             </tbody>
         </table>
@@ -59,21 +65,16 @@
                   Soal
                 </div>
                 <x-menu-separator />
-        
+
                   <div id="pertanyaan">
 
-
-                    
                     <div class="mb-3">
                         <x-input  label="" wire:model="masterSoalForm.asesmen_id" id="masterSoalForm.asesmen_id" name="masterSoalForm.asesmen_id" placeholder="asesmen id" hidden/>
                     </div>
 
                     <div class="mb-3 ">
-                        <x-file wire:model="masterSoalForm.image_url" label="Image" accept="image/*" crop-after-change :disabled="$isDisabled">
-                          <img
-                            src="{{ $masterForm->image_url ?? 'https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg?20200913095930' }}"
-                            class="h-48 rounded-lg" />
-                        </x-file>
+                        <input type="file" wire:model="masterSoalForm.image_url" accept="image/*">
+
                     </div>
 
                     <div class="form-group" wire:ignore>
@@ -85,34 +86,33 @@
                     <div class="mb-3">
                         <x-input  label="Bobot" wire:model.blur="masterSoalForm.bobot" id="masterSoalForm.bobot" name="masterSoalForm.bobot" placeholder="Bobot" />
                     </div>
-        
+
                     <div class="mb-3">
                         <x-input label="Nomor Urut" wire:model.blur="masterSoalForm.no_urut" id="masterSoalForm.no_urut" name="masterSoalForm.no_urut" placeholder="Nomor Urut" />
                     </div>
-                    
+
                     <div class="mb-3">
                         <x-input  label="Durasi (Detik)" wire:model.blur="masterSoalForm.durasi" id="masterSoalForm.durasi" name="masterSoalForm.durasi" placeholder="Durasi" />
                     </div>
-                    
+
                     @if (!$isReadonly)
                       <div class="text-center mt-3">
                         <x-errors class="text-white mb-3" />
                         <x-button type="submit" :label="$idSoal ? 'update' : 'Simpan'" class="btn-success btn-sm text-white" />
                       </div>
                     @endif
-        
+
                   </div>
               </x-form>
 
             <x-button label="Cancel" class="text-xs md:text-sm" wire.click="closeModal" />
-        
+
         </x-modal>
 
         <x-modal wire:model="modalPertanyaanHapus" class="backdrop-blur text-xs md:text-sm">
             <x-button label="Cancel" wire.click="closeModal" />
         </x-modal>
-        
+
     </div>
 
 </x-card>
-  

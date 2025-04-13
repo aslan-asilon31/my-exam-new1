@@ -1,10 +1,10 @@
 <style>
     .size-3 {
-        width: 20px; 
-        height: 20px; 
+        width: 20px;
+        height: 20px;
     }
 </style>
-    
+
 
 <div>
 
@@ -28,11 +28,11 @@
 
             <div>
                 <h1 class="text-md md:text-xl font-semibold text-gray-800">Selamat Datang, {{ Auth::user()->name }}</h1>
-                <p class="text-xs md:text-sm font-semibold text-gray-600">Role: {{ $user_role }}</p>
+                <p class="text-xs md:text-sm font-semibold text-gray-600">anda login sebagai {{ $user_role }}</p>
             </div>
-            
+
         </div>
-        
+
         <div class="flex items-center space-x-4">
             <div class="w-16 h-16 md:w-[50px] md:h-[50px]"></div>
             <div class="pt-8">
@@ -47,7 +47,7 @@
                 </div>
             </div>
         </div>
-        
+
         <div class="mt-6">
 
         </div>

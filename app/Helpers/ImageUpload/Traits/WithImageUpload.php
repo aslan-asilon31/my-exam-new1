@@ -8,10 +8,12 @@ trait WithImageUpload
   {
 
     if ($newImageUrl instanceof \Livewire\Features\SupportFileUploads\TemporaryUploadedFile) {
+
       $ext = $newImageUrl->getClientOriginalExtension();
       $imageName = $imageName . '.' . $ext;
       $imageUrl = $newImageUrl->storeAs($folderName, $imageName, $disk);
       $imageUrl = '/' . $imageUrl;
+
 
       if ($oldImageUrl && \Illuminate\Support\Facades\Storage::disk($disk)->exists($oldImageUrl)) {
         \Illuminate\Support\Facades\Storage::disk($disk)->delete($oldImageUrl);

@@ -61,11 +61,22 @@ class UbahAsesmenEvaluator extends Component
   protected $masterModelAsesmen = \App\Models\Asesmen::class;
   protected $masterModelSoal = \App\Models\Pertanyaan::class;
 
+
+  #[\Livewire\Attributes\Session(key: 'penggunaAsesmen')]
+  public $penggunaAsesmen;
+
+
   public AsesmenEvaluatorForm $masterForm;
   public AsesmenSoalForm $masterSoalForm;
 
   public function mount()
   {
+
+    $this->penggunaAsesmen['asesmen_id'] = $this->id;
+
+    if (!session()->has('penggunaAsesmen.asesmen_id')) {
+        session()->put('penggunaAsesmen.asesmen_id', $this->id);
+    }
 
     $this->ubah();
     $this->initialize();
@@ -102,7 +113,6 @@ class UbahAsesmenEvaluator extends Component
         $this->tampilFormJudulAsesmen = false,
         $this->tampilFormSoalAsesmen = true,
     ];
-
   }
 
 
@@ -118,6 +128,7 @@ class UbahAsesmenEvaluator extends Component
   {
 
     $masterData = $this->masterModelAsesmen::findOrFail($this->id);
+
     if ($masterData->tgl_mulai) {
         $masterData->tgl_mulai = \DateTime::createFromFormat('Y-m-d H:i:s', $masterData->tgl_mulai)->format('Y-m-d\TH:i');
     }
@@ -125,7 +136,10 @@ class UbahAsesmenEvaluator extends Component
     if ($masterData->tgl_selesai) {
         $masterData->tgl_selesai = \DateTime::createFromFormat('Y-m-d H:i:s', $masterData->tgl_selesai)->format('Y-m-d\TH:i');
     }
+    // dd($masterData);
+
     $this->masterForm->fill($masterData->toArray());
+
   }
 
   public function update()

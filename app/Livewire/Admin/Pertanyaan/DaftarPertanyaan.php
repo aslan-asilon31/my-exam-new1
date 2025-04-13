@@ -26,7 +26,7 @@ class DaftarPertanyaan extends Component
     #[\Livewire\Attributes\Locked]
     public string $id = '';
 
-    
+
   #[\Livewire\Attributes\Locked]
   public string $readonly = '';
 
@@ -44,7 +44,7 @@ class DaftarPertanyaan extends Component
   private string $baseFolderName = '/files/images/pertanyaan';
   private string $baseImageName = 'pertanyaan-image';
 
-  #[\Livewire\Attributes\Session(key: 'penggunaAsesmen')] 
+  #[\Livewire\Attributes\Session(key: 'penggunaAsesmen')]
   public $penggunaAsesmen;
 
 
@@ -65,16 +65,16 @@ class DaftarPertanyaan extends Component
 
     public function mount()
     {
-      $this->idAsesmen = $this->PenggunaAsesmen['pengguna_asesmen.asesmen_id_for_pertanyaan'];
+        $this->idAsesmen = $this->penggunaAsesmen['asesmen_id'] ?? session()->put('penggunaAsesmen.asesmen_id', $this->id);
 
-      if ($this->idSoal) {
-        $this->title .= ' (Ubah)';
-        $this->ubah($id);
-      } else {
-        $this->title .= ' (Buat)';
-        $this->buat();
-      }
-      $this->initialize();
+        if ($this->idSoal) {
+            $this->title .= ' (Ubah)';
+            $this->ubah($id);
+        } else {
+            $this->title .= ' (Buat)';
+            $this->buat();
+        }
+        $this->initialize();
     }
 
     #[On('soal-dibuat')]
@@ -82,9 +82,9 @@ class DaftarPertanyaan extends Component
     {
       $this->masterSoalForm->reset();
       $this->idSoal = null;
-      $this->masterForm->pertanyaan = null;
-      $this->masterForm->bobot = null;
-      $this->masterForm->durasi = null;
+      $this->masterSoalForm->pertanyaan = null;
+      $this->masterSoalForm->bobot = null;
+      $this->masterSoalForm->durasi = null;
     }
 
 
@@ -92,9 +92,9 @@ class DaftarPertanyaan extends Component
     {
       $this->masterSoalForm->reset();
       $this->idSoal = null;
-      $this->masterForm->pertanyaan = null;
-      $this->masterForm->bobot = null;
-      $this->masterForm->durasi = null;
+      $this->masterSoalForm->pertanyaan = null;
+      $this->masterSoalForm->bobot = null;
+      $this->masterSoalForm->durasi = null;
 
       $lastNoUrut = Pertanyaan::where('asesmen_id', $this->idAsesmen)->max('no_urut');
       $this->masterSoalForm->no_urut = ($lastNoUrut !== null ? (int)$lastNoUrut + 1 : 1);
@@ -110,7 +110,8 @@ class DaftarPertanyaan extends Component
 
     public function simpan()
     {
-      $this->masterSoalForm->asesmen_id =  $this->idAsesmen;
+        dd($this->masterSoalForm);
+      $this->masterSoalForm->asesmen_id =  $this->idAsesmen ?? session()->put('penggunaAsesmen.asesmen_id', $this->id);
 
       $validatedSoalForm = $this->validate(
         $this->masterSoalForm->rules(),
@@ -134,7 +135,8 @@ class DaftarPertanyaan extends Component
             $imageName = $this->baseImageName . $now;
             $newImageUrl = $validatedSoalForm['image_url'];
 
-            $validatedForm['image_url'] = $this->saveImage(
+
+            $validatedSoalForm['image_url'] = $this->saveImage(
               $folderName,
               $imageName,
               $newImageUrl,
@@ -144,9 +146,9 @@ class DaftarPertanyaan extends Component
           $pertanyaan = Pertanyaan::create($validatedSoalForm);
           $this->modalPertanyaan = false;
           $this->dispatch('soal-dibuat');
-          
+
           $this->success('Soal Asesmen sudah dibuat');
-  
+
     }
 
     public function ubah($id)
@@ -168,7 +170,7 @@ class DaftarPertanyaan extends Component
         [],
         $this->masterSoalForm->attributes()
       )['masterSoalForm'];
-  
+
       $validatedSoalForm['asesmen_id'] = $validatedForm['asesmen_id'];
       $validatedSoalForm['durasi'] = (int) $validatedForm['durasi'];
       $validatedSoalForm['bobot'] = (int) $validatedForm['bobot'];
@@ -208,20 +210,20 @@ class DaftarPertanyaan extends Component
       }
 
 
-     
+
     }
 
     public function hapus()
     {
-  
+
       $masterData = $this->masterSoalForm::findOrFail($this->id);
-  
+
       \Illuminate\Support\Facades\DB::beginTransaction();
       try {
-  
+
         $masterData->delete();
         \Illuminate\Support\Facades\DB::commit();
-  
+
         $this->success('Data has been hapus');
         $this->redirect($this->url, true);
       } catch (\Throwable $th) {
@@ -230,8 +232,8 @@ class DaftarPertanyaan extends Component
       }
     }
 
-    
-    #[Title('Pertanyaan')] 
+
+    #[Title('Pertanyaan')]
     public function render()
     {
         return view('livewire.admin.pertanyaan.daftar-pertanyaan');

@@ -11,7 +11,7 @@ use App\Models\Asesmen;
 use Carbon\Carbon;
 
 use Illuminate\Support\Str;
-use Livewire\Attributes\On; 
+use Livewire\Attributes\On;
 
 class PerbaharuiAsesmenEvaluator extends Component
 {
@@ -29,7 +29,7 @@ class PerbaharuiAsesmenEvaluator extends Component
   public $tampilFormSoalAsesmen = false;
   public $tampilJudulSoal = '';
 
-  
+
   #[\Livewire\Attributes\Locked]
   private string $basePageName = 'asesmen-evaluator';
 
@@ -66,8 +66,12 @@ class PerbaharuiAsesmenEvaluator extends Component
   public $masterSoalForm1;
   public $asesmen;
 
+  #[\Livewire\Attributes\Session(key: 'penggunaAsesmen')]
+  public $penggunaAsesmen;
+
   public function mount()
   {
+
     if ($this->id && $this->readonly) {
       $this->title .= ' (Tampil)';
       $this->tampil();
@@ -78,6 +82,7 @@ class PerbaharuiAsesmenEvaluator extends Component
       $this->title .= ' (Buat)';
       $this->buat();
     }
+
     $this->initialize();
   }
 
@@ -99,7 +104,6 @@ class PerbaharuiAsesmenEvaluator extends Component
 
     $this->tampilJudulSoal = $this->masterModelAsesmen::firstOrFail('id',$this->id);
     $this->masterSoalForm->id = $this->id;
-    // $this->masterSoalForm->no_urut = (int) $this->masterModelSoal::where('asesmen_id',$this->id)
     // ?->max('no_urut') + 1;
     return [
         $this->tampilFormJudulAsesmen = false,
@@ -114,7 +118,7 @@ class PerbaharuiAsesmenEvaluator extends Component
         $this->tampilFormSoalAsesmen = true,
     ];
   }
-  
+
   public function simpanSoal()
   {
 
@@ -132,13 +136,13 @@ class PerbaharuiAsesmenEvaluator extends Component
         $validatedSoalForm['tgl_dibuat'] = now();
         $validatedSoalForm['tgl_diupdate'] = now();
         $validatedSoalForm['jenis'] = 'essay';
-    
+
         $pertanyaan = Pertanyaan::create($validatedSoalForm);
         return $this->redirect('/asesmen-evaluator', navigate: true);
         $this->success('Soal Asesmen sudah dibuat');
 
   }
-  
+
   public function simpan()
   {
     $validatedForm = $this->validate(
@@ -170,7 +174,7 @@ class PerbaharuiAsesmenEvaluator extends Component
       \Illuminate\Support\Facades\DB::commit();
       // $this->create();
       $this->success('Judul Asesmen sudah dibuat');
-      $this->dispatch("asesmen-judul-sudah-dibuat"); 
+      $this->dispatch("asesmen-judul-sudah-dibuat");
       $this->redirect('/asesmen-evaluator');
       // $this->bukaFormSoal();
 

@@ -2,18 +2,18 @@
   <!-- Left Pane (Image) -->
   <div class="flex items-center justify-center bg-white text-black lg:flex-1">
       <!-- Gambar untuk Mobile -->
-      <div class="max-w-md text-center lg:hidden my-4"> 
+      <div class="max-w-md text-center lg:hidden my-4">
           <img src="{{ asset('umeda-logo.png') }}" class="w-48" alt="" srcset="">
       </div>
-      
+
       <!-- Gambar untuk Desktop -->
-      <div class="hidden lg:flex items-center justify-center flex-1"> 
+      <div class="hidden lg:flex items-center justify-center flex-1">
           <img src="{{ asset('umeda-logo.png') }}" width="524.67004" height="531.39694" alt="" srcset="">
       </div>
   </div>
 
   <!-- Right Pane (Form) -->
-  <div class="w-full bg-gray-100 lg:w-1/2 flex items-center justify-center p-4">
+  <div class="w-full  lg:w-1/2 flex items-center justify-center p-4">
 
     <x-form wire:submit="login" class="space-y-4">
         <x-input wire:model="email" label="email" placeholder="email" icon-right="o-user"
