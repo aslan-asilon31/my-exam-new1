@@ -17,16 +17,18 @@ class DetailPenggunaAsesmen extends Model
         'id',
         'pengguna_asesmen_id',
         'pertanyaan_id',
+        'jawaban',
+        'poin',
     ];
 
-    public function pengguna_assesmen()
+    public function pengguna_asesmen()
     {
-        return $this->hasMany(PenggunaAsesmen::class,'id');
+        return $this->hasMany(PenggunaAsesmen::class);
     }
 
-    public function pertanyaan()
+    public function pertanyaans()
     {
-        return $this->belongsTo(Pertanyaan::class, 'pertanyaan_id');
+        return $this->hasMany(Pertanyaan::class, 'id');
     }
 
 

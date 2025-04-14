@@ -1,7 +1,6 @@
 <div>
 
 
-
 <div class="mx-auto max-w-full h-screen bg-white p-2 rounded-md shadow-md transform transition-transform duration-300 hover:shadow-2xl hover:scale-105">
     @if (empty($detailPenggunaAsesmen))
         <p class="text-gray-700 text-center">Tidak ada pertanyaan tersedia.</p>
@@ -16,17 +15,22 @@
         <p hidden>Timer Soal Berjalan: <span id="timer-soal-berjalan">00:00</span></p>
         <div class="mb-6 ">
       
-            <div class="w-full flex justify-center text-left">
-                <div class="mb-3 flex md:w-64 w-full ">
-                  <div  >
+            <div class="w-full flex flex-col items-center">
+                @if($detailPenggunaAsesmen[$indexDetailPenggunaAsesmen]['image_url'])
+                    <div class="mb-3 text-center">
+                        <img src="{{ $detailPenggunaAsesmen[$indexDetailPenggunaAsesmen]['image_url'] }}" alt="Gambar Pengguna" class="w-48 md:w-64 object-cover"> 
+                    </div>
+                @endif
+            
+                <div class="mb-3 w-full md:w-96 text-left px-4">
                     {!! $detailPenggunaAsesmen[$indexDetailPenggunaAsesmen]['pertanyaan'] !!}
-                  </div>
                 </div>
             </div>
+            
 
             <div class="flex justify-center items-center w-full md:w-full ">
                 <textarea 
-                    wire:model="jawaban" class="w-full md:w-80 h-32 p-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+                    wire:model="jawaban" class="w-full md:w-80 h-32 p-8 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
                     placeholder="Tulis jawaban Anda di sini..."
                 ></textarea>
             </div>

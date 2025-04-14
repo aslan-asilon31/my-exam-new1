@@ -66,6 +66,7 @@ class PenilaianAsesmenCrud extends Component
   public $questionTimers = [];
 
   public $user = [];
+  public $poin;
 
 
   #[\Livewire\Attributes\Locked]
@@ -74,7 +75,6 @@ class PenilaianAsesmenCrud extends Component
 
   public function mount()
   {
-    $this->initialize();
     if ($this->id && $this->readonly) {
       $this->title .= ' (Show)';
       $this->show();
@@ -83,6 +83,10 @@ class PenilaianAsesmenCrud extends Component
 
       $this->edit();
     }
+
+    $this->initialize();
+
+
   }
 
   public function initialize()
@@ -92,46 +96,39 @@ class PenilaianAsesmenCrud extends Component
     $this->userId = auth()->id() ?? 'eafe4ec3-2e7d-4147-9dbe-754a79ff7740';
     $user = User::where('id', $this->PenggunaAsesmen['pengguna_asesmen.user_id']  ?? auth()->id())->first();
     $this->user = $user ? $user->toArray() : null;
-    $this->userName = $this->user['nama'];
-    $this->userEmail = $this->user['surel'];
+    $this->userName = $this->user['name'];
+    $this->userEmail = $this->user['email'];
 
 
     
-    $ActivePenggunaAsesmens = PenggunaAsesmen::with([
-      'pengguna',
+    $this->ActivePenggunaAsesmens = PenggunaAsesmen::with([
+      'user',
       'asesmen',
       'detail_pengguna_asesmens',
       'asesmen.pertanyaans', 
-
+      'detail_pengguna_asesmens.pertanyaans',
     ])
-    ->where('pengguna_asesmens.pengguna_id', $this->userId) 
+    ->where('pengguna_asesmens.asesmen_id',$this->id) 
     ->orderBy('tgl_dibuat', 'desc')
-    ->first();
+    ->first()->toArray();
 
-    if ($this->ActivePenggunaAsesmens) {
-        $this->ActivePenggunaAsesmens = $ActivePenggunaAsesmens->toArray();
-    } else {
-        $this->ActivePenggunaAsesmens = []; 
-        
-    }
 
 
 
     $this->masterForm->fill($this->ActivePenggunaAsesmens);
     
-    $this->asesmenId = $this->ActivePenggunaAsesmens['asesmen']['id'] ?? null;
+    $this->asesmenId = $this->ActivePenggunaAsesmens['asesmen_id'] ?? null;
     
     $asesmen = Asesmen::where('id', $this->asesmenId)->first();
     $this->asesmen = $asesmen ? $asesmen->toArray() : null;
 
-    $this->asesmenDurasi = $this->ActivePenggunaAsesmens['asesmen']['durasi'];
+    $this->asesmenDurasi = $this->asesmen['durasi'];
 
     $tglMulai = \Carbon\Carbon::parse($this->asesmen['tgl_mulai']);
     $tglSelesai = \Carbon\Carbon::parse($this->asesmen['tgl_selesai']);
 
     $durasi = $tglMulai->diff($tglSelesai);
     $this->asesmenDurasi =  $durasi->format('%h jam %i menit %s detik'); 
-
 
 
   }
@@ -145,7 +142,6 @@ class PenilaianAsesmenCrud extends Component
 
   public function store()
   {
-    // $this->permission($this->basePageName.'-create');
 
     $validatedForm = $this->validate(
       $this->masterForm->rules(),
@@ -175,8 +171,6 @@ class PenilaianAsesmenCrud extends Component
 
   public function show()
   {
-    // $this->permission($this->basePageName.'-show');
-
     $this->isReadonly = true;
     $this->isDisabled = true;
     $masterData = $this->masterModel::findOrFail($this->id);
@@ -188,66 +182,54 @@ class PenilaianAsesmenCrud extends Component
   {
 
 
-    $this->ActivePenggunaAsesmens = PenggunaAsesmen::with([
-      'pengguna',
+    $activePengguna = PenggunaAsesmen::with([
+      'user',
       'asesmen',
       'detail_pengguna_asesmens',
       'asesmen.pertanyaans', 
-
     ])
     ->where('pengguna_asesmens.pengguna_id', $this->userId) 
     ->orderBy('tgl_dibuat', 'desc')
-    ->first()
-    ->toArray();
-    $this->masterForm->fill($this->ActivePenggunaAsesmens);
+    ->first();
+
+    if ($activePengguna) {
+        $this->ActivePenggunaAsesmens = $activePengguna->toArray();
+        
+        if ($this->masterForm instanceof PenilaianAsesmenForm) {
+            $this->masterForm->fill($this->ActivePenggunaAsesmens);
+
+        } else {
+            throw new \Exception("Master form is not an instance of PenilaianAsesmenForm");
+        }
+    } else {
+      session()->flash('error', 'Tidak ada pengguna asesman ditemukan.');
+      return;
+  }
+
  
-    // dd($this->ActivePenggunaAsesmens);
-    
   }
 
   public function update()
   {
-      // Validate the input data
-      $this->validate([
-          'ActivePenggunaAsesmens.detail_pengguna_asesmens.*.jawaban' => 'nullable|string|max:1000', // Adjust validation rules as needed
-          'ActivePenggunaAsesmens.asesmen_id' => 'required|exists:asesmens,id', // Ensure asesmen_id is valid
-      ]);
-  
-      // Begin a database transaction
-      DB::beginTransaction();
-      try {
-          // Update the main PenggunaAsesmen record
-          $penggunaAsesmen = PenggunaAsesmen::findOrFail($this->ActivePenggunaAsesmens['id']);
-          $penggunaAsesmen->update([
-              // Update any necessary fields here
-              // Example: 'status' => 'updated', 
-          ]);
-  
-          // Update each detail_pengguna_asesmen record
-            foreach ($this->ActivePenggunaAsesmens['detail_pengguna_asesmens'] as $detail) {
-              $detailPenggunaAsesmen = DetailPenggunaAsesmen::findOrFail($detail['id']);
-              $detailPenggunaAsesmen->update([
-                      'poin' => $detail['poin'],
-                  ]);
-            }
-  
-          // Commit the transaction
-          DB::commit();
-  
-          // Provide feedback to the user
-          $this->success('Berhasil perbaharui data.');
-          session()->flash('message', 'Berhasil perbaharui data.');
-  
-          // Optionally redirect or refresh the view
-          // return redirect()->route('your.route.name'); // Adjust the route as necessary
-      } catch (\Exception $e) {
-          // Rollback the transaction in case of error
-          DB::rollBack();
-          // Handle the error (log it, show a message, etc.)
-          $this->error('gagal perbaharui data.'. $e->getMessage());
 
-          session()->flash('error', 'Failed to update data: ' . $e->getMessage());
-      }
+    if (isset($this->ActivePenggunaAsesmens['detail_pengguna_asesmens'])) {
+        foreach ($this->ActivePenggunaAsesmens['detail_pengguna_asesmens'] as $index => $detail) {
+          $detailPenggunaAsesmen = DetailPenggunaAsesmen::findOrFail($detail['id']);
+              
+            $detailPenggunaAsesmen->update([
+                'poin' => $detail['poin'],  
+            ]);
+        }
+
+        session()->flash('success', 'Berhasil memperbaharui data.');
+    } else {
+        session()->flash('error', 'Tidak ada detail pengguna asesmen yang ditemukan.');
+    }
+
+
+      $this->success('Berhasil memberikan poin.');
+      session()->flash('message', 'Berhasil perbaharui data.');
+
   }
   
 

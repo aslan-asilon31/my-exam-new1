@@ -12,7 +12,7 @@
                 @csrf
             </form>
 
-            <x-menu-item title="Logout" icon="o-cog-6-tooth" link="{{ route('logout') }}"
+            <x-menu-item title="Logout" wire.confirm="apakah kamu yakin ingin logout ?" icon="o-cog-6-tooth" link="{{ route('logout') }}"
                 onclick="event.preventDefault();
                             document.getElementById('logout-form').submit();" >
                     {{ __('Logout') }}
@@ -29,6 +29,10 @@
 
             @can('dashboard-user-lihat')
             <x-menu-item title="Dashboard" icon="o-home" link="/dasbor-user"  :class="request()->is('dasbor') ? 'active' : ''" />
+            @endcan
+
+            @can('laporan-lihat')
+            <x-menu-item title="Laporan" icon="o-home" link="/laporan"  :class="request()->is('laporan') ? 'active' : ''" />
             @endcan
             
             @if(auth()->user()->can('pengguna-lihat') || auth()->user()->can('asesmen_evaluator-lihat') || auth()->user()->can('penilaian_asesmen-lihat') || auth()->user()->can('hasil_asesmen-lihat'))

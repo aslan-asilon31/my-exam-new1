@@ -3,29 +3,6 @@
 <div>
   <x-card :title="$title" shadow separator class="border shadow">
 
-    {{-- <div class="grid grid-cols-2 mb-4">
-      <div>
-        <x-button label="List" link="{{ $url }}" class="btn-ghost btn-outline" />
-        @if ($id)
-          <x-button label="Create" link="{{ $url . '/create' }}" class="btn-ghost btn-outline" />
-        @endif
-  
-        @if ($id && $isReadonly)
-          <x-button label="Edit" link="{{ $url . '/edit/' . $id }}" class="btn-ghost btn-outline" />
-        @endif
-  
-  
-      </div>
-      <div class="text-right">
-        @if ($id && !$isReadonly)
-          <x-button label="Delete" wire:click="delete" wire:confirm="Do you want to delete this data?"
-            class="btn-ghost btn-outline text-red-500" />
-        @endif
-      </div>
-    </div> --}}
-  
-    {{-- <x-product-contents.product-content-tab activatedTab="product-contents" :fieldId="$id" /> --}}
-  
     
     <div class="transform transition-transform duration-300 hover:shadow-2xl hover:scale-105 bg-gray-100 p-4 rounded-md shadow-md" style="background-image: url({{ asset('bg-brown.png') }}); background-size: cover; background-position: center;">
       <div class="absolute inset-0 bg-black opacity-50 rounded-md z-1"></div>
@@ -46,12 +23,7 @@
                           {{ \Carbon\Carbon::parse($asesmen['tgl_mulai'])->translatedFormat('d F Y') }}  
                       </p>
                   </div>
-                  <div class="flex flex-col py-2">
-                    <p class="text-gray-100 text-md md:text-xl">Total Poin :</p>
-                    <p class="text-gray-100 text-sm md:text-md">
-                        {{ $totalPoints = collect($this->ActivePenggunaAsesmens['detail_pengguna_asesmens'])->sum('poin') }}
-                    </p>
-                </div>
+
               </div>
           
               <!-- Kolom Kanan -->
@@ -75,8 +47,7 @@
   
   
     <x-form wire:submit="update" class="mt-4" >
-  
-  
+
       @forelse($this->ActivePenggunaAsesmens['detail_pengguna_asesmens'] as $index => $detail)
           <div class="col-span-full pb-8">
               <x-hr />
@@ -84,9 +55,9 @@
               <x-hr target="update" />
   
               <div class="w-full flex justify-center text-center">
-                <div class="mb-3 flex w-64 ">
+                <div class="mb-3 flex w-full ">
                   <div id="summernote-soal-penilaian" class="summernote-editor">
-                    <h3 class="">{!! $this->ActivePenggunaAsesmens['asesmen']['pertanyaans'][$index]['pertanyaan'] ?? 'Pertanyaan tidak ditemukan' !!}</h3>
+                    <h3 class="w-full text-left">{!! $this->ActivePenggunaAsesmens['asesmen']['pertanyaans'][$index]['pertanyaan'] ?? 'Pertanyaan tidak ditemukan' !!}</h3>
                   </div>
                 </div>
               </div>
@@ -102,7 +73,7 @@
               </div>
               <p class="mt-3 text-sm "></p>
               <div class="sm:col-span-2 sm:col-start-1">
-                  <label for="poin_{{ $index }}" class="block text-sm font-medium text-gray-900">Poin (bobot: 10)</label>
+                  <label for="" class="block text-sm font-medium text-gray-900">Poin (Bobot : {{ $this->ActivePenggunaAsesmens['asesmen']['pertanyaans'][$index]['bobot'] }} ) </label>
                   <div class="mt-2  ">
                       <input type="number" 
                             name="poin_{{ $index }}" 
@@ -110,7 +81,7 @@
                             wire:model="ActivePenggunaAsesmens.detail_pengguna_asesmens.{{ $index }}.poin" 
                             class="block  rounded-md bg-white px-3 py-1.5 outline-gray-900 text-base text-gray-900 outline-1 -outline-offset-1  placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm" 
                             min="0" 
-                            max="10" 
+                            max="{{ $this->ActivePenggunaAsesmens['asesmen']['pertanyaans'][$index]['bobot'] }}" 
                             placeholder="Masukkan poin" />
                   </div>
               </div>
@@ -120,9 +91,6 @@
       @empty
           <p>Tidak ada data pengguna.</p>
       @endforelse
-  
-  
-  
   
       @if (!$isReadonly)
         <div class="text-center mt-3">

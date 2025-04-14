@@ -39,7 +39,7 @@ class PenilaianAsesmenForm extends Form
             'durasi' => 'Durasi',
             'tgl_mulai' => 'Tanggal Mulai',
             'tgl_selesai' => 'Tanggal Selesai',
-            'jawaban' => 'Jawaban',
+            'masterForm.detail_pengguna_asesmens.jawaban' => 'Jawaban',
         ];
     }
 

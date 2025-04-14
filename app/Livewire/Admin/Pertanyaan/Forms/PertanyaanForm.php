@@ -9,7 +9,7 @@ class PertanyaanForm extends Form
 {
     public string|null $asesmen_id = null;
     public string|null $durasi = null;
-  public TemporaryUploadedFile|string|null $image_url = null;
+    public string|null $image_url = null;
     public string|null $pertanyaan = null;
     public string|null $bobot = null;
     public int|null $no_urut;
@@ -20,10 +20,7 @@ class PertanyaanForm extends Form
         return [
             'masterSoalForm.id' => 'nullable|string',
             'masterSoalForm.asesmen_id' => 'nullable|string',
-            'masterSoalForm.image_url' => [
-                'nullable',
-                new \App\Rules\StringOrImageRule,
-              ],
+            'masterSoalForm.image_url' => 'nullable',
             'masterSoalForm.durasi' => 'nullable|string',
             'masterSoalForm.pertanyaan' => 'nullable|string',
             'masterSoalForm.bobot' => 'required|integer|min:0',

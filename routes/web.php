@@ -31,6 +31,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
 
     # admin
+    Route::get('/laporan', \App\Livewire\Admin\Laporan\Laporan::class)->name('laporan');
+
     Route::get('/dasbor', \App\Livewire\Admin\Dasbor\Dasbor::class)->name('dasbor');
     Route::get('/dasbor-user', \App\Livewire\User\DasborUser\DasborUser::class)->name('dasbor-user');
 
@@ -42,6 +44,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/penilaian-asesmen', \App\Livewire\Admin\PenilaianAsesmen\DaftarPenilaianAsesmen::class)->name('daftar-penilaian-asesmen');
     Route::get('/penilaian-asesmen/{id}', \App\Livewire\Admin\PenilaianAsesmen\PenilaianAsesmenCrud::class)->name('daftar-penilaian-asesmen-detail');
+    Route::get('/penilaian-asesmen-detail/{id}', \App\Livewire\Admin\PenilaianAsesmen\DaftarDetailPenilaianAsesmen::class)->name('daftar-detail-penilaian-asesmen');
     Route::get('/penilaian-asesmen/{id}/readonly', \App\Livewire\Admin\PenilaianAsesmen\PenilaianAsesmenCrud::class)->name('penilaian-asesmen-crud-ubah')->defaults('readonly', true);
 
     Route::get('/laporan-asesmen', \App\Livewire\Admin\LaporanAsesmen\DaftarLaporanAsesmen::class)->name('daftar-laporan-asesmen');
@@ -57,7 +60,7 @@ Route::middleware('auth:sanctum')->group(function () {
     # halaman pengguna admin
     Route::get('/hasil-asesmen', \App\Livewire\User\HasilAsesmen\DaftarHasilAsesmen::class)->name('daftar-hasil-asesmen');
 
-    # customer
+    # peserta
     Route::get('/daftar-asesmen', \App\Livewire\Asesmen\DaftarAsesmen::class)->name('daftar-asesmen');
     Route::get('/konfirmasi-mulai/{id}', \App\Livewire\Asesmen\KonfirmasiMulai::class)->name('konfirmasi-mulai');
     Route::get('/soal-asesmen/{id}', \App\Livewire\Asesmen\SoalAsesmen::class)->name('soal-asesmen');

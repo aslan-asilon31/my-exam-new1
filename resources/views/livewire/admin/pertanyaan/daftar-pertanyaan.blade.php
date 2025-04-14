@@ -72,9 +72,16 @@
                         <x-input  label="" wire:model="masterSoalForm.asesmen_id" id="masterSoalForm.asesmen_id" name="masterSoalForm.asesmen_id" placeholder="asesmen id" hidden/>
                     </div>
 
-                    <div class="mb-3 ">
-                        <input type="file" wire:model="masterSoalForm.image_url" accept="image/*">
 
+                    <div class="mb-3 ">
+                        {{-- <input type="file" wire:model="image" accept="image/*" /> --}}
+                        <x-file wire:model="masterSoalForm.image_url" accept="image/*" />
+                    </div>
+
+                    <div class="mt-3">
+                        @if ($masterSoalForm->image_url)
+                            <img src="{{ $masterSoalForm->image_url->temporaryUrl() ?? 'https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg?20200913095930' }}" alt="Image preview" class="w-full"/>
+                        @endif
                     </div>
 
                     <div class="form-group" wire:ignore>

@@ -4,7 +4,7 @@ namespace App\Livewire\Asesmen;
 
 use Livewire\Component;
 use App\Models\Asesmen;
-use App\Models\Pengguna;
+use App\Models\Pertanyaan;
 use App\Models\User;
 use Livewire\Attributes\On;
 use Illuminate\Support\Str;
@@ -75,13 +75,16 @@ class KonfirmasiMulai extends Component
 
         \Carbon\Carbon::setLocale('id');
         $this->initialize($this->id);
+
     }
 
     public function initialize()
     {
-        $this->asesmen = Asesmen::where('id', $this->id)->first()->toArray();
-        $this->asesmenDurasi = $this->asesmen['durasi'];
+        $this->asesmen = Asesmen::where('id', $this->id)->first();
+        
 
+
+        $this->asesmenDurasi = $this->asesmen['durasi'];
     }
 
     public function render()

@@ -90,9 +90,11 @@ class SoalAsesmen extends Component
             $penggunaAsesmen = PenggunaAsesmen::create([
                 'id' => (string) Str::uuid(),
                 'pengguna_id' => auth()->id(), 
-                'asesmen_id' => session()->get('pengguna_asesmen.asesmen_id'),
+                'asesmen_id' => $this->id,
                 'tgl_mulai' => now(),
                 'tgl_selesai' => now(),
+                'dibuat_oleh' => auth()->user()->name,
+                'diupdate_oleh' => auth()->user()->name,
                 'status' => 1,
             ]);
 
@@ -101,7 +103,8 @@ class SoalAsesmen extends Component
             if (!empty($this->detailPenggunaAsesmen)) {
                 foreach ($this->detailPenggunaAsesmen as $item) {
                     $data[] = [
-                        'pengguna_asesmen_id' => $penggunaAsesmen->id, 
+                        'id' => (string) Str::uuid(),
+                        'pengguna_asesmen_id' => $penggunaAsesmen->id,
                         'pertanyaan_id' => $item['pertanyaan_id'], 
                         'jawaban' => $item['jawaban'], 
                         'poin' => 0,

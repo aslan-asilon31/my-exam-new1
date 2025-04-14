@@ -22,6 +22,7 @@ class Pertanyaan extends Model
         'jenis',
         'durasi',
         'bobot',
+        'image_url',
         'dibuat_oleh',
         'diupdate_oleh',
         'tgl_dibuat',
@@ -39,4 +40,10 @@ class Pertanyaan extends Model
     {
         return $this->belongsTo(Asesmen::class, 'id');
     }
+
+    public function detail_pengguna_asesmens()
+    {
+        return $this->hasMany(DetailPenggunaAsesmen::class); 
+    }
+
 }

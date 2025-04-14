@@ -12,7 +12,13 @@
 
                 $totalBobots = array_sum(array_column($asesmen['asesmen']['pertanyaans'], 'bobot'));
                 $totalPoints = array_sum(array_column($asesmen['detail_pengguna_asesmens'], 'poin'));
-                $countHasilAsesmen =  ceil(($totalPoints/$totalBobots)*100);
+                // $countHasilAsesmen =  ceil(($totalPoints/$totalBobots)*100);
+
+                if ($totalBobots > 0) {
+                    $countHasilAsesmen = ceil(($totalPoints / $totalBobots) * 100);
+                } else {
+                    $countHasilAsesmen = null; 
+                }
             @endphp
 
             <div class="my-4 py-4">
@@ -59,7 +65,7 @@
 
                             Hasil Asesmen : &nbsp;
                             @if($countHasilAsesmen > 0)
-                                {{ $countHasilAsesmen }}
+                                {{ $countHasilAsesmen }} / 100
                             @else
                                 <p> sedang dinilai</p>
                             @endif

@@ -23,6 +23,8 @@ class DaftarPertanyaan extends Component
     public $description = "";
     public PertanyaanForm $masterSoalForm;
 
+    public $image;
+
     #[\Livewire\Attributes\Locked]
     public string $id = '';
 
@@ -110,8 +112,8 @@ class DaftarPertanyaan extends Component
 
     public function simpan()
     {
-        dd($this->masterSoalForm);
-      $this->masterSoalForm->asesmen_id =  $this->idAsesmen ?? session()->put('penggunaAsesmen.asesmen_id', $this->id);
+
+     $this->masterSoalForm->asesmen_id =  $this->idAsesmen ?? session()->put('penggunaAsesmen.asesmen_id', $this->id);
 
       $validatedSoalForm = $this->validate(
         $this->masterSoalForm->rules(),
@@ -119,29 +121,27 @@ class DaftarPertanyaan extends Component
         $this->masterSoalForm->attributes()
       )['masterSoalForm'];
 
-
         $validatedSoalForm['durasi'] = (int) $validatedSoalForm['durasi'];
         $validatedSoalForm['bobot'] = (int) $validatedSoalForm['bobot'];
 
-          $validatedSoalForm['dibuat_oleh'] = auth()->user()->username ?? 'admin';
-          $validatedSoalForm['diupdate_oleh'] = auth()->user()->username ?? 'admin';
-          $validatedSoalForm['tgl_dibuat'] = now();
-          $validatedSoalForm['tgl_diupdate'] = now();
-          $validatedSoalForm['jenis'] = 'essay';
+        if($this->image){
+          $ext = $this->image->getClientOriginalExtension();
+          $filename = str()->orderedUuid()->toString(). ".$ext";
+  
+          $filePath = $this->image->storeAs(
+            path: 'files/images/pertanyaan',
+            name: $filename, 
+            options: 'public'
+          );
 
-          // image_url
-            $folderName = $this->baseFolderName;
-            $now = now()->format('Ymd_His_u');
-            $imageName = $this->baseImageName . $now;
-            $newImageUrl = $validatedSoalForm['image_url'];
+          $validatedSoalForm['image_url'] =  '/' . $filePath;
+        }
 
-
-            $validatedSoalForm['image_url'] = $this->saveImage(
-              $folderName,
-              $imageName,
-              $newImageUrl,
-            );
-          // ./image_url
+        $validatedSoalForm['dibuat_oleh'] = auth()->user()->username ?? 'admin';
+        $validatedSoalForm['diupdate_oleh'] = auth()->user()->username ?? 'admin';
+        $validatedSoalForm['tgl_dibuat'] = now();
+        $validatedSoalForm['tgl_diupdate'] = now();
+        $validatedSoalForm['jenis'] = 'essay';
 
           $pertanyaan = Pertanyaan::create($validatedSoalForm);
           $this->modalPertanyaan = false;
@@ -170,6 +170,21 @@ class DaftarPertanyaan extends Component
         [],
         $this->masterSoalForm->attributes()
       )['masterSoalForm'];
+
+      
+      if($this->image){
+        $ext = $this->image->getClientOriginalExtension();
+        $filename = str()->orderedUuid()->toString(). ".$ext";
+
+        $filePath = $this->image->storeAs(
+          path: 'files/images/pertanyaan',
+          name: $filename, 
+          options: 'public'
+        );
+
+        $validatedSoalForm['image_url'] =  '/' . $filePath;
+      }
+
 
       $validatedSoalForm['asesmen_id'] = $validatedForm['asesmen_id'];
       $validatedSoalForm['durasi'] = (int) $validatedForm['durasi'];

@@ -97,7 +97,7 @@ class KonfirmasiSelesai extends Component
     public function simpanJawaban()
     {
 
-        return $this->redirect('/daftar-asesmen', navigate: true);
+        return $this->redirect('/dasbor-user', navigate: true);
              
     }
 

@@ -18,6 +18,8 @@
                 tooltip="Hello"
                 color="text-primary" class="text-md md:text-xl"/>
 
+            <x-button label="Tambah Peserta"><x-icon name="o-plus" class="w-9 h-9 text-green-500" /> Tambah Peserta </x-button>
+
         </div>
 
         <x-menu-separator />

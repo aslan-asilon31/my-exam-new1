@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Session;
 use Livewire\Attributes\On;
 use Mary\Traits\Toast;
 use App\Models\Asesmen;
-use App\Models\Pengguna;
+use App\Models\Pertanyaan;
 use App\Models\User;
 use App\Models\PenggunaAsesmen;
 
@@ -41,6 +41,7 @@ class DaftarAsesmen extends Component
     public $user;
     public $userName;
     public $userEmail;
+    public $cekPertanyaan;
 
 
     public function startTest()
@@ -55,30 +56,37 @@ class DaftarAsesmen extends Component
         $this->userId = auth()->id();
         $user = User::where('id', auth()->id())->first();
         $this->user = $user ? $user->toArray() : null;
-
+        
         $this->initialize();
+
     }
 
     public function initialize()
     {
 
-        $this->asesmens = Asesmen::where('apa_aktif', true)->get();
+        $this->asesmens = Asesmen::where('apa_aktif', true)->get()->toArray();
+        
+        if (!empty($this->asesmens)) {
+            $durasi = array_column($this->asesmens, 'durasi'); 
+            $this->asesmenDurasi = !empty($durasi) ? $durasi[0] : null; 
+        } else {
+            $this->asesmenDurasi = null;  
+        }
 
         foreach ($this->asesmens as $asesmen) {
             $tglMulai = \Carbon\Carbon::parse($asesmen['tgl_mulai']);
             $tglSelesai = \Carbon\Carbon::parse($asesmen['tgl_selesai']);
             $durasi = $tglMulai->diff($tglSelesai);
-            $asesmen->durasi = $durasi->format('%h jam %i menit %s detik');
+            $asesmen['durasi'] = $durasi->format('%h jam %i menit %s detik');
         }
 
-        $this->penggunaAsesmen['pengguna_asesmen.asesmen_id'] = $asesmen->id;
-        $this->penggunaAsesmen['pengguna_asesmen.tgl_mulai'] = $asesmen->tgl_mulai;
-        $this->penggunaAsesmen['pengguna_asesmen.tgl_selesai'] = $asesmen->tgl_selesai;
-        $this->penggunaAsesmen['pengguna_asesmen.asesmen_durasi'] = $asesmen->durasi;
+        $this->penggunaAsesmen['pengguna_asesmen.asesmen_id'] = $asesmen['id'];
+        $this->penggunaAsesmen['pengguna_asesmen.tgl_mulai'] = $asesmen['tgl_mulai'];
+        $this->penggunaAsesmen['pengguna_asesmen.tgl_selesai'] = $asesmen['tgl_selesai'];
+        $this->penggunaAsesmen['pengguna_asesmen.asesmen_durasi'] = $asesmen['durasi'];
 
         $this->apakahSudahIkutAsesmen = PenggunaAsesmen::where('pengguna_id', auth()->id())->get(); 
-
-
+        $this->cekPertanyaan = Pertanyaan::where('asesmen_id', $asesmen['id'])->get(); 
 
     }
 
