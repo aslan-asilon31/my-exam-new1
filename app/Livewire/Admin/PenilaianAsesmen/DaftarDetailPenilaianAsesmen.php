@@ -32,7 +32,7 @@ class DaftarDetailPenilaianAsesmen extends Component
     public $questionTimer;
     public $questionTimers = [];
 
-    #[\Livewire\Attributes\Session(key: 'penggunaAsesmen')] 
+    #[\Livewire\Attributes\Session(key: 'penggunaAsesmen')]
     public $penggunaAsesmen;
 
     #[\Livewire\Attributes\Locked]
@@ -43,7 +43,7 @@ class DaftarDetailPenilaianAsesmen extends Component
     public $userName;
     public $userEmail;
 
-    
+
     public function mount()
     {
         $this->penggunaAsesmen = [];
@@ -64,14 +64,14 @@ class DaftarDetailPenilaianAsesmen extends Component
         $this->user = $user ? $user->toArray() : null;
         $this->userName = $this->user['name'];
         $this->userEmail = $this->user['email'];
-    
+
         $this->ActivePenggunaAsesmens = PenggunaAsesmen::with([
           'user',
           'asesmen',
           'detail_pengguna_asesmens',
-          'asesmen.pertanyaans', 
+          'asesmen.pertanyaans',
         ])
-        ->where('pengguna_asesmens.pengguna_id',$this->id) 
+        ->where('pengguna_asesmens.pengguna_id',$this->id)
         ->orderBy('tgl_dibuat', 'desc')
         ->get()->toArray();
 
@@ -80,7 +80,7 @@ class DaftarDetailPenilaianAsesmen extends Component
 
     }
 
-    #[Title('Daftar Penilaian Asesmen')] 
+    #[Title('Daftar Penilaian Asesmen')]
     public function render()
     {
         return view('livewire.admin.penilaian-asesmen.daftar-detail-penilaian-asesmen');

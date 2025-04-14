@@ -21,17 +21,17 @@ class SoalAsesmen extends Component
     public $jawaban;
     public $durasiSoal ;
 
-    
+
     #[\Livewire\Attributes\Locked]
     public string $id = '';
 
-    #[\Livewire\Attributes\Session(key: 'detailPenggunaAsesmen')] 
+    #[\Livewire\Attributes\Session(key: 'detailPenggunaAsesmen')]
     public $detailPenggunaAsesmen;
 
-    #[\Livewire\Attributes\Session(key: 'indexDetailPenggunaAsesmen')] 
+    #[\Livewire\Attributes\Session(key: 'indexDetailPenggunaAsesmen')]
     public $indexDetailPenggunaAsesmen;
 
-    #[\Livewire\Attributes\Session(key: 'penggunaAsesmen')] 
+    #[\Livewire\Attributes\Session(key: 'penggunaAsesmen')]
     public $penggunaAsesmen;
 
     public function mount(){
@@ -46,7 +46,7 @@ class SoalAsesmen extends Component
             ->orderBy('no_urut')
             ->get()
             ->map(function($pertanyaan ,$index){
-                return [  
+                return [
                     'index' => $index,
                     'pertanyaan_id' => $pertanyaan->id,
                     'no_urut' => $pertanyaan->no_urut,
@@ -69,7 +69,7 @@ class SoalAsesmen extends Component
             $waktuMulaiSoal = now();
             $durasi = $this->detailPenggunaAsesmen[$this->indexDetailPenggunaAsesmen]['durasi'];
             $this->detailPenggunaAsesmen[$this->indexDetailPenggunaAsesmen]['waktu_mulai_soal'] = now()->format('Y-m-d H:i:s');
-            $this->detailPenggunaAsesmen[$this->indexDetailPenggunaAsesmen]['waktu_selesai_soal'] = $waktuMulaiSoal->addSeconds($durasi)->format('Y-m-d H:i:s'); 
+            $this->detailPenggunaAsesmen[$this->indexDetailPenggunaAsesmen]['waktu_selesai_soal'] = $waktuMulaiSoal->addSeconds($durasi)->format('Y-m-d H:i:s');
         }
 
         $this->detailPenggunaAsesmen[$this->indexDetailPenggunaAsesmen]['sisa_waktu'] = now()->diffInSeconds($this->detailPenggunaAsesmen[$this->indexDetailPenggunaAsesmen]['waktu_selesai_soal']);
@@ -84,17 +84,17 @@ class SoalAsesmen extends Component
 
     public function soalSelanjutnya(){
         $this->detailPenggunaAsesmen[$this->indexDetailPenggunaAsesmen]['jawaban'] = $this->jawaban;
-      
+
         if($this->indexDetailPenggunaAsesmen >= (count($this->detailPenggunaAsesmen)-1)){
 
             $penggunaAsesmen = PenggunaAsesmen::create([
                 'id' => (string) Str::uuid(),
-                'pengguna_id' => auth()->id(), 
+                'pengguna_id' => auth()->id(),
                 'asesmen_id' => $this->id,
                 'tgl_mulai' => now(),
                 'tgl_selesai' => now(),
-                'dibuat_oleh' => auth()->user()->name,
-                'diupdate_oleh' => auth()->user()->name,
+                'tgl_dibuat' => now(),
+                'tgl_diupdate' => now(),
                 'status' => 1,
             ]);
 
@@ -105,9 +105,11 @@ class SoalAsesmen extends Component
                     $data[] = [
                         'id' => (string) Str::uuid(),
                         'pengguna_asesmen_id' => $penggunaAsesmen->id,
-                        'pertanyaan_id' => $item['pertanyaan_id'], 
-                        'jawaban' => $item['jawaban'], 
+                        'pertanyaan_id' => $item['pertanyaan_id'],
+                        'jawaban' => $item['jawaban'],
                         'poin' => 0,
+                        'dibuat_oleh' => auth()->user()->name,
+                        'diupdate_oleh' => auth()->user()->name,
                         'apa_aktif' => 1,
                     ];
                 }
@@ -132,7 +134,7 @@ class SoalAsesmen extends Component
         $waktuMulaiSoal = now();
         $durasi = $this->detailPenggunaAsesmen[$this->indexDetailPenggunaAsesmen]['durasi'];
         $this->detailPenggunaAsesmen[$this->indexDetailPenggunaAsesmen]['waktu_mulai_soal'] = now()->format('Y-m-d H:i:s');
-        $this->detailPenggunaAsesmen[$this->indexDetailPenggunaAsesmen]['waktu_selesai_soal'] = $waktuMulaiSoal->addSeconds($durasi)->format('Y-m-d H:i:s'); 
+        $this->detailPenggunaAsesmen[$this->indexDetailPenggunaAsesmen]['waktu_selesai_soal'] = $waktuMulaiSoal->addSeconds($durasi)->format('Y-m-d H:i:s');
         $this->detailPenggunaAsesmen[$this->indexDetailPenggunaAsesmen]['sisa_waktu'] = now()->diffInSeconds($this->detailPenggunaAsesmen[$this->indexDetailPenggunaAsesmen]['waktu_selesai_soal']);
 
         $this->durasiSoal = intval($this->detailPenggunaAsesmen[$this->indexDetailPenggunaAsesmen]['sisa_waktu']);
@@ -140,7 +142,7 @@ class SoalAsesmen extends Component
         $this->dispatch('resetCountdown');
     }
 
-    
+
     public function render()
     {
         return view('livewire.asesmen.halaman-soal-asesmen')

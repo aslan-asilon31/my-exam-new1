@@ -57,6 +57,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/permission/create', App\Livewire\Admin\Permission\PermissionCrud::class)->name('permission-crud');
     Route::get('/permission/edit/{id}', App\Livewire\Admin\Permission\PermissionCrud::class)->name('permission-crud');
 
+    Route::get('/profil', App\Livewire\Admin\Profil\Profil::class)->name('profil');
+
+
     # halaman pengguna admin
     Route::get('/hasil-asesmen', \App\Livewire\User\HasilAsesmen\DaftarHasilAsesmen::class)->name('daftar-hasil-asesmen');
 

@@ -28,6 +28,7 @@ class User extends Authenticatable
     protected $keyType = 'string';
 
     protected $fillable = [
+        'id',
         'name',
         'email',
         'password',
@@ -65,5 +66,5 @@ class User extends Authenticatable
     {
         return $this->hasMany(PenggunaAsesmen::class, 'pengguna_id', 'id');
     }
-    
+
 }

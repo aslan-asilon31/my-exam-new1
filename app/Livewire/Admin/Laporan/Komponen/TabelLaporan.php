@@ -50,47 +50,32 @@ final class TabelLaporan extends PowerGridComponent
     public function datasource(): Builder
     {
         $users = User::query()
-                ->join('pengguna_asesmens', 'pengguna_asesmens.pengguna_id', '=', 'users.id')
-                ->join('detail_pengguna_asesmen', 'detail_pengguna_asesmen.pengguna_asesmen_id', '=', 'pengguna_asesmens.id')
-                ->join('pertanyaans', 'detail_pengguna_asesmen.pertanyaan_id', '=', 'pertanyaans.id')
-                ->select([
-                    'users.id',
-                    'users.name',
-                    'users.email',
-                    DB::raw('MAX(pengguna_asesmens.tgl_mulai) as tgl_mulai'),
-                    DB::raw('MAX(pengguna_asesmens.tgl_selesai) as tgl_selesai'),
-                    DB::raw('MAX(pengguna_asesmens.tgl_dibuat) as tgl_dibuat'),
-                    DB::raw('MAX(pengguna_asesmens.tgl_diupdate) as tgl_diupdate'),
-                    DB::raw('SUM(detail_pengguna_asesmen.poin) as total_poin'), // Hitung total poin
-                    DB::raw('COUNT(detail_pengguna_asesmen.pertanyaan_id) as total_soal') // Hitung total soal
-                ])
-                ->groupBy('users.id', 'users.name', 'users.email')
-                ->where('users.id', '<>', auth()->id())
-                ->orderByDesc('tgl_dibuat')
-                ->limit(10);
+        ->join('pengguna_asesmens', 'pengguna_asesmens.pengguna_id', '=', 'users.id')
+        ->join('detail_pengguna_asesmen', 'detail_pengguna_asesmen.pengguna_asesmen_id', '=', 'pengguna_asesmens.id')
+        ->join('pertanyaans', 'detail_pengguna_asesmen.pertanyaan_id', '=', 'pertanyaans.id')
+        ->select([
+            'users.id',
+            'users.name',
+            'users.email',
+            DB::raw('MAX(pengguna_asesmens.tgl_mulai) as tgl_mulai'),
+            DB::raw('MAX(pengguna_asesmens.tgl_selesai) as tgl_selesai'),
+            DB::raw('MAX(pengguna_asesmens.tgl_dibuat) as tgl_dibuat'),
+            DB::raw('MAX(pengguna_asesmens.tgl_diupdate) as tgl_diupdate'),
+            DB::raw('SUM(detail_pengguna_asesmen.poin) as total_poin'),
+            DB::raw('SUM(pertanyaans.bobot) as total_bobot'),
+            DB::raw(
+                "CASE
+                        WHEN SUM(pertanyaans.bobot) = 0 THEN 0
+                        ELSE (SUM(detail_pengguna_asesmen.poin)/SUM(pertanyaans.bobot)) * 100
+                    END AS hasil_poin"
+                )
+        ])
+        // ->groupBy('users.id', 'users.name', 'users.email')
+        ->orderByDesc(DB::raw("MAX(pengguna_asesmens.tgl_dibuat)"))
+        ->limit(10);
 
-            
-                return $users; 
+        return $users;
 
-  
-        // $users = User::query()
-        //         ->join('pengguna_asesmens', 'pengguna_asesmens.pengguna_id', '=', 'users.id')
-        //         ->join('detail_pengguna_asesmen', 'detail_pengguna_asesmen.pengguna_asesmen_id', '=', 'pengguna_asesmens.id')
-        //         ->select([
-        //             'users.id',
-        //             'users.name',
-        //             'users.email',
-        //             DB::raw('MAX(pengguna_asesmens.tgl_mulai) as tgl_mulai'),
-        //             DB::raw('MAX(pengguna_asesmens.tgl_selesai) as tgl_selesai'),
-        //             DB::raw('MAX(pengguna_asesmens.tgl_dibuat) as tgl_dibuat'),
-        //             DB::raw('MAX(pengguna_asesmens.tgl_diupdate) as tgl_diupdate'),
-        //             DB::raw('MAX(detail_pengguna_asesmen.poin) as poin'),
-        //         ])
-        //         ->groupBy('users.id', 'users.name', 'users.email')
-        //         ->where('users.id', '<>', auth()->id())
-        //         ->orderByDesc('tgl_dibuat')->get()->toArray();
-
-                // dd($users);
 
     }
 
@@ -107,7 +92,7 @@ final class TabelLaporan extends PowerGridComponent
     {
         return PowerGrid::fields()
             ->add('name', fn($record) => $record->name)
-            ->add('nilai_poin', fn($record) => $record->total_poin)
+            ->add('nilai_poin', fn($record) => round($record->hasil_poin,1))
             ->add('email', fn($record) => $record->email)
             ->add('tgl_mulai', fn($record) => $record->tgl_mulai)
             ->add('tgl_selesai', fn($record) => $record->tgl_selesai)
@@ -121,11 +106,11 @@ final class TabelLaporan extends PowerGridComponent
             Column::make('Name', 'name')
                 ->sortable()
                 ->headerAttribute('text-center', 'background-color:#851902; color:white;text-align:center;'),
-           
+
             Column::make('Nilai Poin', 'nilai_poin')
                 ->sortable()
                 ->headerAttribute('text-center', 'background-color:#851902; color:white;text-align:center;'),
-           
+
 
             Column::make('Tanggal Asesmen Mulai', 'tgl_mulai')
                 ->sortable()
