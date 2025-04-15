@@ -64,7 +64,7 @@ class DaftarAsesmen extends Component
     public function initialize()
     {
 
-        $this->asesmens = Asesmen::where('apa_aktif', true)->get()->toArray();
+        $this->asesmens = Asesmen::has('pertanyaans')->where('apa_aktif', true)->get()->toArray();
         
         if (!empty($this->asesmens)) {
             $durasi = array_column($this->asesmens, 'durasi'); 
@@ -74,11 +74,16 @@ class DaftarAsesmen extends Component
         }
 
         foreach ($this->asesmens as $asesmen) {
+
             $tglMulai = \Carbon\Carbon::parse($asesmen['tgl_mulai']);
             $tglSelesai = \Carbon\Carbon::parse($asesmen['tgl_selesai']);
             $durasi = $tglMulai->diff($tglSelesai);
-            $asesmen['durasi'] = $durasi->format('%h jam %i menit %s detik');
+            $this->asesmenDurasi = $durasi->format('%h jam %i menit %s detik');
+
         }
+
+
+
 
         $this->penggunaAsesmen['pengguna_asesmen.asesmen_id'] = $asesmen['id'];
         $this->penggunaAsesmen['pengguna_asesmen.tgl_mulai'] = $asesmen['tgl_mulai'];
@@ -86,7 +91,6 @@ class DaftarAsesmen extends Component
         $this->penggunaAsesmen['pengguna_asesmen.asesmen_durasi'] = $asesmen['durasi'];
 
         $this->apakahSudahIkutAsesmen = PenggunaAsesmen::where('pengguna_id', auth()->id())->get(); 
-        $this->cekPertanyaan = Pertanyaan::where('asesmen_id', $asesmen['id'])->get(); 
 
     }
 

@@ -27,8 +27,6 @@ Route::get('/', \App\Livewire\Auth\Login::class)->name('login');
 
 
 Route::middleware('auth:sanctum')->group(function () {
-    // Route::post('/logout', [\App\Http\Controllers\Api\AuthController::class, 'logout']);
-
 
     # admin
     Route::get('/laporan', \App\Livewire\Admin\Laporan\Laporan::class)->name('laporan');
@@ -46,8 +44,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/penilaian-asesmen/{id}', \App\Livewire\Admin\PenilaianAsesmen\PenilaianAsesmenCrud::class)->name('daftar-penilaian-asesmen-detail');
     Route::get('/penilaian-asesmen-detail/{id}', \App\Livewire\Admin\PenilaianAsesmen\DaftarDetailPenilaianAsesmen::class)->name('daftar-detail-penilaian-asesmen');
     Route::get('/penilaian-asesmen/{id}/readonly', \App\Livewire\Admin\PenilaianAsesmen\PenilaianAsesmenCrud::class)->name('penilaian-asesmen-crud-ubah')->defaults('readonly', true);
-
-    Route::get('/laporan-asesmen', \App\Livewire\Admin\LaporanAsesmen\DaftarLaporanAsesmen::class)->name('daftar-laporan-asesmen');
 
     Route::get('/role', App\Livewire\Admin\Role\RoleList::class)->name('role');
     Route::get('/role/create', App\Livewire\Admin\Role\RoleCrud::class)->name('role-create');
@@ -69,8 +65,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/soal-asesmen/{id}', \App\Livewire\Asesmen\SoalAsesmen::class)->name('soal-asesmen');
     Route::get('/konfirmasi-selesai', \App\Livewire\Asesmen\KonfirmasiSelesai::class)->name('konfirmasi-selesai');
 
-
-    Route::get('/try-asesmen', \App\Livewire\TryAsesmen::class)->name('try-asesmen');
 
 
 });

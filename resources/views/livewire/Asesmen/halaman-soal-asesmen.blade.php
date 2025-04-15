@@ -1,61 +1,52 @@
 <div>
 
 
-<div class="mx-auto max-w-full h-screen bg-white p-2 rounded-md shadow-md transform transition-transform duration-300 hover:shadow-2xl hover:scale-105">
+ <div class="flex justify-center">
+
+    <div class="w-full max-w-96 md:max-w-screen-sm border p-4">
     @if (empty($detailPenggunaAsesmen))
         <p class="text-gray-700 text-center">Tidak ada pertanyaan tersedia.</p>
     @else
-        <h1 class="text-sm md:text-md font-bold mb-6 text-orange-900 text-center">
+    <h1 class="text-sm md:text-md font-bold text-orange-900 text-center">
+        Soal {{ $indexDetailPenggunaAsesmen + 1 }} dari {{ count($detailPenggunaAsesmen) }}
+    </h1>
+    <hr class="my-4"/>
 
-            <p> Soal {{ $indexDetailPenggunaAsesmen + 1 }} dari {{ count($detailPenggunaAsesmen) }}</p>
-
-            <hr class="my-5" />
-            
-        </h1>
-        <p hidden>Timer Soal Berjalan: <span id="timer-soal-berjalan">00:00</span></p>
-        <div class="mb-6 ">
-      
-            <div class="w-full flex flex-col items-center">
-                @if($detailPenggunaAsesmen[$indexDetailPenggunaAsesmen]['image_url'])
-                    <div class="mb-3 text-center">
-                        <img src="{{ $detailPenggunaAsesmen[$indexDetailPenggunaAsesmen]['image_url'] }}" alt="Gambar Pengguna" class="w-48 md:w-64 object-cover"> 
-                    </div>
-                @endif
-            
-                <div class="mb-3 w-full md:w-96 text-left px-4">
-                    {!! $detailPenggunaAsesmen[$indexDetailPenggunaAsesmen]['pertanyaan'] !!}
-                </div>
+        @if($detailPenggunaAsesmen[$indexDetailPenggunaAsesmen]['image_url'])
+            <div class="mb-4 flex justify-center">
+                <img src="{{ $detailPenggunaAsesmen[$indexDetailPenggunaAsesmen]['image_url'] }}" alt="Gambar Pengguna" class="w-full md:w-3/4 border object-cover"> 
             </div>
-            
+        @endif
 
-            <div class="flex justify-center items-center w-full md:w-full ">
-                <textarea 
-                    wire:model="jawaban" class="w-full md:w-80 h-32 p-8 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
-                    placeholder="Tulis jawaban Anda di sini..."
-                ></textarea>
-            </div>
-
-            <div class="flex justify-center items-center w-full md:w-full ">
-                <span id="durasiSoal" >Durasi Soal {{ $indexDetailPenggunaAsesmen + 1 }}</span>
-            </div>
-
+        <div class="mb-4 text-left">
+            {!! $detailPenggunaAsesmen[$indexDetailPenggunaAsesmen]['pertanyaan'] !!}
         </div>
 
-        <div class="flex justify-center items-center w-full md:w-full  mt-8">
-
-            <button
-                wire:click="soalSelanjutnya"
-                class="text-xs md:text-sm bg-orange-900 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-            >
-                Selanjutnya
-            </button>
+        <div>
+            <textarea wire:model="jawaban" class="w-full border min-h-36 p-2 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500" placeholder="Tulis jawaban Anda di sini..."></textarea>
         </div>
+
+        <div class="flex flex-row  mt-2">
+            <div class="basis-1/2 flex items-center text-sm">
+                Sisa Waktu :&nbsp;<span  id="durasiSoal"></span>
+            </div>
+            <div class="basis-1/2 flex justify-end">
+                <button wire:click="soalSelanjutnya" class="btn btn-sm text-xs bg-orange-900 hover:bg-orange-700 text-white font-bold rounded focus:outline-none focus:shadow-outline">
+                    Selanjutnya
+                </button>
+            </div>
+        </div>
+
+
+        
     @endif
+    </div>
 
-
-
-
+ </div>
+    
 </div>
+
+
 
 @script 
 
@@ -98,7 +89,3 @@
 
 </script>
 @endscript 
-
-
-
-</div>

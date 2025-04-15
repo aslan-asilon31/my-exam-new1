@@ -76,15 +76,16 @@ class KonfirmasiMulai extends Component
         \Carbon\Carbon::setLocale('id');
         $this->initialize($this->id);
 
+
     }
 
     public function initialize()
     {
         $this->asesmen = Asesmen::where('id', $this->id)->first();
-        
-
-
-        $this->asesmenDurasi = $this->asesmen['durasi'];
+        $tglMulai = \Carbon\Carbon::parse($this->asesmen['tgl_mulai']);
+        $tglSelesai = \Carbon\Carbon::parse($this->asesmen['tgl_selesai']);
+        $durasi = $tglMulai->diff( $tglSelesai); 
+        $this->asesmenDurasi = $durasi->format('%h jam %i menit %s detik');
     }
 
     public function render()

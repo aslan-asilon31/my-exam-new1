@@ -47,6 +47,7 @@ final class TabelAsesmenEvaluator extends PowerGridComponent
     {
         return Asesmen::query()
             ->select([
+                DB::raw("ROW_NUMBER() OVER (ORDER BY asesmens.tgl_dibuat DESC) AS nomor_urut"),
                 'asesmens.id',
                 'asesmens.judul',
                 'asesmens.deskripsi',
@@ -71,6 +72,7 @@ final class TabelAsesmenEvaluator extends PowerGridComponent
                 <x-dropdown no-x-anchor class="btn-sm">
                     <x-menu-item title="Edit" Link="/asesmen-evaluator/ubah/' . e($record->id) . '"/>
                 </x-dropdown>'))
+            ->add('nomor_urut', fn($record) => $record->nomor_urut)
             ->add('judul', fn($record) => $record->judul)
             ->add('deskripsi')
             ->add('durasi')
@@ -87,64 +89,64 @@ final class TabelAsesmenEvaluator extends PowerGridComponent
             Column::make('Action', 'action')
                 ->visibleInExport(false)
                 ->bodyAttribute('text-center')
-                ->headerAttribute('text-center', 'background-color:#851902; color:white;text-align:center;'),
+                ->headerAttribute('text-center', 'background-color:#A16A38; color:white;text-align:center;'),
 
 
-            Column::make('ID', 'id')
+            Column::make('nomor_urut', 'nomor_urut')
                 ->visibleInExport(false) 
                 ->sortable()
                 ->searchable()
-                ->headerAttribute('text-center', 'background-color:#851902; color:white;text-align:center;'),
+                ->headerAttribute('text-center', 'background-color:#A16A38; color:white;text-align:center;'),
 
 
             Column::make('Judul', 'judul')
                 ->sortable()
                 ->searchable()
-                ->headerAttribute('text-center', 'background-color:#851902; color:white;text-align:center;'),
+                ->headerAttribute('text-center', 'background-color:#A16A38; color:white;text-align:center;'),
 
 
             Column::make('Deskripsi', 'deskripsi')
                 ->sortable()
                 ->searchable()
-                ->headerAttribute('text-center', 'background-color:#851902; color:white;text-align:center;'),
+                ->headerAttribute('text-center', 'background-color:#A16A38; color:white;text-align:center;'),
 
 
             Column::make('Durasi', 'durasi')
                 ->sortable()
                 ->searchable()
-                ->headerAttribute('text-center', 'background-color:#851902; color:white;text-align:center;'),
+                ->headerAttribute('text-center', 'background-color:#A16A38; color:white;text-align:center;'),
 
 
             Column::make('Tanggal mulai', 'tgl_mulai')
                 ->sortable()
                 ->searchable()
-                ->headerAttribute('text-center', 'background-color:#851902; color:white;text-align:center;'),
+                ->headerAttribute('text-center', 'background-color:#A16A38; color:white;text-align:center;'),
 
             Column::make('Tanggal selesai', 'tgl_selesai')
                 ->sortable()
                 ->searchable()
-                ->headerAttribute('text-center', 'background-color:#851902; color:white;text-align:center;'),
+                ->headerAttribute('text-center', 'background-color:#A16A38; color:white;text-align:center;'),
 
             Column::make('Dibuat oleh', 'dibuat_oleh')
                 ->sortable()
                 ->searchable()
-                ->headerAttribute('text-center', 'background-color:#851902; color:white;text-align:center;'),
+                ->headerAttribute('text-center', 'background-color:#A16A38; color:white;text-align:center;'),
 
             Column::make('Dibuat oleh', 'diupdate_oleh')
                 ->sortable()
                 ->searchable()
-                ->headerAttribute('text-center', 'background-color:#851902; color:white;text-align:center;'),
+                ->headerAttribute('text-center', 'background-color:#A16A38; color:white;text-align:center;'),
 
 
             Column::make('diupdate oleh', 'diupdate_oleh')
                 ->sortable()
                 ->searchable()
-                ->headerAttribute('text-center', 'background-color:#851902; color:white;text-align:center;'),
+                ->headerAttribute('text-center', 'background-color:#A16A38; color:white;text-align:center;'),
 
             Column::make('tgl_dibuat', 'diupdate_oleh')
                 ->sortable()
                 ->searchable()
-                ->headerAttribute('text-center', 'background-color:#851902; color:white;text-align:center;'),
+                ->headerAttribute('text-center', 'background-color:#A16A38; color:white;text-align:center;'),
 
 
 

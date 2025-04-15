@@ -83,11 +83,6 @@
         </x-form>
 
 
-    <!-- Loading Indicator -->
-    <div id="loadingIndicator" style="display: none; text-align: center; margin-top: 20px;">
-        <p>Loading...</p>
-        <div class="loader"></div> <!-- You can add a spinner here -->
-    </div>
 
 <script>
     function toggleCheckboxes(source) {

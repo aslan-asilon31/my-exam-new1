@@ -92,56 +92,56 @@ final class TabelAsesmen extends PowerGridComponent
             Column::make('Action', 'action')
                 ->visibleInExport(false)
                 ->bodyAttribute('text-center')
-                ->headerAttribute('text-center', 'background-color:#851902; color:white;text-align:center;'),
+                ->headerAttribute('text-center', 'background-color:#A16A38; color:white;text-align:center;'),
 
 
             Column::make('ID', 'id')
                 ->visibleInExport(false) // Hide ID column in export
                 ->sortable()
-                ->headerAttribute('text-center', 'background-color:#851902; color:white;text-align:center;'),
+                ->headerAttribute('text-center', 'background-color:#A16A38; color:white;text-align:center;'),
 
 
             Column::make('Judul', 'judul')
                 ->sortable()
-                ->headerAttribute('text-center', 'background-color:#851902; color:white;text-align:center;'),
+                ->headerAttribute('text-center', 'background-color:#A16A38; color:white;text-align:center;'),
 
 
             Column::make('Deskripsi', 'deskripsi')
                 ->sortable()
                 ->searchable()
-                ->headerAttribute('text-center', 'background-color:#851902; color:white;text-align:center;'),
+                ->headerAttribute('text-center', 'background-color:#A16A38; color:white;text-align:center;'),
 
 
             Column::make('Durasi', 'durasi')
                 ->sortable()
-                ->headerAttribute('text-center', 'background-color:#851902; color:white;text-align:center;'),
+                ->headerAttribute('text-center', 'background-color:#A16A38; color:white;text-align:center;'),
 
 
             Column::make('Tanggal mulai', 'tgl_mulai')
                 ->sortable()
-                ->headerAttribute('text-center', 'background-color:#851902; color:white;text-align:center;'),
+                ->headerAttribute('text-center', 'background-color:#A16A38; color:white;text-align:center;'),
 
             Column::make('Tanggal selesai', 'tgl_selesai')
                 ->sortable()
-                ->headerAttribute('text-center', 'background-color:#851902; color:white;text-align:center;'),
+                ->headerAttribute('text-center', 'background-color:#A16A38; color:white;text-align:center;'),
 
             Column::make('Dibuat oleh', 'dibuat_oleh')
                 ->sortable()
-                ->headerAttribute('text-center', 'background-color:#851902; color:white;text-align:center;'),
+                ->headerAttribute('text-center', 'background-color:#A16A38; color:white;text-align:center;'),
 
             Column::make('Dibuat oleh', 'diupdate_oleh')
                 ->sortable()
-                ->headerAttribute('text-center', 'background-color:#851902; color:white;text-align:center;'),
+                ->headerAttribute('text-center', 'background-color:#A16A38; color:white;text-align:center;'),
 
 
             Column::make('diupdate oleh', 'diupdate_oleh')
                 ->sortable()
-                ->headerAttribute('text-center', 'background-color:#851902; color:white;text-align:center;'),
+                ->headerAttribute('text-center', 'background-color:#A16A38; color:white;text-align:center;'),
 
 
             Column::make('tgl_dibuat', 'diupdate_oleh')
                 ->sortable()
-                ->headerAttribute('text-center', 'background-color:#851902; color:white;text-align:center;'),
+                ->headerAttribute('text-center', 'background-color:#A16A38; color:white;text-align:center;'),
 
 
 

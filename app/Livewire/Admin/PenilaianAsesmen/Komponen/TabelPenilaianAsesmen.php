@@ -97,27 +97,27 @@ final class TabelPenilaianAsesmen extends PowerGridComponent
             Column::make('', 'action')
                 ->visibleInExport(false)
                 ->bodyAttribute('text-center')
-                ->headerAttribute('text-center', 'background-color:#851902; color:white;text-align:center;'),
+                ->headerAttribute('text-center', 'background-color:#A16A38; color:white;text-align:center;'),
 
             Column::make('Name', 'name')
                 ->sortable()
-                ->headerAttribute('text-center', 'background-color:#851902; color:white;text-align:center;'),
+                ->headerAttribute('text-center', 'background-color:#A16A38; color:white;text-align:center;'),
 
             Column::make('Tanggal Asesmen Mulai', 'tgl_mulai')
                 ->sortable()
-                ->headerAttribute('text-center', 'background-color:#851902; color:white;text-align:center;'),
+                ->headerAttribute('text-center', 'background-color:#A16A38; color:white;text-align:center;'),
 
             Column::make('Tanggal Asesmen Selesai', 'tgl_selesai')
                 ->sortable()
-                ->headerAttribute('text-center', 'background-color:#851902; color:white;text-align:center;'),
+                ->headerAttribute('text-center', 'background-color:#A16A38; color:white;text-align:center;'),
 
             Column::make('Tanggal Dibuat', 'tgl_dibuat')
                 ->sortable()
-                ->headerAttribute('text-center', 'background-color:#851902; color:white;text-align:center;'),
+                ->headerAttribute('text-center', 'background-color:#A16A38; color:white;text-align:center;'),
 
             Column::make('Tanggal Diupdate', 'tgl_diupdate')
                 ->sortable()
-                ->headerAttribute('text-center', 'background-color:#851902; color:white;text-align:center;'),
+                ->headerAttribute('text-center', 'background-color:#A16A38; color:white;text-align:center;'),
 
 
         ];

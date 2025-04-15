@@ -24,12 +24,13 @@ class User extends Authenticatable
 
     protected $table = 'users';
     public $timestamps = false;
-    public $incrementing = false;
+    public $incrementing = true;
     protected $keyType = 'string';
 
     protected $fillable = [
         'id',
         'name',
+        'img_url',
         'email',
         'password',
         'created_by',

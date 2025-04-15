@@ -6,13 +6,13 @@
         <x-menu activate-by-route>
 
             <x-menu-sub title="Setting" icon="o-cog-6-tooth">
-            <x-menu-item title="Profile" icon="o-user-circle" link="#" />
+            <x-menu-item title="Profile" link="/profil"  :class="request()->is('profil') ? 'active' : ''" icon="o-user-circle"  />
 
             <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                 @csrf
             </form>
 
-            <x-menu-item title="Logout" wire.confirm="apakah kamu yakin ingin logout ?" icon="o-cog-6-tooth" link="{{ route('logout') }}"
+            <x-menu-item title="Logout" wire.confirm="apakah kamu yakin ingin logout ?" icon="o-arrow-left-start-on-rectangle" link="{{ route('logout') }}"
                 onclick="event.preventDefault();
                             document.getElementById('logout-form').submit();" >
                     {{ __('Logout') }}
@@ -21,10 +21,8 @@
             </x-menu-sub>
             <x-menu-separator />
 
-
-
             @can('dashboard-lihat')
-            <x-menu-item title="Dashboard" icon="o-home" link="/dasbor"  :class="request()->is('dasbor') ? 'active' : ''" />
+            <x-menu-item title="Dashboard" icon="o-presentation-chart-bar" link="/dasbor"  :class="request()->is('dasbor') ? 'active' : ''" />
             @endcan
 
             @can('dashboard-user-lihat')
@@ -32,7 +30,7 @@
             @endcan
 
             @can('laporan-lihat')
-            <x-menu-item title="Laporan" icon="o-home" link="/laporan"  :class="request()->is('laporan') ? 'active' : ''" />
+            <x-menu-item title="Laporan" icon="o-book-open" link="/laporan"  :class="request()->is('laporan') ? 'active' : ''" />
             @endcan
             
             @if(auth()->user()->can('pengguna-lihat') || auth()->user()->can('asesmen_evaluator-lihat') || auth()->user()->can('penilaian_asesmen-lihat') || auth()->user()->can('hasil_asesmen-lihat'))

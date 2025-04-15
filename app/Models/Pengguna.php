@@ -21,18 +21,18 @@ class Pengguna extends Authenticatable
 
     protected $table = 'users';
     public $timestamps = false;
-    public $incrementing = false; 
+    public $incrementing = true; 
     protected $keyType = 'string'; 
 
     protected $fillable = [
         'id',
-        'nama',
-        'surel',
-        'sandi',
-        'dibuat_oleh',
-        'diupdate_oleh',
-        'tgl_dibuat',
-        'tgl_diupdate',
+        'name',
+        'email',
+        'password',
+        'created_by',
+        'updated_by',
+        'created_at',
+        'updated_at',
     ];
 
     public function pengguna_asesmens()

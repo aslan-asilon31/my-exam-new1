@@ -1,30 +1,47 @@
 <div>
+    <style>
+        .profile-grid {
+            display: grid;
+            grid-template-columns: 80px 1fr;
+            gap: 2px;
+            align-items: start;
+        }
+    
+        .profile-image {
+            width: 70px;
+            height: 70px;
+            object-fit: cover;
+            border-radius: 50%;
+        }
 
-    <x-card  :title="$title"  :url="$url" >
-
-        <div class="card-body">
-            <h5 class="card-title">Profil Anda</h5>
-            <div class="card-body">
-        <div class="d-flex align-items-center">
-                    <img src="{{ user->image_url ?? asset('user-no.png') }}" alt="image {{ $user->name }}" class="rounded-circle" style="width: 50px; height: 50px; object-fit: cover;">
-                    <div class="ml-3">
-                        <h5 class="card-title">{{ user()->auth->name ?? '-'  }}</h5>
-                        <p class="card-text">{{ user()->auth->email ?? '-'  }}</p>
-                    </div>
+    </style>
+    
+    <x-card :title="$title" :url="$url">
+        <div class="profile-grid">
+            <!-- Kiri: Foto Profil -->
+            <div class="text-center">
+                <img 
+                    src="{{ $user->image_url ?? asset('user-no.png') }}" 
+                    alt="image {{ $user->name }}" 
+                    class="profile-image"
+                >
+            </div>
+    
+            <!-- Kanan: Data User -->
+            <div>
+                <div class="form-group">
+                    <p class="text-sm">Nama : {{ $user->name ?? '-' }}</p>
                 </div>
-                <ul class="list-group list-group-flush mt-3">
-                    <li class="list-group-item">
-                        <strong>Roles:</strong>
-                        <ul>
-                        {{ $user_role  ?? 'Tidak ada role' }}
-                        </ul>
-                    </li>
-                </ul>
+    
+                <div class="form-group">
+                    <p class="text-sm">Email : {{ $user->email ?? '-' }}</p>
+                </div>
+    
+                <div class="form-group">
+                    <p class="text-sm">Roles : {{ $user_role ?? 'Tidak ada role' }}</p>
+                </div>
             </div>
         </div>
-
     </x-card>
-
-
-
+    
 </div>

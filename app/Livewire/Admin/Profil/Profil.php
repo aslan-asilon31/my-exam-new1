@@ -14,12 +14,13 @@ class Profil extends Component
     public $title = "Profil";
     public $url = "profil";
     public $user_role;
+    public $user;
 
 
 
     public function mount()
     {
-        $user = User::where('id',user()->id())->first();
+        $this->user = User::where('id',Auth::id())->first();
         $user_login = Auth::user();
 
         $this->user_role = $user_login->getRoleNames()->first();

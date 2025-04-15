@@ -47,7 +47,7 @@ class Role extends Authenticatable
                 'guard_name',
             ]);
         }])
-        ->orderBy('id') // Mengurutkan berdasarkan ID role
+        ->orderBy('id') 
         ->get();
     }
 

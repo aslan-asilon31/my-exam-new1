@@ -1,5 +1,7 @@
 <x-card :title="$title" shadow separator class="border shadow">
 
+
+
     <div class="grid grid-cols-2 mb-4">
       <div>
         <x-button label="List" link="{{ $url }}" class="btn-ghost btn-outline" />
