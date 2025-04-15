@@ -13,15 +13,18 @@
   </div>
 
   <!-- Right Pane (Form) -->
-  <div class="w-full  lg:w-1/2 flex items-center justify-center p-4">
 
-    <x-form wire:submit="login" class="space-y-4">
+  <div class="w-full border-2 lg:w-1/2 flex items-center justify-center  md:p-4">
+
+    <x-form wire:submit="login" class="space-y-2 ">
+        <p class="text-md font-bold text-center pt-8 pb-4 ">LOGIN</pc>
+
         <x-input wire:model="email" label="email" placeholder="email" icon-right="o-user"
           right />
         <x-password wire:model="password" class="block text-sm font-medium text-gray-700" label="password"  placeholder="password"
           password-icon="o-lock-closed" password-visible-icon="o-lock-open" right />
 
-        <x-button type="submit" spinner="login" class="block text-sm font-medium text-gray-700" class="bg-blue-700 hover:bg-blue-400 text-white btn-block">
+        <x-button type="submit" spinner="login" class="bg-[#A16A38] hover:bg-red-900  block text-sm font-medium text-white p-2" >
           Masuk
         </x-button>
         <x-errors class="text-white" />

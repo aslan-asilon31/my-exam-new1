@@ -14,10 +14,12 @@
 
             <x-menu-item title="Logout" wire.confirm="apakah kamu yakin ingin logout ?" icon="o-arrow-left-start-on-rectangle" link="{{ route('logout') }}"
                 onclick="event.preventDefault();
-                            document.getElementById('logout-form').submit();" >
+                        if (confirm('Apakah kamu yakin ingin logout?')) {
+                            document.getElementById('logout-form').submit();
+                        }">
                     {{ __('Logout') }}
             </x-menu-item>
-            
+
             </x-menu-sub>
             <x-menu-separator />
 
@@ -32,7 +34,7 @@
             @can('laporan-lihat')
             <x-menu-item title="Laporan" icon="o-book-open" link="/laporan"  :class="request()->is('laporan') ? 'active' : ''" />
             @endcan
-            
+
             @if(auth()->user()->can('pengguna-lihat') || auth()->user()->can('asesmen_evaluator-lihat') || auth()->user()->can('penilaian_asesmen-lihat') || auth()->user()->can('hasil_asesmen-lihat'))
                 <x-menu-separator title="Management" icon="o-sparkles" />
             @endif
