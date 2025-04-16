@@ -20,7 +20,7 @@
     <x-form wire:submit="login" class="p-4 mt-2 border-2 ">
         <p class="text-md font-bold text-center  pb-2 ">LOGIN</pc>
 
-        <x-input class="outline-[#954832]" wire:model="email" label="email" placeholder="email" icon-right="o-user"
+        <x-input class="outline-[#954832] caret-pink-500" wire:model="email" label="email" placeholder="email" icon-right="o-user"
           right />
         <x-password wire:model="password" class="block text-sm font-medium text-gray-700" label="password"  placeholder="password"
           password-icon="o-lock-closed" password-visible-icon="o-lock-open" right />
