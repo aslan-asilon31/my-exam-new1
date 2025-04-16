@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 use App\Models\User;
 use Spatie\Permission\Traits;
-
+use Spatie\Permission\PermissionRegistrar;
 
 class Login extends Component
 {
@@ -19,7 +19,7 @@ class Login extends Component
 
     public $email;
     public $password;
-    public  $title = "Halaman Login";
+    public $title = "Halaman Login";
 
 
     protected $rules = [
@@ -27,11 +27,10 @@ class Login extends Component
         'password' => 'required|min:5',
     ];
 
-    
-
-
     public function mount()
     {
+        app()[PermissionRegistrar::class]->forgetCachedPermissions();
+
         if (Auth::check()) {
 
             $this->userId = auth()->id();
@@ -82,7 +81,8 @@ class Login extends Component
     public function render()
     {
         return view('livewire.auth.login')
-        ->layout('components.layouts.app_auth');
+        ->layout('components.layouts.app_auth')
+        ->title($this->title);
     }
 }
 

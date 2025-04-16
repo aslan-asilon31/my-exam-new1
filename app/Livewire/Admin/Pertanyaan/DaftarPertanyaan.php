@@ -155,7 +155,7 @@ class DaftarPertanyaan extends Component
 
     public function ubah($id)
     {
-      $this->idSoal = $id;
+        $this->idSoal = $id;
       $masterData = Pertanyaan::findOrFail($this->idSoal);
         $this->masterSoalForm->fill($masterData);
         $this->modalPertanyaan = true;

@@ -1,6 +1,8 @@
 <div class="flex flex-col lg:flex-row h-screen">
+
   <!-- Left Pane (Image) -->
   <div class="flex items-center justify-center bg-white text-black lg:flex-1">
+
       <!-- Gambar untuk Mobile -->
       <div class="max-w-md text-center lg:hidden my-4">
           <img src="{{ asset('umeda-logo.png') }}" class="w-48" alt="" srcset="">
@@ -13,13 +15,12 @@
   </div>
 
   <!-- Right Pane (Form) -->
+  <div class="w-full border-x-2 lg:w-1/2 flex items-center justify-center  md:p-4">
 
-  <div class="w-full border-2 lg:w-1/2 flex items-center justify-center  md:p-4">
+    <x-form wire:submit="login" class="p-4 mt-2 border-2 ">
+        <p class="text-md font-bold text-center  pb-2 ">LOGIN</pc>
 
-    <x-form wire:submit="login" class="space-y-2 ">
-        <p class="text-md font-bold text-center pt-8 pb-4 ">LOGIN</pc>
-
-        <x-input wire:model="email" label="email" placeholder="email" icon-right="o-user"
+        <x-input class="outline-[#954832]" wire:model="email" label="email" placeholder="email" icon-right="o-user"
           right />
         <x-password wire:model="password" class="block text-sm font-medium text-gray-700" label="password"  placeholder="password"
           password-icon="o-lock-closed" password-visible-icon="o-lock-open" right />

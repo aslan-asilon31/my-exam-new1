@@ -28,7 +28,7 @@
             @endcan
 
             @can('dashboard-user-lihat')
-            <x-menu-item title="Dashboard" icon="o-home" link="/dasbor-user"  :class="request()->is('dasbor') ? 'active' : ''" />
+                <x-menu-item title="Dashboard User" icon="o-home" link="/dasbor-user"  :class="request()->is('dasbor-user') ? 'active' : ''" />
             @endcan
 
             @can('laporan-lihat')

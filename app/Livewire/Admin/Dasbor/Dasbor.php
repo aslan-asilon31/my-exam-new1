@@ -46,8 +46,6 @@ class Dasbor extends Component
         $user = Auth::user();
         $this->user_role = $user->getRoleNames()->first();
 
-        // $this->masterForm = new UserForm();
-
         $this->initialize();
 
     }
@@ -120,7 +118,6 @@ class Dasbor extends Component
         $validatedUserForm['updated_at'] = now();
 
 
-
         $roles_id = 1;
         $user = User::create($validatedUserForm);
 
@@ -132,11 +129,9 @@ class Dasbor extends Component
         ]);
 
 
-        // Tutup modal, reset form
         $this->modalUser = false;
         $this->dispatch('user-dibuat');
 
-        // Feedback sukses
         $this->success('Pengguna berhasil ditambahkan');
     }
 
