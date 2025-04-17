@@ -242,6 +242,7 @@ class DaftarPertanyaan extends Component
     #[Title('Pertanyaan')]
     public function render()
     {
-        return view('livewire.admin.pertanyaan.daftar-pertanyaan');
+        return view('livewire.admin.pertanyaan.daftar-pertanyaan')
+        ->title($this->title);
     }
 }

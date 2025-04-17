@@ -58,6 +58,7 @@ final class TabelPenilaianAsesmen extends PowerGridComponent
                     DB::raw('MAX(pengguna_asesmens.tgl_selesai) as tgl_selesai'),
                     DB::raw('MAX(pengguna_asesmens.tgl_dibuat) as tgl_dibuat'),
                     DB::raw('MAX(pengguna_asesmens.tgl_diupdate) as tgl_diupdate'),
+                    DB::raw('ROW_NUMBER() OVER (ORDER BY MAX(pengguna_asesmens.tgl_dibuat) DESC) AS no_urut')
                 ])
                 ->groupBy('users.id', 'users.name', 'users.email')
                 ->where('users.id', '<>', auth()->id())
@@ -83,6 +84,7 @@ final class TabelPenilaianAsesmen extends PowerGridComponent
                 <x-dropdown no-x-anchor class="btn-sm">
                     <x-menu-item title="Beri nilai" Link="/penilaian-asesmen-detail/' . e($record->id) . '"/>
                 </x-dropdown>'))
+            ->add('no_urut', fn($record) => $record->no_urut)
             ->add('name', fn($record) => $record->name)
             ->add('email', fn($record) => $record->email)
             ->add('tgl_mulai', fn($record) => $record->tgl_mulai)
@@ -98,6 +100,13 @@ final class TabelPenilaianAsesmen extends PowerGridComponent
                 ->visibleInExport(false)
                 ->bodyAttribute('text-center')
                 ->headerAttribute('text-center', 'background-color:#A16A38; color:white;text-align:center;'),
+
+            Column::make('Nomor Urut', 'no_urut')
+                ->visibleInExport(false) 
+                ->sortable()
+                ->searchable()
+                ->headerAttribute('text-center', 'background-color:#A16A38; color:white;text-align:center;'),
+
 
             Column::make('Name', 'name')
                 ->sortable()
@@ -127,6 +136,7 @@ final class TabelPenilaianAsesmen extends PowerGridComponent
     {
         return [
             Filter::inputText('Name', 'name')->placeholder('name'),
+            Filter::inputText('Nomor Urut', 'no_urut')->placeholder('no_urut'),
             Filter::inputText('Tanggal Mulai', 'tgl_mulai')->placeholder('tgl_mulai'),
             Filter::inputText('Tanggal Selesai', 'tgl_selesai')->placeholder('tgl_selesai'),
             Filter::inputText('Tanggal Dibuat', 'tgl_dibuat')->placeholder('tgl_dibuat'),

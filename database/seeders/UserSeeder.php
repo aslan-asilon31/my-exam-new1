@@ -104,38 +104,6 @@ class UserSeeder extends Seeder
             $user->assignRole($developerRole);
         }
 
-        // try {
-        //     // $s_admin = User::create([
-        //     //     "name" => "Aslan Asilon",
-        //     //     'email' => 'aslanasilon@gmail.com',
-        //     //     'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
-        //     // ]);
-        //     // Roler::UserRole($s_admin, ["api", "developer"]);
-
-        //     $s_admin = User::create([
-        //         "name" => "ego oktafanda",
-        //         'email' => 'super_admin@mail.com',
-        //         'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
-        //     ]);
-        //     Roler::UserRole($s_admin, ["api", "super-admin"]);
-
-        //     $admin = User::create([
-        //         "name" => "admin",
-        //         'email' => 'admin@mail.com',
-        //         'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
-        //     ]);
-        //     Roler::UserRole($admin, ["api", "admin"]);
-
-        // } catch (\Exception $e) {
-        //     dd($e);
-        // }
-
-        // User::factory()->count(30)->create([
-        //     'email_verified_at' => now(),
-        //     'password' => Hash::make('password'), // Menggunakan password default
-        //     'remember_token' => Str::random(10),
-        //     'profile_photo_path' => null,
-        //     'current_company_id' => null,
-        // ]);
+        
     }
 }

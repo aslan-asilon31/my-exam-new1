@@ -9,13 +9,16 @@ use App\Models\Permission;
 use App\Models\RoleHasPermission;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Livewire\Attributes\Title;
+
 
 class RoleCrud extends Component
 {
 
     public function render()
     {
-        return view('livewire.admin.role.role-crud')->title($this->title);
+        return view('livewire.admin.role.role-crud')
+        ->title($this->title);
     }
 
 

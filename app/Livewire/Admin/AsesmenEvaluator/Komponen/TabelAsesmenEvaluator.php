@@ -92,7 +92,7 @@ final class TabelAsesmenEvaluator extends PowerGridComponent
                 ->headerAttribute('text-center', 'background-color:#A16A38; color:white;text-align:center;'),
 
 
-            Column::make('nomor_urut', 'nomor_urut')
+            Column::make('Nomor Urut', 'nomor_urut')
                 ->visibleInExport(false) 
                 ->sortable()
                 ->searchable()

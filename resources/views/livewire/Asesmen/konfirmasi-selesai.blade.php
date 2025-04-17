@@ -10,8 +10,9 @@
         
         <div class="pt-8 flex">
             <!-- Kolom Kiri -->
+            
             <div class="flex-1 pr-2">
-           
+
                 <div class="mb-4">
                     <h3 class="text-sm font-bold  text-left">Nama:</h3>
                     <span class="text-sm md:text-md text-right">{{ auth()->user()->name }}</span>

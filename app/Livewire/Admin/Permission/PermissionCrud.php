@@ -6,6 +6,8 @@ use Illuminate\Support\Facades\Auth;
 use Spatie\Permission\Models\Permission;
 use Livewire\Component;
 use App\Livewire\Admin\Permission\Forms\PermissionForm;
+use Livewire\Attributes\Title;
+
 
 class PermissionCrud extends Component
 {
@@ -14,7 +16,8 @@ class PermissionCrud extends Component
 
     public function render()
     {
-        return view('livewire.admin.Permission.Permission-crud');
+        return view('livewire.admin.Permission.Permission-crud')
+        ->title($this->title);
     }
 
   use \Livewire\WithFileUploads;

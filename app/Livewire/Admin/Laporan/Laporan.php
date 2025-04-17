@@ -13,6 +13,7 @@ class Laporan extends Component
 
     public function render()
     {
-        return view('livewire.admin.laporan.laporan');
+        return view('livewire.admin.laporan.laporan')
+        ->title($this->title);
     }
 }

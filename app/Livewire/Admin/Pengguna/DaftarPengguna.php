@@ -13,6 +13,7 @@ class DaftarPengguna extends Component
     #[Title('Pengguna')] 
     public function render()
     {
-        return view('livewire.admin.pengguna.daftar-pengguna');
+        return view('livewire.admin.pengguna.daftar-pengguna')
+        ->title($this->title);
     }
 }

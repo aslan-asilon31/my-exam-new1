@@ -9,7 +9,6 @@ use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 class RoleForm extends Form
 {
     public string|null $name = null;
-    public string|null $guard_name = null;
     public array $selectedPermissions = [];
 
 
@@ -17,7 +16,6 @@ class RoleForm extends Form
   {
       return [
           'name' => 'required|string|max:255',
-          'guard_name' => 'required|string|max:255',
           'selectedPermissions' => 'array',
           'selectedPermissions.*' => 'exists:permissions,id',
       ];
@@ -27,9 +25,7 @@ class RoleForm extends Form
   {
       return [
           'name' => 'name',
-          'guard_name' => 'guard name',
           'selectedPermissions' => 'selectedPermissions',
-
       ];
   }
 }

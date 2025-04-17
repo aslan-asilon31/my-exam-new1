@@ -9,6 +9,8 @@ use App\Models\Page;
 use App\Models\Pertanyaan;
 use App\Models\Asesmen;
 use Illuminate\Support\Str;
+use Livewire\Attributes\Title;
+
 use Livewire\Attributes\On;
 
 class UbahAsesmenEvaluator extends Component

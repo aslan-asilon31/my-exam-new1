@@ -14,7 +14,8 @@ class DaftarAsesmenEvaluator extends Component
 
     public function render()
     {
-        return view('livewire.admin.asesmen-evaluator.daftar-asesmen-evaluator');
+        return view('livewire.admin.asesmen-evaluator.daftar-asesmen-evaluator')
+        ->title($this->title);
     }
 
 }

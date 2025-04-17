@@ -14,6 +14,7 @@ class DaftarAsesmenPartisipan extends Component
     #[Title('asesmens')] 
     public function render()
     {
-        return view('livewire.admin.asesmen.daftar-asesmen-partisipan');
+        return view('livewire.admin.asesmen.daftar-asesmen-partisipan')
+        ->title($this->title);
     }
 }

@@ -83,6 +83,7 @@ class DaftarDetailPenilaianAsesmen extends Component
     #[Title('Daftar Penilaian Asesmen')]
     public function render()
     {
-        return view('livewire.admin.penilaian-asesmen.daftar-detail-penilaian-asesmen');
+        return view('livewire.admin.penilaian-asesmen.daftar-detail-penilaian-asesmen')
+        ->title($this->title);
     }
 }

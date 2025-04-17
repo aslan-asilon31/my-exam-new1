@@ -62,6 +62,7 @@ class RoleCrud extends Component
     public  $selectedPermissions = [];
     public  $groupedPermissions = [];
     public bool $checkAll = false;
+    public $checkAction = false;
 
 
 
@@ -90,13 +91,13 @@ class RoleCrud extends Component
 
   public function create()
   {
-    // dd($this->masterForm);
     $this->masterForm->reset();
+    $this->permissions = DB::table('permissions')->select('id', 'name')->get();
+    $this->checkAction = true;
   }
 
   public function store()
   {
-    // $this->permission($this->basePageName.'-create');
 
     $validatedForm = $this->validate(
       $this->masterForm->rules(),
@@ -178,24 +179,14 @@ class RoleCrud extends Component
         ->get();
 
 
-        // $this->groupedPermissions = [];
-        // foreach ($this->permissions as $permission) {
-        //     $parts = explode('-', $permission->name);
-        //     if (count($parts) > 2) {
-        //         $groupKey = $parts[1]; 
-        //         $this->groupedPermissions[$groupKey][] = $permission;
-        //     }
-        // }
-
         $this->groupedPermissions = [];
         foreach ($this->permissions as $permission) {
             $parts = explode('-', $permission->name);
-            if (count($parts) > 1) { // Ensure there is at least one dash
-                $groupKey = $parts[0]; // Get the part before the dash
+            if (count($parts) > 2) {
+                $groupKey = $parts[1]; 
                 $this->groupedPermissions[$groupKey][] = $permission;
             }
         }
-
 
 
 
