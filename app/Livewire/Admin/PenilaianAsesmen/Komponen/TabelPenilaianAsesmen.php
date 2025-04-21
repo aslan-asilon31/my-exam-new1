@@ -49,74 +49,44 @@ final class TabelPenilaianAsesmen extends PowerGridComponent
     public function datasource(): Builder
     {
 
-        
+        $results = DB::table('pengguna_asesmens as pa')
+        ->join('users as u', 'pa.pengguna_id', '=', 'u.id')
+        ->join('asesmens as a', 'pa.asesmen_id', '=', 'a.id')
+        ->select(
+            'pa.pengguna_id',
+            DB::raw('GROUP_CONCAT(a.judul) as asesmen_judul'),
+            DB::raw('MAX(pa.tgl_dibuat) as tgl_dibuat'), // contoh agregasi untuk tanggal
+            'u.name as user_name'
+        )
+        ->groupBy('pa.pengguna_id', 'u.name')
+        ->get();
 
-        // $subQuery = DB::table('pengguna_asesmens')
-        // ->select('pengguna_id', DB::raw('MAX(tgl_dibuat) as tgl_dibuat'))
-        // ->groupBy('pengguna_id');
-    
-        // $cek = DB::table('users')
-        //     ->joinSub($subQuery, 'latest_assessments', function ($join) {
-        //         $join->on('users.id', '=', 'latest_assessments.pengguna_id');
-        //     })
-        //     ->join('pengguna_asesmens', function ($join) {
-        //         $join->on('pengguna_asesmens.pengguna_id', '=', 'users.id')
-        //             ->on('pengguna_asesmens.tgl_dibuat', '=', 'latest_assessments.tgl_dibuat');
-        //     })
-        //     ->join('asesmens', 'pengguna_asesmens.asesmen_id', '=', 'asesmens.id')
-        //     ->select([
-        //         'users.id as user_id',
-        //         'users.name',
-        //         'users.email',
-        //         DB::raw('GROUP_CONCAT(asesmens.judul SEPARATOR ", ") as judul_asesmen'),
-        //         'pengguna_asesmens.tgl_mulai',
-        //         'pengguna_asesmens.tgl_selesai',
-        //         'pengguna_asesmens.tgl_dibuat',
-        //         'pengguna_asesmens.tgl_diupdate',
-        //         DB::raw('ROW_NUMBER() OVER (ORDER BY pengguna_asesmens.tgl_dibuat DESC) AS no_urut'),
-        //     ])
-        //     ->where('users.id', '<>', auth()->id())
-        //     ->groupBy('users.id', 'users.name', 'users.email', 'pengguna_asesmens.tgl_mulai', 'pengguna_asesmens.tgl_selesai', 'pengguna_asesmens.tgl_dibuat', 'pengguna_asesmens.tgl_diupdate')
-        //     ->orderByDesc('pengguna_asesmens.tgl_dibuat')
-        //     ->limit(10);
-        
-        //     $result = [];
-        //     foreach ($cek as $user) {
-        //         $result[] = [
-        //             "id" => $user->user_id,
-        //             "name" => $user->name,
-        //             "email" => $user->email,
-        //             "judul" => explode(', ', $user->judul_asesmen), 
-        //             "tgl_mulai" => $user->tgl_mulai,
-        //             "tgl_selesai" => $user->tgl_selesai,
-        //             "tgl_dibuat" => $user->tgl_dibuat,
-        //             "tgl_diupdate" => $user->tgl_diupdate,
-        //             "no_urut" => $user->no_urut,
-        //         ];
-        // }
+    // Memproses hasil untuk memecah string judul menjadi array
+    $results->transform(function ($item) {
+        $item->asesmen_juduls = explode(',', $item->asesmen_judul);
+        return $item;
+    });
 
-
-        // return $result;
 
         // ========================
-        return User::query()
-                ->join('pengguna_asesmens', 'pengguna_asesmens.pengguna_id', '=', 'users.id')
-                ->select([
-                    'users.id',
-                    'users.name',
-                    'users.email',
-                    DB::raw('MAX(pengguna_asesmens.tgl_mulai) as tgl_mulai'),
-                    DB::raw('MAX(pengguna_asesmens.tgl_selesai) as tgl_selesai'),
-                    DB::raw('MAX(pengguna_asesmens.tgl_dibuat) as tgl_dibuat'),
-                    DB::raw('MAX(pengguna_asesmens.tgl_diupdate) as tgl_diupdate'),
-                    DB::raw('ROW_NUMBER() OVER (ORDER BY MAX(pengguna_asesmens.tgl_dibuat) DESC) AS no_urut')
-                ])
-                ->groupBy('users.id', 'users.name', 'users.email')
-                ->where('users.id', '<>', auth()->id())
-                ->orderByDesc('tgl_dibuat')
-                ->limit(10)
-                ->offset(0);
-    
+        // return User::query()
+        //         ->join('pengguna_asesmens', 'pengguna_asesmens.pengguna_id', '=', 'users.id')
+        //         ->select([
+        //             'users.id',
+        //             'users.name',
+        //             'users.email',
+        //             DB::raw('MAX(pengguna_asesmens.tgl_mulai) as tgl_mulai'),
+        //             DB::raw('MAX(pengguna_asesmens.tgl_selesai) as tgl_selesai'),
+        //             DB::raw('MAX(pengguna_asesmens.tgl_dibuat) as tgl_dibuat'),
+        //             DB::raw('MAX(pengguna_asesmens.tgl_diupdate) as tgl_diupdate'),
+        //             DB::raw('ROW_NUMBER() OVER (ORDER BY MAX(pengguna_asesmens.tgl_dibuat) DESC) AS no_urut')
+        //         ])
+        //         ->groupBy('users.id', 'users.name', 'users.email')
+        //         ->where('users.id', '<>', auth()->id())
+        //         ->orderByDesc('tgl_dibuat')
+        //         ->limit(10)
+        //         ->offset(0);
+
     }
 
     public function relationSearch(): array
@@ -135,24 +105,22 @@ final class TabelPenilaianAsesmen extends PowerGridComponent
                 <x-dropdown no-x-anchor class="btn-sm">
                     <x-menu-item title="Beri nilai" Link="/penilaian-asesmen-detail/' . e($record->id) . '"/>
                 </x-dropdown>'))
-            ->add('no_urut', fn($record) => $record->no_urut)
-            // ->add('name', fn($record) => $record->name)
 
-            ->add('name', fn($record) => Blade::render('
-                   <div>
-                   A
-                    <ul class="pl-4">
-                        <li>A</li>
-                        <li>B</li>
-                        <li>C</li>
+            ->add('user_name', fn($record) => Blade::render('
+                <div>
+                    {{ $record->no_urut }}
+                    <ul>
+                        @foreach ($record->asesmen_juduls as $judul)
+                            <li>{{ $judul }}</li>
+                        @endforeach
                     </ul>
-                   </div>
-                '))
-            ->add('email', fn($record) => $record->email)
-            ->add('tgl_mulai', fn($record) => $record->tgl_mulai)
-            ->add('tgl_selesai', fn($record) => $record->tgl_selesai)
-            ->add('tgl_dibuat', fn($record) => $record->tgl_dibuat)
-            ->add('tgl_diupdate', fn($record) => $record->tgl_diupdate);
+                </div>
+                ', ['record' => $record]));
+            // ->add('email', fn($record) => $record->email)
+            // ->add('tgl_mulai', fn($record) => $record->tgl_mulai)
+            // ->add('tgl_selesai', fn($record) => $record->tgl_selesai)
+            // ->add('tgl_dibuat', fn($record) => $record->tgl_dibuat)
+            // ->add('tgl_diupdate', fn($record) => $record->tgl_diupdate);
     }
 
     public function columns(): array
@@ -163,32 +131,32 @@ final class TabelPenilaianAsesmen extends PowerGridComponent
                 ->bodyAttribute('text-center')
                 ->headerAttribute('text-center', 'background-color:#A16A38; color:white;text-align:center;'),
 
-            Column::make('Nomor Urut', 'no_urut')
-                ->visibleInExport(false) 
-                ->sortable()
-                ->searchable()
-                ->headerAttribute('text-center', 'background-color:#A16A38; color:white;text-align:center;'),
+            // Column::make('Nomor Urut', 'no_urut')
+            //     ->visibleInExport(false)
+            //     ->sortable()
+            //     ->searchable()
+            //     ->headerAttribute('text-center', 'background-color:#A16A38; color:white;text-align:center;'),
 
 
             Column::make('Name', 'name')
                 ->sortable()
                 ->headerAttribute('text-center', 'background-color:#A16A38; color:white;text-align:center;'),
 
-            Column::make('Tanggal Asesmen Mulai', 'tgl_mulai')
-                ->sortable()
-                ->headerAttribute('text-center', 'background-color:#A16A38; color:white;text-align:center;'),
+            // Column::make('Tanggal Asesmen Mulai', 'tgl_mulai')
+            //     ->sortable()
+            //     ->headerAttribute('text-center', 'background-color:#A16A38; color:white;text-align:center;'),
 
-            Column::make('Tanggal Asesmen Selesai', 'tgl_selesai')
-                ->sortable()
-                ->headerAttribute('text-center', 'background-color:#A16A38; color:white;text-align:center;'),
+            // Column::make('Tanggal Asesmen Selesai', 'tgl_selesai')
+            //     ->sortable()
+            //     ->headerAttribute('text-center', 'background-color:#A16A38; color:white;text-align:center;'),
 
-            Column::make('Tanggal Dibuat', 'tgl_dibuat')
-                ->sortable()
-                ->headerAttribute('text-center', 'background-color:#A16A38; color:white;text-align:center;'),
+            // Column::make('Tanggal Dibuat', 'tgl_dibuat')
+            //     ->sortable()
+            //     ->headerAttribute('text-center', 'background-color:#A16A38; color:white;text-align:center;'),
 
-            Column::make('Tanggal Diupdate', 'tgl_diupdate')
-                ->sortable()
-                ->headerAttribute('text-center', 'background-color:#A16A38; color:white;text-align:center;'),
+            // Column::make('Tanggal Diupdate', 'tgl_diupdate')
+            //     ->sortable()
+            //     ->headerAttribute('text-center', 'background-color:#A16A38; color:white;text-align:center;'),
 
 
         ];
@@ -198,11 +166,11 @@ final class TabelPenilaianAsesmen extends PowerGridComponent
     {
         return [
             Filter::inputText('Name', 'name')->placeholder('name'),
-            Filter::inputText('Nomor Urut', 'no_urut')->placeholder('no_urut'),
-            Filter::inputText('Tanggal Mulai', 'tgl_mulai')->placeholder('tgl_mulai'),
-            Filter::inputText('Tanggal Selesai', 'tgl_selesai')->placeholder('tgl_selesai'),
-            Filter::inputText('Tanggal Dibuat', 'tgl_dibuat')->placeholder('tgl_dibuat'),
-            Filter::inputText('Tanggal Diupdate', 'tgl_diupdate')->placeholder('tgl_diupdate'),
+            // Filter::inputText('Nomor Urut', 'no_urut')->placeholder('no_urut'),
+            // Filter::inputText('Tanggal Mulai', 'tgl_mulai')->placeholder('tgl_mulai'),
+            // Filter::inputText('Tanggal Selesai', 'tgl_selesai')->placeholder('tgl_selesai'),
+            // Filter::inputText('Tanggal Dibuat', 'tgl_dibuat')->placeholder('tgl_dibuat'),
+            // Filter::inputText('Tanggal Diupdate', 'tgl_diupdate')->placeholder('tgl_diupdate'),
 
         ];
     }
