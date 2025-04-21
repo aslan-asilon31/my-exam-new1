@@ -66,8 +66,8 @@ final class PermissionTable extends PowerGridComponent
         return PowerGrid::fields()
             ->add('action', fn($record) => Blade::render('
                 <x-dropdown no-x-anchor class="btn-sm">
-                    <x-menu-item title="Show" Link="/permission/show/' . e($record->id) . '/readonly" />
-                    <x-menu-item class="" title="Edit" Link="/permission/edit/' . e($record->id) . '"/>
+                    <x-menu-item title="Show" Link="/daftar-pertanyaan/show/' . e($record->id) . '/readonly" />
+                    <x-menu-item class="" title="Edit" Link="/daftar-pertanyaan/edit/' . e($record->id) . '"/>
                 </x-dropdown>'))
             ->add('name', fn($record) => $record->name)
             ->add('guard_name');
@@ -79,26 +79,26 @@ final class PermissionTable extends PowerGridComponent
             Column::make('Action', 'action')
                 ->visibleInExport(false)
                 ->bodyAttribute('text-center')
-                ->headerAttribute('text-center', 'background-color:#800080; color:white;text-align:center;'),
+                ->headerAttribute('text-center', 'background-color:#A16A38; color:white;text-align:center;'),
 
 
             Column::make('ID', 'id')
                 ->visibleInExport(false) // Hide ID column in export
                 ->sortable()
-                ->headerAttribute('text-center', 'background-color:#800080; color:white;text-align:center;'),
+                ->headerAttribute('text-center', 'background-color:#A16A38; color:white;text-align:center;'),
 
 
             Column::make('Name', 'name')
                 ->sortable()
                 ->searchable()
-                ->headerAttribute('text-center', 'background-color:#800080; color:white;text-align:center;'),
+                ->headerAttribute('text-center', 'background-color:#A16A38; color:white;text-align:center;'),
 
 
 
             Column::make('guard name', 'guard_name')
                 ->sortable()
                 ->searchable()
-                ->headerAttribute('text-center', 'background-color:#800080; color:white;text-align:center;'),
+                ->headerAttribute('text-center', 'background-color:#A16A38; color:white;text-align:center;'),
 
 
         ];

@@ -4,13 +4,11 @@ namespace App\Livewire\Admin\Role;
 
 use App\Livewire\Admin\Role\Forms\RoleForm;
 use Livewire\Component;
-// use App\Models\Role;
-// use App\Models\Permission;
+use App\Models\Role;
+use App\Models\Permission;
 use App\Models\RoleHasPermission;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
-use Spatie\Permission\Models\Permission;
-use Spatie\Permission\Models\Role;
 
 class RoleCrud extends Component
 {
@@ -39,11 +37,6 @@ class RoleCrud extends Component
 
   public $roles = [];
   public $rolePermissions = [];
-  public $role;
-  public $roleId;
-
-  public $permissions;
-  public $selectedPermissions = [];
 
   #[\Livewire\Attributes\Locked]
   public string $id = '';
@@ -65,10 +58,11 @@ class RoleCrud extends Component
   protected $masterModel = \App\Models\Role::class;
 
     public $isLoading = false;
+    public  $permissions = [];
+    public  $selectedPermissions = [];
     public  $groupedPermissions = [];
     public bool $checkAll = false;
     public $checkAction = false;
-    public $permissionList = false;
 
 
 
@@ -89,29 +83,6 @@ class RoleCrud extends Component
       $this->create();
     }
     $this->initialize();
-  }
-
-
-  public function permissionList()
-  {
-    $this->permissionList = true;
-  }
-
-
-  public function groupPermissions()
-  {
-      $this->groupedPermissions = [];
-
-      foreach ($this->permissions as $permission) {
-          $parts = explode('-', $permission->name);
-          $group = $parts[0] ?? $permission->name;
-
-          if (!isset($this->groupedPermissions[$group])) {
-              $this->groupedPermissions[$group] = [];
-          }
-
-          $this->groupedPermissions[$group][] = $permission;
-      }
   }
 
   public function initialize()
@@ -142,6 +113,7 @@ class RoleCrud extends Component
       $this->masterModel::create($validatedForm);
       \Illuminate\Support\Facades\DB::commit();
 
+
       $pageId = str($validatedForm['name'])->slug('_');
       \Log::info('Inserting permission with page_id: ' . $pageId);
 
@@ -161,6 +133,16 @@ class RoleCrud extends Component
       Permission::insert($permissionsData);
       \Illuminate\Support\Facades\DB::commit();
 
+          // $positionPermissionsData = $actions->map(function ($action) use ($pageId) {
+          //     return [
+          //         'id' => strtolower(auth()->user()->employee->position_id . '-' . $pageId . '-' . $action->name),
+          //         'position_id' => auth()->user()->employee->position_id,
+          //         'permission_id' => strtolower($pageId . '-' . $action->name),
+          //     ];
+          // })->toArray();
+
+          // PositionPermission::insert($positionPermissionsData);
+          // \Illuminate\Support\Facades\DB::commit();
 
           $this->create();
           $this->success('Data has been stored');
@@ -185,21 +167,31 @@ class RoleCrud extends Component
 
   public function edit()
   {
-      $this->role = Role::find($this->id);
 
-      if (!$this->role) {
-          $this->selectedPermissions = [];
-          session()->flash('error', 'Role not found');
-          return;
-      }
+    $this->permissions = DB::table('permissions')->select('id', 'name')->get();
 
-      $this->permissions = Permission::all();
+    $this->rolePermissions = DB::table('roles')
+        ->join('role_has_permissions', 'roles.id', '=', 'role_has_permissions.role_id')
+        ->join('permissions', 'role_has_permissions.permission_id', '=', 'permissions.id')
+        ->join('model_has_roles', 'model_has_roles.role_id', '=', 'roles.id')
+        ->select('permissions.id as permission_id', 'permissions.name as permission_name')
+        ->where('role_has_permissions.role_id', $this->id)
+        ->get();
 
-      $this->selectedPermissions = $this->role->permissions()->pluck('id')->toArray();
 
-      $this->groupPermissions();
+        $this->groupedPermissions = [];
+        foreach ($this->permissions as $permission) {
+            $parts = explode('-', $permission->name);
+            if (count($parts) > 2) {
+                $groupKey = $parts[1]; 
+                $this->groupedPermissions[$groupKey][] = $permission;
+            }
+        }
+
+
+
+    $this->selectedPermissions = $this->rolePermissions->pluck('permission_id')->toArray();
   }
-
 
   public function toggleCheckAll()
   {
@@ -212,27 +204,6 @@ class RoleCrud extends Component
       }
   }
 
-  public function update()
-  {
-
-    try {
-        RoleHasPermission::where('role_id', $this->role->id)->delete();
-
-        $data = array_map(function ($permissionId) {
-            return [
-                'role_id' => $this->role->id,
-                'permission_id' => $permissionId,
-            ];
-        }, $this->selectedPermissions);
-
-        RoleHasPermission::insert($data);
-
-          session()->flash('success', 'Permissions updated successfully.');
-      } catch (\Exception $e) {
-          session()->flash('error', 'Failed to update permissions: ' . $e->getMessage());
-      }
-  }
-
 
   public function refreshData()
   {
@@ -241,7 +212,7 @@ class RoleCrud extends Component
     $this->isLoading = false;
   }
 
-  public function updateold()
+  public function update()
   {
       // Validate the selected permissions
       $validatedForm = $this->validate([

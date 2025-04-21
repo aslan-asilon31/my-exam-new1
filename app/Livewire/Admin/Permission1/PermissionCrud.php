@@ -8,9 +8,11 @@ use Livewire\Component;
 use App\Livewire\Admin\Permission\Forms\PermissionForm;
 use Livewire\Attributes\Title;
 
+
 class PermissionCrud extends Component
 {
     public PermissionForm $masterForm;
+
 
     public function render()
     {
@@ -18,19 +20,22 @@ class PermissionCrud extends Component
         ->title($this->title);
     }
 
-    use \Livewire\WithFileUploads;
-    //   use \App\Helpers\ImageUpload\Traits\WithImageUpload;
-    use \App\Helpers\Table\Traits\WithTable;
+  use \Livewire\WithFileUploads;
+  //   use \App\Helpers\ImageUpload\Traits\WithImageUpload;
+     use \App\Helpers\Table\Traits\WithTable;
     use \Mary\Traits\Toast;
 
-    #[\Livewire\Attributes\Locked]
-    private string $basePageName = 'permission';
 
     #[\Livewire\Attributes\Locked]
-    public string $title = 'Permission CRUD';
+    private string $basePageName = 'role';
 
     #[\Livewire\Attributes\Locked]
-    public string $url = '/permission';
+    public string $title = 'Role';
+
+    #[\Livewire\Attributes\Locked]
+    public string $url = '/role';
+
+
 
     #[\Livewire\Attributes\Locked]
     public string $id = '';
@@ -53,6 +58,7 @@ class PermissionCrud extends Component
 
     public function mount()
     {
+
       if ($this->id && $this->readonly) {
         $this->title .= ' (Show)';
         $this->show();
@@ -78,16 +84,22 @@ class PermissionCrud extends Component
 
     public function store()
     {
+      // $this->permission($this->basePageName.'-create');
 
+      $validatedForm = $this->validate(
+        $this->masterForm->rules(),
+        [],
+        $this->masterForm->attributes()
+      )['masterForm'];
 
       \Illuminate\Support\Facades\DB::beginTransaction();
       try {
 
-        $validatedForm['name'] = $this->masterForm->name;
-        $validatedForm['guard_name'] = 'web';
+        $validatedForm['id'] = str($validatedForm['name'])->slug('_');
 
         $this->masterModel::create($validatedForm);
         \Illuminate\Support\Facades\DB::commit();
+
 
             $this->create();
             $this->success('Data has been stored');
@@ -112,32 +124,36 @@ class PermissionCrud extends Component
 
     public function edit()
     {
+      $this->permission($this->basePageName.'-update');
+
       $masterData = $this->masterModel::findOrFail($this->id);
       $this->masterForm->fill($masterData);
     }
 
     public function update()
     {
+      $this->permission($this->basePageName.'-update');
 
-      $validatedForm = [
-          'name' => $this->masterForm->name
-      ];
-
+      $validatedForm = $this->validate(
+        $this->masterForm->rules(),
+        [],
+        $this->masterForm->attributes()
+      )['masterForm'];
 
       $masterData = $this->masterModel::findOrFail($this->id);
 
       \Illuminate\Support\Facades\DB::beginTransaction();
       try {
 
-        $validatedForm['guard_name'] = 'web';
+        $validatedForm['id'] = str($validatedForm['name'])->slug('_');
+        $validatedForm['updated_by'] = auth()->user()->username;
+
 
         $masterData->update($validatedForm);
 
         \Illuminate\Support\Facades\DB::commit();
 
         $this->success('Data has been updated');
-
-
       } catch (\Throwable $th) {
         \Illuminate\Support\Facades\DB::rollBack();
         $this->error('Data failed to update');

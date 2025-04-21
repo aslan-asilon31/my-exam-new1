@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\Admin\Permission\Forms;
+namespace App\Livewire\Permission\Forms;
 
 use Livewire\Attributes\Validate;
 use Livewire\Form;
@@ -8,11 +8,13 @@ use Livewire\Form;
 class PermissionForm extends Form
 {
   public string|null $name = null;
+  public string|null $guard_name = null;
 
   public function rules()
   {
       return [
           'name' => 'required|string|max:255',
+          'guard_name' => 'required|string|max:255',
       ];
   }
 
@@ -20,6 +22,7 @@ class PermissionForm extends Form
   {
       return [
           'name' => 'name',
+          'guard_name' => 'guard name',
       ];
   }
 }

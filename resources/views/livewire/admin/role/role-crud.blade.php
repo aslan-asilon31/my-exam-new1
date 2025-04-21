@@ -14,93 +14,43 @@
         <x-button label="Edit" link="{{ $url . '/edit/' . $id }}" class="btn-ghost btn-outline" />
         @endif
 
+
+    <x-button label="Permission List" @click="$wire.permissionList = true" />
+
     </div>
-    <div class="text-right">
-        @if ($id && !$isReadonly)
-        <x-button label="Delete" wire:click="delete" wire:confirm="Do you want to delete this data?"
-            class="btn-ghost btn-outline text-red-500" />
-        @endif
-    </div>
-    </div>
-
-
-    <x-form wire:submit="{{ $id ? 'update' : 'store' }}" wire:confirm="Are you sure?">
-
-    <div class="" style="height: 500px; overflow: auto;">
-<table class="min-w-full divide-y divide-gray-200">
-    <thead>
-        <tr>
-            <th class="px-4 py-2 text-left">
-                <x-checkbox
-                    id="checkAll"
-                    label="Check All"
-                    wire:model="checkAll"
-                    wire:click="toggleCheckAll"
-                />
-            </th>
-            <th class="px-4 py-2 text-left">Permission</th>
-        </tr>
-    </thead>
-    <tbody class="bg-white divide-y divide-gray-200">
-        @if($checkAction)
-
-            @foreach ($permissions as $permission)
-                <tr class="flex items-center">
-                    <td class="flex items-center px-4 py-2 text-left">
-                        <x-checkbox
-                            class="pr-4"
-                            wire:model="selectedPermissions"
-                            value="{{ $permission->id }}"
-                            id="permission-{{ $permission->id }}"
-                            :checked="in_array($permission->id)"
-                        />
-                        <div class=" ">
-                            {{ $permission->name }}
-                        </div>
-                    </td>
-                </tr>
-            @endforeach
-
-        @else
-            @forelse ($groupedPermissions as $group => $permissions)
-                    <tr>
-                        <td colspan="2" class="font-bold">{{ ucfirst($group) }}</td>
-                    </tr>
-                    @foreach ($permissions as $permission)
-                        <tr class="flex items-center">
-                            <td class="flex items-center px-4 py-2 text-left">
-                                <x-checkbox
-                                    class="pr-4"
-                                    wire:model="selectedPermissions"
-                                    value="{{ $permission->id }}"
-                                    id="permission-{{ $permission->id }}"
-                                    :checked="in_array($permission->id, $rolePermissions->pluck('permission_id')->toArray())"
-                                />
-                                <div class=" ">
-                                    {{ $permission->name }}
-                                </div>
-                            </td>
-                        </tr>
-                    @endforeach
-
-            @empty
-                <tr>
-                    <td colspan="2" class="text-center">No permissions available.</td>
-                </tr>
-            @endforelse
-        @endif
-    </tbody>
-</table>
-</div>
-
-
-    @if (!$isReadonly)
-        <div class="text-center mt-3">
-        <x-errors class="text-white mb-3" />
-        <x-button type="submit" :label="$id ? 'Update' : 'Store'" class="btn-success btn-sm text-white" />
+        <div class="text-right">
+            @if ($id && !$isReadonly)
+            <x-button label="Delete" wire:click="delete" wire:confirm="Do you want to delete this data?"
+                class="btn-ghost btn-outline text-red-500" />
+            @endif
         </div>
-    @endif
-    </x-form>
+    </div>
+
+    <form wire:submit.prevent="update">
+
+        @foreach ($groupedPermissions as $group => $permissionsInGroup)
+            <div class="mb-6 border-2 p-8">
+                <h4 class="text-lg font-semibold mb-2">{{ ucfirst($group) }}</h4>
+                <div class="flex ">
+                    @foreach ($permissionsInGroup as $permission)
+                        <div class="flex-1 p-2 m-2  bg-slate-300 border-md">
+                            <input 
+                                type="checkbox" 
+                                wire:model="selectedPermissions" 
+                                value="{{ $permission->id }}" 
+                                class="form-checkbox h-4 w-4 text-blue-600  transition duration-150 ease-in-out"
+                            >
+                            <label class="ml-2 text-gray-700">{{ ucfirst($permission->name) }}</label>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        @endforeach
+    
+
+        <button type="submit" class="btn btn-primary mt-3">Update Permissions</button>
+
+    </form>
 
 
 <!-- Loading Indicator -->
@@ -124,5 +74,22 @@ function toggleCheckboxes(source) {
 }
 </script>
 
+
+
+
+<x-modal wire:model="permissionList" title="Daftar Permission" class="backdrop-blur">
+
+
+    <x-button label="Permission Create"  Link="/permission/create" />
+
+
+    <div>
+        <livewire:admin.permission.component.permission-table class="bg-white p-2 m-2" />
+    </div>
+    <x-slot:actions>
+        <x-button label="Cancel" @click="$wire.permissionList = false" />
+    </x-slot:actions>
+</x-modal>
+ 
 
 </x-card>

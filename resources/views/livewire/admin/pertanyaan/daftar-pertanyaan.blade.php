@@ -107,3 +107,8 @@
     </div>
 
 </x-card>
+
+
+@script
+
+@endscript

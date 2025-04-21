@@ -31,6 +31,11 @@
       <x-input label="Name" wire:model.blur="masterForm.name" id="masterForm.name" name="masterForm.name" placeholder="Name" />
     </div>
 
+
+    <div class="mb-3">
+      <x-input label="Guard Name" wire:model.blur="masterForm.guard_name" id="masterForm.guard_name" name="masterForm.guard_name" placeholder="Guard Name" />
+    </div>
+
     @if (!$isReadonly)
       <div class="text-center mt-3">
         <x-errors class="text-white mb-3" />

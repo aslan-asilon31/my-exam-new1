@@ -64,9 +64,9 @@
             <x-menu-item title="Role" icon="o-squares-2x2" link="/role" :class="request()->is('role') ? 'active' : ''" />
             @endcan
 
-            @can('permission-lihat')
+            {{-- @can('permission-lihat')
             <x-menu-item title="Permission" icon="o-squares-2x2" link="/permission" :class="request()->is('permission') ? 'active' : ''" />
-            @endcan
+            @endcan --}}
 
 
 
