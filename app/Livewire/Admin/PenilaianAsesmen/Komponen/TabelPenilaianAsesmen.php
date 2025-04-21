@@ -48,6 +48,55 @@ final class TabelPenilaianAsesmen extends PowerGridComponent
 
     public function datasource(): Builder
     {
+
+        // $subQuery = DB::table('pengguna_asesmens')
+        // ->select('pengguna_id', DB::raw('MAX(tgl_dibuat) as tgl_dibuat'))
+        // ->groupBy('pengguna_id');
+    
+        // $cek = DB::table('users')
+        //     ->joinSub($subQuery, 'latest_assessments', function ($join) {
+        //         $join->on('users.id', '=', 'latest_assessments.pengguna_id');
+        //     })
+        //     ->join('pengguna_asesmens', function ($join) {
+        //         $join->on('pengguna_asesmens.pengguna_id', '=', 'users.id')
+        //             ->on('pengguna_asesmens.tgl_dibuat', '=', 'latest_assessments.tgl_dibuat');
+        //     })
+        //     ->join('asesmens', 'pengguna_asesmens.asesmen_id', '=', 'asesmens.id')
+        //     ->select([
+        //         'users.id as user_id',
+        //         'users.name',
+        //         'users.email',
+        //         DB::raw('GROUP_CONCAT(asesmens.judul SEPARATOR ", ") as judul_asesmen'),
+        //         'pengguna_asesmens.tgl_mulai',
+        //         'pengguna_asesmens.tgl_selesai',
+        //         'pengguna_asesmens.tgl_dibuat',
+        //         'pengguna_asesmens.tgl_diupdate',
+        //         DB::raw('ROW_NUMBER() OVER (ORDER BY pengguna_asesmens.tgl_dibuat DESC) AS no_urut'),
+        //     ])
+        //     ->where('users.id', '<>', auth()->id())
+        //     ->groupBy('users.id', 'users.name', 'users.email', 'pengguna_asesmens.tgl_mulai', 'pengguna_asesmens.tgl_selesai', 'pengguna_asesmens.tgl_dibuat', 'pengguna_asesmens.tgl_diupdate')
+        //     ->orderByDesc('pengguna_asesmens.tgl_dibuat')
+        //     ->limit(10);
+        
+        //     $result = [];
+        //     foreach ($cek as $user) {
+        //         $result[] = [
+        //             "id" => $user->user_id,
+        //             "name" => $user->name,
+        //             "email" => $user->email,
+        //             "judul" => explode(', ', $user->judul_asesmen), 
+        //             "tgl_mulai" => $user->tgl_mulai,
+        //             "tgl_selesai" => $user->tgl_selesai,
+        //             "tgl_dibuat" => $user->tgl_dibuat,
+        //             "tgl_diupdate" => $user->tgl_diupdate,
+        //             "no_urut" => $user->no_urut,
+        //         ];
+        // }
+
+
+        // return $result;
+
+        // ========================
         return User::query()
                 ->join('pengguna_asesmens', 'pengguna_asesmens.pengguna_id', '=', 'users.id')
                 ->select([
@@ -85,7 +134,18 @@ final class TabelPenilaianAsesmen extends PowerGridComponent
                     <x-menu-item title="Beri nilai" Link="/penilaian-asesmen-detail/' . e($record->id) . '"/>
                 </x-dropdown>'))
             ->add('no_urut', fn($record) => $record->no_urut)
-            ->add('name', fn($record) => $record->name)
+            // ->add('name', fn($record) => $record->name)
+
+            ->add('name', fn($record) => Blade::render('
+                   <div>
+                   A
+                    <ul class="pl-4">
+                        <li>A</li>
+                        <li>B</li>
+                        <li>C</li>
+                    </ul>
+                   </div>
+                '))
             ->add('email', fn($record) => $record->email)
             ->add('tgl_mulai', fn($record) => $record->tgl_mulai)
             ->add('tgl_selesai', fn($record) => $record->tgl_selesai)
