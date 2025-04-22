@@ -49,23 +49,29 @@ final class TabelPenilaianAsesmen extends PowerGridComponent
     public function datasource(): Builder
     {
 
-        $results = DB::table('pengguna_asesmens as pa')
-        ->join('users as u', 'pa.pengguna_id', '=', 'u.id')
-        ->join('asesmens as a', 'pa.asesmen_id', '=', 'a.id')
-        ->select(
-            'pa.pengguna_id',
-            DB::raw('GROUP_CONCAT(a.judul) as asesmen_judul'),
-            DB::raw('MAX(pa.tgl_dibuat) as tgl_dibuat'), // contoh agregasi untuk tanggal
-            'u.name as user_name'
-        )
-        ->groupBy('pa.pengguna_id', 'u.name')
-        ->get();
 
-    // Memproses hasil untuk memecah string judul menjadi array
-    $results->transform(function ($item) {
-        $item->asesmen_juduls = explode(',', $item->asesmen_judul);
-        return $item;
-    });
+        $cek = User::query()
+                ->join('pengguna_asesmens', 'pengguna_asesmens.pengguna_id', '=', 'users.id')
+                ->join('asesmens', 'pengguna_asesmens.asesmen_id', '=', 'asesmens.id')
+                ->select([
+                    'users.id',
+                    'users.name',
+                    'users.email',
+                    DB::raw('GROUP_CONCAT(asesmens.judul SEPARATOR ", ") as asesmen_judul'),
+                    DB::raw('MAX(pengguna_asesmens.tgl_mulai) as tgl_mulai'),
+                    DB::raw('MAX(pengguna_asesmens.tgl_selesai) as tgl_selesai'),
+                    DB::raw('MAX(pengguna_asesmens.tgl_dibuat) as tgl_dibuat'),
+                    DB::raw('MAX(pengguna_asesmens.tgl_diupdate) as tgl_diupdate'),
+                    DB::raw('ROW_NUMBER() OVER (ORDER BY MAX(pengguna_asesmens.tgl_dibuat) DESC) AS no_urut')
+                ])
+                ->groupBy('users.id', 'users.name', 'users.email')
+                ->where('users.id', '<>', auth()->id())
+                ->orderByDesc('tgl_dibuat')
+                ->limit(10)
+                ->offset(0);
+                
+
+                return $cek;
 
 
         // ========================
@@ -106,16 +112,8 @@ final class TabelPenilaianAsesmen extends PowerGridComponent
                     <x-menu-item title="Beri nilai" Link="/penilaian-asesmen-detail/' . e($record->id) . '"/>
                 </x-dropdown>'))
 
-            ->add('user_name', fn($record) => Blade::render('
-                <div>
-                    {{ $record->no_urut }}
-                    <ul>
-                        @foreach ($record->asesmen_juduls as $judul)
-                            <li>{{ $judul }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-                ', ['record' => $record]));
+            ->add('name', fn($record) => $record->name)
+            ->add('asesmen_judul', fn($record) => preg_replace('/, /', ',<br>', $record->asesmen_judul ));
             // ->add('email', fn($record) => $record->email)
             // ->add('tgl_mulai', fn($record) => $record->tgl_mulai)
             // ->add('tgl_selesai', fn($record) => $record->tgl_selesai)
@@ -139,6 +137,11 @@ final class TabelPenilaianAsesmen extends PowerGridComponent
 
 
             Column::make('Name', 'name')
+                ->sortable()
+                ->headerAttribute('text-center', 'background-color:#A16A38; color:white;text-align:center;'),
+
+
+            Column::make('asesmen_judul', 'asesmen_judul')
                 ->sortable()
                 ->headerAttribute('text-center', 'background-color:#A16A38; color:white;text-align:center;'),
 

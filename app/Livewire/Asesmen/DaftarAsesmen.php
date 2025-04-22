@@ -104,6 +104,7 @@ class DaftarAsesmen extends Component
     {
 
         return view('livewire.asesmen.daftar-asesmen')
-        ->layout('components.layouts.app_visitor');
+        ->layout('components.layouts.app_visitor')
+        ->title($this->title);
     }
 }
