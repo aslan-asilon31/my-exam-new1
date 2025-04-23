@@ -49,7 +49,7 @@
     <x-toast />
     @livewireScripts
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.js"></script>
+
 
 </body>
 </html>

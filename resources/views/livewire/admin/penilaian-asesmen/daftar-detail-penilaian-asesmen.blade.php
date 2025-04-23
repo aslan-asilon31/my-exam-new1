@@ -5,7 +5,7 @@
     @endphp
 
     <div class=" bg-white p-8 md:p-16 rounded-md shadow-lg ">
-        <h1 class="text-md sm:text-lg font-bold mb-6 text-orange-900 text-center">Daftar Asesmen Yang Sudah Diikuti</h1>
+        <h1 class="text-md sm:text-lg font-bold mb-6 text-orange-900 text-center">Daftar Asesmen Yang Sudah Diikuti <b> {{ $this->userSelected['name'] }} </b> </h1>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
             @if(!empty($this->ActivePenggunaAsesmens))
                 @foreach($this->ActivePenggunaAsesmens as $index => $asesmen)

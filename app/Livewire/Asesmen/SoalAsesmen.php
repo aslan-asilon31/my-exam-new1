@@ -146,7 +146,7 @@ class SoalAsesmen extends Component
     public function render()
     {
         return view('livewire.asesmen.halaman-soal-asesmen')
-        ->layout('components.layouts.app_visitor')
+        // ->layout('components.layouts.app_visitor')
         ->title($this->title);
     }
 }

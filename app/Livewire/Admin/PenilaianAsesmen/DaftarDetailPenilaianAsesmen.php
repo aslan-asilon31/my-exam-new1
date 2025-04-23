@@ -40,6 +40,7 @@ class DaftarDetailPenilaianAsesmen extends Component
 
     public $userId;
     public $user;
+    public $userSelected;
     public $userName;
     public $userEmail;
 
@@ -75,8 +76,9 @@ class DaftarDetailPenilaianAsesmen extends Component
         ->orderBy('tgl_dibuat', 'desc')
         ->get()->toArray();
 
-
-
+        foreach ($this->ActivePenggunaAsesmens as $apa) {
+            $this->userSelected = User::where('id', $apa['pengguna_id'])->get()->select('name')->first();
+        }
 
     }
 

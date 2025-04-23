@@ -97,7 +97,7 @@ class KonfirmasiSelesai extends Component
     public function simpanJawaban()
     {
 
-        return $this->redirect('/dasbor-user', navigate: true);
+        return $this->redirect('/daftar-asesmen', navigate: true);
              
     }
 
@@ -110,7 +110,7 @@ class KonfirmasiSelesai extends Component
     {
 
         return view('livewire.asesmen.konfirmasi-selesai')
-        ->layout('components.layouts.app_visitor')
+        // ->layout('components.layouts.app_visitor')
         ->title($this->title);
     }
 }

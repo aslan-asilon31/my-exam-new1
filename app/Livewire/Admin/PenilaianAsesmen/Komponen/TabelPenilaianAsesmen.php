@@ -50,14 +50,14 @@ final class TabelPenilaianAsesmen extends PowerGridComponent
     {
 
 
-        $cek = User::query()
+        $asesmen = User::query()
                 ->join('pengguna_asesmens', 'pengguna_asesmens.pengguna_id', '=', 'users.id')
                 ->join('asesmens', 'pengguna_asesmens.asesmen_id', '=', 'asesmens.id')
                 ->select([
                     'users.id',
                     'users.name',
                     'users.email',
-                    DB::raw('GROUP_CONCAT(asesmens.judul SEPARATOR ", ") as asesmen_judul'),
+                    DB::raw('GROUP_CONCAT("- <b>", asesmens.judul SEPARATOR "</b>, ") as asesmen_judul'),
                     DB::raw('MAX(pengguna_asesmens.tgl_mulai) as tgl_mulai'),
                     DB::raw('MAX(pengguna_asesmens.tgl_selesai) as tgl_selesai'),
                     DB::raw('MAX(pengguna_asesmens.tgl_dibuat) as tgl_dibuat'),
@@ -71,27 +71,9 @@ final class TabelPenilaianAsesmen extends PowerGridComponent
                 ->offset(0);
                 
 
-                return $cek;
+                return $asesmen;
 
-
-        // ========================
-        // return User::query()
-        //         ->join('pengguna_asesmens', 'pengguna_asesmens.pengguna_id', '=', 'users.id')
-        //         ->select([
-        //             'users.id',
-        //             'users.name',
-        //             'users.email',
-        //             DB::raw('MAX(pengguna_asesmens.tgl_mulai) as tgl_mulai'),
-        //             DB::raw('MAX(pengguna_asesmens.tgl_selesai) as tgl_selesai'),
-        //             DB::raw('MAX(pengguna_asesmens.tgl_dibuat) as tgl_dibuat'),
-        //             DB::raw('MAX(pengguna_asesmens.tgl_diupdate) as tgl_diupdate'),
-        //             DB::raw('ROW_NUMBER() OVER (ORDER BY MAX(pengguna_asesmens.tgl_dibuat) DESC) AS no_urut')
-        //         ])
-        //         ->groupBy('users.id', 'users.name', 'users.email')
-        //         ->where('users.id', '<>', auth()->id())
-        //         ->orderByDesc('tgl_dibuat')
-        //         ->limit(10)
-        //         ->offset(0);
+       
 
     }
 
@@ -112,13 +94,13 @@ final class TabelPenilaianAsesmen extends PowerGridComponent
                     <x-menu-item title="Beri nilai" Link="/penilaian-asesmen-detail/' . e($record->id) . '"/>
                 </x-dropdown>'))
 
+            ->add('no_urut', fn($record) => $record->no_urut)
             ->add('name', fn($record) => $record->name)
-            ->add('asesmen_judul', fn($record) => preg_replace('/, /', ',<br>', $record->asesmen_judul ));
-            // ->add('email', fn($record) => $record->email)
-            // ->add('tgl_mulai', fn($record) => $record->tgl_mulai)
-            // ->add('tgl_selesai', fn($record) => $record->tgl_selesai)
-            // ->add('tgl_dibuat', fn($record) => $record->tgl_dibuat)
-            // ->add('tgl_diupdate', fn($record) => $record->tgl_diupdate);
+            ->add('asesmen_judul', fn($record) => preg_replace('/, /', ',<br>', $record->asesmen_judul ))
+            ->add('tgl_mulai', fn($record) => $record->tgl_mulai)
+            ->add('tgl_selesai', fn($record) => $record->tgl_selesai)
+            ->add('tgl_dibuat', fn($record) => $record->tgl_dibuat)
+            ->add('tgl_diupdate', fn($record) => $record->tgl_diupdate);
     }
 
     public function columns(): array
@@ -129,11 +111,11 @@ final class TabelPenilaianAsesmen extends PowerGridComponent
                 ->bodyAttribute('text-center')
                 ->headerAttribute('text-center', 'background-color:#A16A38; color:white;text-align:center;'),
 
-            // Column::make('Nomor Urut', 'no_urut')
-            //     ->visibleInExport(false)
-            //     ->sortable()
-            //     ->searchable()
-            //     ->headerAttribute('text-center', 'background-color:#A16A38; color:white;text-align:center;'),
+            Column::make('Nomor Urut', 'no_urut')
+                ->visibleInExport(false)
+                ->sortable()
+                ->searchable()
+                ->headerAttribute('text-center', 'background-color:#A16A38; color:white;text-align:center;'),
 
 
             Column::make('Name', 'name')
@@ -141,25 +123,25 @@ final class TabelPenilaianAsesmen extends PowerGridComponent
                 ->headerAttribute('text-center', 'background-color:#A16A38; color:white;text-align:center;'),
 
 
-            Column::make('asesmen_judul', 'asesmen_judul')
+            Column::make('Asesmen', 'asesmen_judul')
                 ->sortable()
                 ->headerAttribute('text-center', 'background-color:#A16A38; color:white;text-align:center;'),
 
-            // Column::make('Tanggal Asesmen Mulai', 'tgl_mulai')
-            //     ->sortable()
-            //     ->headerAttribute('text-center', 'background-color:#A16A38; color:white;text-align:center;'),
+            Column::make('Tanggal Asesmen Mulai', 'tgl_mulai')
+                ->sortable()
+                ->headerAttribute('text-center', 'background-color:#A16A38; color:white;text-align:center;'),
 
-            // Column::make('Tanggal Asesmen Selesai', 'tgl_selesai')
-            //     ->sortable()
-            //     ->headerAttribute('text-center', 'background-color:#A16A38; color:white;text-align:center;'),
+            Column::make('Tanggal Asesmen Selesai', 'tgl_selesai')
+                ->sortable()
+                ->headerAttribute('text-center', 'background-color:#A16A38; color:white;text-align:center;'),
 
-            // Column::make('Tanggal Dibuat', 'tgl_dibuat')
-            //     ->sortable()
-            //     ->headerAttribute('text-center', 'background-color:#A16A38; color:white;text-align:center;'),
+            Column::make('Tanggal Dibuat', 'tgl_dibuat')
+                ->sortable()
+                ->headerAttribute('text-center', 'background-color:#A16A38; color:white;text-align:center;'),
 
-            // Column::make('Tanggal Diupdate', 'tgl_diupdate')
-            //     ->sortable()
-            //     ->headerAttribute('text-center', 'background-color:#A16A38; color:white;text-align:center;'),
+            Column::make('Tanggal Diupdate', 'tgl_diupdate')
+                ->sortable()
+                ->headerAttribute('text-center', 'background-color:#A16A38; color:white;text-align:center;'),
 
 
         ];
@@ -169,11 +151,11 @@ final class TabelPenilaianAsesmen extends PowerGridComponent
     {
         return [
             Filter::inputText('Name', 'name')->placeholder('name'),
-            // Filter::inputText('Nomor Urut', 'no_urut')->placeholder('no_urut'),
-            // Filter::inputText('Tanggal Mulai', 'tgl_mulai')->placeholder('tgl_mulai'),
-            // Filter::inputText('Tanggal Selesai', 'tgl_selesai')->placeholder('tgl_selesai'),
-            // Filter::inputText('Tanggal Dibuat', 'tgl_dibuat')->placeholder('tgl_dibuat'),
-            // Filter::inputText('Tanggal Diupdate', 'tgl_diupdate')->placeholder('tgl_diupdate'),
+            Filter::inputText('Nomor Urut', 'no_urut')->placeholder('no_urut'),
+            Filter::inputText('Tanggal Mulai', 'tgl_mulai')->placeholder('tgl_mulai'),
+            Filter::inputText('Tanggal Selesai', 'tgl_selesai')->placeholder('tgl_selesai'),
+            Filter::inputText('Tanggal Dibuat', 'tgl_dibuat')->placeholder('tgl_dibuat'),
+            Filter::inputText('Tanggal Diupdate', 'tgl_diupdate')->placeholder('tgl_diupdate'),
 
         ];
     }

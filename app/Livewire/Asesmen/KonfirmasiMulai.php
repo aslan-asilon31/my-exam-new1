@@ -92,7 +92,7 @@ class KonfirmasiMulai extends Component
     {
 
         return view('livewire.asesmen.konfirmasi-mulai')
-        ->layout('components.layouts.app_visitor')
+        // ->layout('components.layouts.app_visitor')
         ->title($this->title);
 
     }
